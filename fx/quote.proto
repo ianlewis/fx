@@ -1,0 +1,47 @@
+// Copyright 2025 Ian Lewis
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+syntax = "proto3";
+
+import "google/type/money.proto";
+import "google/type/date.proto";
+
+// Quote is a currency conversion quote.
+message Quote {
+    // provider_code is the provider code of that provides the quote.
+    string provider_code = 1;
+
+    // date is the date on which the quote was given.
+    google.type.Date date = 2; 
+
+    // base_currency_code is the currency pair base currency alphabetic code.
+    string base_currency_code = 3;
+    
+    // quote_currency_code is the currency pair quote currency (target) alphabetic code.
+    string quote_currency_code = 4;
+
+    // ask is the ask/sell price in the quote currency.
+    google.type.Money ask = 5;
+
+    // bid is the bid/buy price in the quote currency.
+    google.type.Money bid = 6;
+
+    // mid is the middle rate in the quote currency.
+    google.type.Money mid = 7;
+}
+
+// QuoteList represents a lits of Quote objects.
+message QuoteList {
+    repeated Quote quotes = 1;    
+}

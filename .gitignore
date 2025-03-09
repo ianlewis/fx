@@ -1,0 +1,15 @@
+# For markdownlint
+.git/
+
+# Python cache files.
+__pycache__
+
+# Dependency directories (remove the comment below to include it)
+node_modules/
+.venv/
+
+# SARIF files
+*.sarif.json
+
+# the built site directory.
+_site
