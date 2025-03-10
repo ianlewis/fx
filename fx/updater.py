@@ -18,6 +18,8 @@ import argparse
 import logging
 from datetime import date
 
+from mufg import MUFGProvider
+from provider import update_providers
 from currency import update_currencies
 from quote import update_quotes
 
@@ -39,7 +41,9 @@ def main():
         logger.setLevel(logging.DEBUG)
 
     currencies = update_currencies(args.out, logger)
-    update_quotes(args.out, args.start, args.end, currencies, logger)
+    providers = [MUFGProvider(logger, currencies)]
+    update_providers(args.out, providers, logger)
+    update_quotes(args.out, args.start, args.end, providers, currencies, logger)
 
 
 if __name__ == "__main__":

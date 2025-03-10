@@ -26,8 +26,7 @@ from datetime import date
 from dateutil.relativedelta import relativedelta
 from google.protobuf.json_format import MessageToDict
 
-from fx.mufg import MUFGProvider
-from fx.money import dict_to_str
+from money import dict_to_str
 
 
 def dateIterator(from_date=None, to_date=None, delta=relativedelta(days=1)):
@@ -108,8 +107,7 @@ def update_quote(quote, base_path, logger):
         write_quotes_csv(f, quotes)
 
 
-def update_quotes(base_dir, start_date, end_date, currencies, logger):
-    providers = [MUFGProvider(logger, currencies)]
+def update_quotes(base_dir, start_date, end_date, providers, currencies, logger):
     update_day_quotes(base_dir, start_date, end_date, providers, logger)
 
     for provider in providers:
