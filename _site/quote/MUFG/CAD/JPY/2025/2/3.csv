@@ -1,2 +1,2 @@
-date,baseCurrencyName,baseCurrencyCode,baseCurrencyNum,quoteCurrencyName,quoteCurrencyCode,quoteCurrencyNum,tts,ttb,ttm
+date,baseCurrencyName,baseCurrencyCode,baseCurrencyNum,quoteCurrencyName,quoteCurrencyCode,quoteCurrencyNum,ask,bid,mid
 2025-02-03,Canadian Dollar,CAD,124,Yen,JPY,392,107.29,104.09,105.69

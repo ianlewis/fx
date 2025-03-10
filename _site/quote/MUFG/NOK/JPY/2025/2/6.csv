@@ -1,2 +1,2 @@
-date,baseCurrencyName,baseCurrencyCode,baseCurrencyNum,quoteCurrencyName,quoteCurrencyCode,quoteCurrencyNum,tts,ttb,ttm
+date,baseCurrencyName,baseCurrencyCode,baseCurrencyNum,quoteCurrencyName,quoteCurrencyCode,quoteCurrencyNum,ask,bid,mid
 2025-02-06,Norwegian Krone,NOK,578,Yen,JPY,392,13.88,13.28,13.58

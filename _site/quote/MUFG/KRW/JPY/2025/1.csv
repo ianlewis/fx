@@ -1,4 +1,4 @@
-date,baseCurrencyName,baseCurrencyCode,baseCurrencyNum,quoteCurrencyName,quoteCurrencyCode,quoteCurrencyNum,tts,ttb,ttm
+date,baseCurrencyName,baseCurrencyCode,baseCurrencyNum,quoteCurrencyName,quoteCurrencyCode,quoteCurrencyNum,ask,bid,mid
 2025-01-06,Won,KRW,410,Yen,JPY,392,10.92,10.52,10.72
 2025-01-07,Won,KRW,410,Yen,JPY,392,11.05,10.65,10.85
 2025-01-08,Won,KRW,410,Yen,JPY,392,11.07,10.67,10.87

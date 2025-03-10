@@ -1,2 +1,2 @@
-date,baseCurrencyName,baseCurrencyCode,baseCurrencyNum,quoteCurrencyName,quoteCurrencyCode,quoteCurrencyNum,tts,ttb,ttm
+date,baseCurrencyName,baseCurrencyCode,baseCurrencyNum,quoteCurrencyName,quoteCurrencyCode,quoteCurrencyNum,ask,bid,mid
 2025-01-14,Pound Sterling,GBP,826,Yen,JPY,392,196.39,188.39,192.39

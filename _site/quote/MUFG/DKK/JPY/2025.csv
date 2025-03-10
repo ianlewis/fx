@@ -1,4 +1,4 @@
-date,baseCurrencyName,baseCurrencyCode,baseCurrencyNum,quoteCurrencyName,quoteCurrencyCode,quoteCurrencyNum,tts,ttb,ttm
+date,baseCurrencyName,baseCurrencyCode,baseCurrencyNum,quoteCurrencyName,quoteCurrencyCode,quoteCurrencyNum,ask,bid,mid
 2025-01-06,Danish Krone,DKK,208,Yen,JPY,392,22.08,21.48,21.78
 2025-01-07,Danish Krone,DKK,208,Yen,JPY,392,22.33,21.73,22.03
 2025-01-08,Danish Krone,DKK,208,Yen,JPY,392,22.22,21.62,21.92
@@ -40,3 +40,5 @@ date,baseCurrencyName,baseCurrencyCode,baseCurrencyNum,quoteCurrencyName,quoteCu
 2025-03-04,Danish Krone,DKK,208,Yen,JPY,392,21.28,20.68,20.98
 2025-03-05,Danish Krone,DKK,208,Yen,JPY,392,21.65,21.05,21.35
 2025-03-06,Danish Krone,DKK,208,Yen,JPY,392,21.91,21.31,21.61
+2025-03-07,Danish Krone,DKK,208,Yen,JPY,392,21.71,21.11,21.41
+2025-03-10,Danish Krone,DKK,208,Yen,JPY,392,21.77,21.17,21.47

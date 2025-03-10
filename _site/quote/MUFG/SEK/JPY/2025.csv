@@ -1,4 +1,4 @@
-date,baseCurrencyName,baseCurrencyCode,baseCurrencyNum,quoteCurrencyName,quoteCurrencyCode,quoteCurrencyNum,tts,ttb,ttm
+date,baseCurrencyName,baseCurrencyCode,baseCurrencyNum,quoteCurrencyName,quoteCurrencyCode,quoteCurrencyNum,ask,bid,mid
 2025-01-06,Swedish Krona,SEK,752,Yen,JPY,392,14.57,13.77,14.17
 2025-01-07,Swedish Krona,SEK,752,Yen,JPY,392,14.72,13.92,14.32
 2025-01-08,Swedish Krona,SEK,752,Yen,JPY,392,14.6,13.8,14.2
@@ -40,3 +40,5 @@ date,baseCurrencyName,baseCurrencyCode,baseCurrencyNum,quoteCurrencyName,quoteCu
 2025-03-04,Swedish Krona,SEK,752,Yen,JPY,392,14.61,13.81,14.21
 2025-03-05,Swedish Krona,SEK,752,Yen,JPY,392,14.79,13.99,14.39
 2025-03-06,Swedish Krona,SEK,752,Yen,JPY,392,15.05,14.25,14.65
+2025-03-07,Swedish Krona,SEK,752,Yen,JPY,392,14.96,14.16,14.56
+2025-03-10,Swedish Krona,SEK,752,Yen,JPY,392,15.03,14.23,14.63

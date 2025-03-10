@@ -1,4 +1,4 @@
-date,baseCurrencyName,baseCurrencyCode,baseCurrencyNum,quoteCurrencyName,quoteCurrencyCode,quoteCurrencyNum,tts,ttb,ttm
+date,baseCurrencyName,baseCurrencyCode,baseCurrencyNum,quoteCurrencyName,quoteCurrencyCode,quoteCurrencyNum,ask,bid,mid
 2025-01-06,Kuwaiti Dinar,KWD,414,Yen,JPY,392,520.11,504.11,512.11
 2025-01-07,Kuwaiti Dinar,KWD,414,Yen,JPY,392,521.87,505.87,513.87
 2025-01-08,Kuwaiti Dinar,KWD,414,Yen,JPY,392,521.61,505.61,513.61
@@ -40,3 +40,5 @@ date,baseCurrencyName,baseCurrencyCode,baseCurrencyNum,quoteCurrencyName,quoteCu
 2025-03-04,Kuwaiti Dinar,KWD,414,Yen,JPY,392,492.93,476.93,484.93
 2025-03-05,Kuwaiti Dinar,KWD,414,Yen,JPY,392,494.59,478.59,486.59
 2025-03-06,Kuwaiti Dinar,KWD,414,Yen,JPY,392,492.58,476.58,484.58
+2025-03-07,Kuwaiti Dinar,KWD,414,Yen,JPY,392,489.37,473.37,481.37
+2025-03-10,Kuwaiti Dinar,KWD,414,Yen,JPY,392,487.44,471.44,479.44

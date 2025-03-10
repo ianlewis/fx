@@ -1,5 +1,7 @@
-date,baseCurrencyName,baseCurrencyCode,baseCurrencyNum,quoteCurrencyName,quoteCurrencyCode,quoteCurrencyNum,tts,ttb,ttm
+date,baseCurrencyName,baseCurrencyCode,baseCurrencyNum,quoteCurrencyName,quoteCurrencyCode,quoteCurrencyNum,ask,bid,mid
 2025-03-03,Pound Sterling,GBP,826,Yen,JPY,392,193.78,185.78,189.78
 2025-03-04,Pound Sterling,GBP,826,Yen,JPY,392,193.52,185.52,189.52
 2025-03-05,Pound Sterling,GBP,826,Yen,JPY,392,195.79,187.79,191.79
 2025-03-06,Pound Sterling,GBP,826,Yen,JPY,392,196.52,188.52,192.52
+2025-03-07,Pound Sterling,GBP,826,Yen,JPY,392,194.79,186.79,190.79
+2025-03-10,Pound Sterling,GBP,826,Yen,JPY,392,194.69,186.69,190.69

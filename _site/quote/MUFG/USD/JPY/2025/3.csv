@@ -1,5 +1,7 @@
-date,baseCurrencyName,baseCurrencyCode,baseCurrencyNum,quoteCurrencyName,quoteCurrencyCode,quoteCurrencyNum,tts,ttb,ttm
+date,baseCurrencyName,baseCurrencyCode,baseCurrencyNum,quoteCurrencyName,quoteCurrencyCode,quoteCurrencyNum,ask,bid,mid
 2025-03-03,US Dollar,USD,840,Yen,JPY,392,151.56,149.56,150.56
 2025-03-04,US Dollar,USD,840,Yen,JPY,392,150.26,148.26,149.26
 2025-03-05,US Dollar,USD,840,Yen,JPY,392,150.87,148.87,149.87
 2025-03-06,US Dollar,USD,840,Yen,JPY,392,150.25,148.25,149.25
+2025-03-07,US Dollar,USD,840,Yen,JPY,392,149.07,147.07,148.07
+2025-03-10,US Dollar,USD,840,Yen,JPY,392,148.38,146.38,147.38

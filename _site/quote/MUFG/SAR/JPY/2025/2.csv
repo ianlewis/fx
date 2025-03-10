@@ -1,4 +1,4 @@
-date,baseCurrencyName,baseCurrencyCode,baseCurrencyNum,quoteCurrencyName,quoteCurrencyCode,quoteCurrencyNum,tts,ttb,ttm
+date,baseCurrencyName,baseCurrencyCode,baseCurrencyNum,quoteCurrencyName,quoteCurrencyCode,quoteCurrencyNum,ask,bid,mid
 2025-02-03,Saudi Riyal,SAR,682,Yen,JPY,392,42.38,40.78,41.58
 2025-02-04,Saudi Riyal,SAR,682,Yen,JPY,392,42.16,40.56,41.36
 2025-02-05,Saudi Riyal,SAR,682,Yen,JPY,392,41.95,40.35,41.15

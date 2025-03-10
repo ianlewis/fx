@@ -58,6 +58,13 @@ node_modules/.installed: package.json package-lock.json
 	@./.venv/bin/pip install -r requirements.txt --require-hashes
 	@touch .venv/.installed
 
+## Build
+#####################################################################
+
+.PHONY: build
+build: .venv/.installed ## Update API contents.
+	PYTHONPATH=. ./.venv/bin/python fx/updater.py --start "$$(date -d "-90 days" +"%Y-%m-%d")"
+
 ## Tools
 #####################################################################
 
@@ -92,8 +99,8 @@ license-headers: ## Update license headers.
 .PHONY: protoc
 protoc: fx/quote_pb2.py ## Compile protobuf files.
 
-fx/quote_pb2.py: fx/quote.proto
-	@protoc --proto_path=. --proto_path=.venv/lib/python3.10/site-packages/ --python_out=. $<
+fx/quote_pb2.py: .venv/.installed fx/quote.proto
+	@protoc --proto_path=. --proto_path=.venv/lib/python3.10/site-packages/ --python_out=. fx/quote.proto
 
 ## Formatting
 #####################################################################

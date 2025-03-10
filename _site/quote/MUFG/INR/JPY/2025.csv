@@ -1,4 +1,4 @@
-date,baseCurrencyName,baseCurrencyCode,baseCurrencyNum,quoteCurrencyName,quoteCurrencyCode,quoteCurrencyNum,tts,ttb,ttm
+date,baseCurrencyName,baseCurrencyCode,baseCurrencyNum,quoteCurrencyName,quoteCurrencyCode,quoteCurrencyNum,ask,bid,mid
 2025-01-06,Indian Rupee,INR,356,Yen,JPY,392,2.,1.7,1.85
 2025-01-07,Indian Rupee,INR,356,Yen,JPY,392,2.,1.7,1.85
 2025-01-08,Indian Rupee,INR,356,Yen,JPY,392,2.,1.7,1.85
@@ -40,3 +40,5 @@ date,baseCurrencyName,baseCurrencyCode,baseCurrencyNum,quoteCurrencyName,quoteCu
 2025-03-04,Indian Rupee,INR,356,Yen,JPY,392,1.87,1.57,1.72
 2025-03-05,Indian Rupee,INR,356,Yen,JPY,392,1.88,1.58,1.73
 2025-03-06,Indian Rupee,INR,356,Yen,JPY,392,1.88,1.58,1.73
+2025-03-07,Indian Rupee,INR,356,Yen,JPY,392,1.86,1.56,1.71
+2025-03-10,Indian Rupee,INR,356,Yen,JPY,392,1.85,1.55,1.7

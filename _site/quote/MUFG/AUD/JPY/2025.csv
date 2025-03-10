@@ -1,4 +1,4 @@
-date,baseCurrencyName,baseCurrencyCode,baseCurrencyNum,quoteCurrencyName,quoteCurrencyCode,quoteCurrencyNum,tts,ttb,ttm
+date,baseCurrencyName,baseCurrencyCode,baseCurrencyNum,quoteCurrencyName,quoteCurrencyCode,quoteCurrencyNum,ask,bid,mid
 2025-01-06,Australian Dollar,AUD,036,Yen,JPY,392,100.27,96.27,98.27
 2025-01-07,Australian Dollar,AUD,036,Yen,JPY,392,100.86,96.86,98.86
 2025-01-08,Australian Dollar,AUD,036,Yen,JPY,392,100.38,96.38,98.38
@@ -40,3 +40,5 @@ date,baseCurrencyName,baseCurrencyCode,baseCurrencyNum,quoteCurrencyName,quoteCu
 2025-03-04,Australian Dollar,AUD,036,Yen,JPY,392,94.69,90.69,92.69
 2025-03-05,Australian Dollar,AUD,036,Yen,JPY,392,95.82,91.82,93.82
 2025-03-06,Australian Dollar,AUD,036,Yen,JPY,392,96.52,92.52,94.52
+2025-03-07,Australian Dollar,AUD,036,Yen,JPY,392,95.67,91.67,93.67
+2025-03-10,Australian Dollar,AUD,036,Yen,JPY,392,95.,91.,93.

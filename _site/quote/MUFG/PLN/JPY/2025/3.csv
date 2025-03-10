@@ -1,5 +1,7 @@
-date,baseCurrencyName,baseCurrencyCode,baseCurrencyNum,quoteCurrencyName,quoteCurrencyCode,quoteCurrencyNum,tts,ttb,ttm
+date,baseCurrencyName,baseCurrencyCode,baseCurrencyNum,quoteCurrencyName,quoteCurrencyCode,quoteCurrencyNum,ask,bid,mid
 2025-03-03,Zloty,PLN,985,Yen,JPY,392,38.75,36.35,37.55
 2025-03-04,Zloty,PLN,985,Yen,JPY,392,38.83,36.43,37.63
 2025-03-05,Zloty,PLN,985,Yen,JPY,392,39.4,37.,38.2
 2025-03-06,Zloty,PLN,985,Yen,JPY,392,40.03,37.63,38.83
+2025-03-07,Zloty,PLN,985,Yen,JPY,392,39.45,37.05,38.25
+2025-03-10,Zloty,PLN,985,Yen,JPY,392,39.58,37.18,38.38

@@ -47,6 +47,9 @@ def str_to_money(code, s):
 
 
 def dict_to_str(d):
+    if not d:
+        return None
+
     n = str(d.get("units", 0))
 
     # nanos might have been negative but is always positive in the string
@@ -61,4 +64,6 @@ def dict_to_str(d):
 
 
 def money_to_str(m):
+    if not m:
+        return None
     return dict_to_str(MessageToDict(m))

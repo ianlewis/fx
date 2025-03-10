@@ -1,4 +1,4 @@
-date,baseCurrencyName,baseCurrencyCode,baseCurrencyNum,quoteCurrencyName,quoteCurrencyCode,quoteCurrencyNum,tts,ttb,ttm
+date,baseCurrencyName,baseCurrencyCode,baseCurrencyNum,quoteCurrencyName,quoteCurrencyCode,quoteCurrencyNum,ask,bid,mid
 2025-01-06,Qatari Rial,QAR,634,Yen,JPY,392,44.02,42.66,43.34
 2025-01-07,Qatari Rial,QAR,634,Yen,JPY,392,44.16,42.8,43.48
 2025-01-08,Qatari Rial,QAR,634,Yen,JPY,392,44.12,42.76,43.44
@@ -40,3 +40,5 @@ date,baseCurrencyName,baseCurrencyCode,baseCurrencyNum,quoteCurrencyName,quoteCu
 2025-03-04,Qatari Rial,QAR,634,Yen,JPY,392,41.7,40.34,41.02
 2025-03-05,Qatari Rial,QAR,634,Yen,JPY,392,41.86,40.5,41.18
 2025-03-06,Qatari Rial,QAR,634,Yen,JPY,392,41.69,40.33,41.01
+2025-03-07,Qatari Rial,QAR,634,Yen,JPY,392,41.37,40.01,40.69
+2025-03-10,Qatari Rial,QAR,634,Yen,JPY,392,41.18,39.82,40.5

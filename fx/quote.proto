@@ -52,12 +52,12 @@ message Quote {
     // quote_currency is the currency pair's quote currency (target currency).
     Currency quote_currency = 4;
 
-    // tts is the Telegraphic Transfer Selling Rate in the quote currency.
-    google.type.Money tts = 5;
+    // ask is the ask/sell price in the quote currency.
+    google.type.Money ask = 5;
 
-    // tts is the Telegraphic Transfer Buying Rate in the quote currency.
-    google.type.Money ttb = 6;
+    // bid is the bid/buy price in the quote currency.
+    google.type.Money bid = 6;
 
-    // tts is the Telegraphic Transfer Middle Rate in the quote currency.
-    google.type.Money ttm = 7;
+    // mid is the middle rate in the quote currency.
+    google.type.Money mid = 7;
 }

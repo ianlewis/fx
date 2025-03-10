@@ -1,4 +1,4 @@
-date,baseCurrencyName,baseCurrencyCode,baseCurrencyNum,quoteCurrencyName,quoteCurrencyCode,quoteCurrencyNum,tts,ttb,ttm
+date,baseCurrencyName,baseCurrencyCode,baseCurrencyNum,quoteCurrencyName,quoteCurrencyCode,quoteCurrencyNum,ask,bid,mid
 2025-01-06,Euro,EUR,978,Yen,JPY,392,163.96,160.96,162.46
 2025-01-07,Euro,EUR,978,Yen,JPY,392,165.8,162.8,164.3
 2025-01-08,Euro,EUR,978,Yen,JPY,392,165.04,162.04,163.54
@@ -40,3 +40,5 @@ date,baseCurrencyName,baseCurrencyCode,baseCurrencyNum,quoteCurrencyName,quoteCu
 2025-03-04,Euro,EUR,978,Yen,JPY,392,158.,155.,156.5
 2025-03-05,Euro,EUR,978,Yen,JPY,392,160.77,157.77,159.27
 2025-03-06,Euro,EUR,978,Yen,JPY,392,162.72,159.72,161.22
+2025-03-07,Euro,EUR,978,Yen,JPY,392,161.21,158.21,159.71
+2025-03-10,Euro,EUR,978,Yen,JPY,392,161.64,158.64,160.14

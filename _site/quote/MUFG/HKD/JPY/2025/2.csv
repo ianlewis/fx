@@ -1,4 +1,4 @@
-date,baseCurrencyName,baseCurrencyCode,baseCurrencyNum,quoteCurrencyName,quoteCurrencyCode,quoteCurrencyNum,tts,ttb,ttm
+date,baseCurrencyName,baseCurrencyCode,baseCurrencyNum,quoteCurrencyName,quoteCurrencyCode,quoteCurrencyNum,ask,bid,mid
 2025-02-03,Hong Kong Dollar,HKD,344,Yen,JPY,392,20.41,19.55,19.98
 2025-02-04,Hong Kong Dollar,HKD,344,Yen,JPY,392,20.37,19.51,19.94
 2025-02-05,Hong Kong Dollar,HKD,344,Yen,JPY,392,20.22,19.36,19.79

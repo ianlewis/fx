@@ -1,4 +1,4 @@
-date,baseCurrencyName,baseCurrencyCode,baseCurrencyNum,quoteCurrencyName,quoteCurrencyCode,quoteCurrencyNum,tts,ttb,ttm
+date,baseCurrencyName,baseCurrencyCode,baseCurrencyNum,quoteCurrencyName,quoteCurrencyCode,quoteCurrencyNum,ask,bid,mid
 2025-01-06,Rand,ZAR,710,Yen,JPY,392,9.91,6.91,8.41
 2025-01-07,Rand,ZAR,710,Yen,JPY,392,10.02,7.02,8.52
 2025-01-08,Rand,ZAR,710,Yen,JPY,392,9.94,6.94,8.44
@@ -40,3 +40,5 @@ date,baseCurrencyName,baseCurrencyCode,baseCurrencyNum,quoteCurrencyName,quoteCu
 2025-03-04,Rand,ZAR,710,Yen,JPY,392,9.52,6.52,8.02
 2025-03-05,Rand,ZAR,710,Yen,JPY,392,9.6,6.6,8.1
 2025-03-06,Rand,ZAR,710,Yen,JPY,392,9.65,6.65,8.15
+2025-03-07,Rand,ZAR,710,Yen,JPY,392,9.66,6.66,8.16
+2025-03-10,Rand,ZAR,710,Yen,JPY,392,9.56,6.56,8.06

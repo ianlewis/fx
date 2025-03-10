@@ -1,4 +1,4 @@
-date,baseCurrencyName,baseCurrencyCode,baseCurrencyNum,quoteCurrencyName,quoteCurrencyCode,quoteCurrencyNum,tts,ttb,ttm
+date,baseCurrencyName,baseCurrencyCode,baseCurrencyNum,quoteCurrencyName,quoteCurrencyCode,quoteCurrencyNum,ask,bid,mid
 2025-02-03,Yuan Renminbi,CNY,156,Yen,JPY,392,21.47,20.87,21.17
 2025-02-04,Yuan Renminbi,CNY,156,Yen,JPY,392,21.54,20.94,21.24
 2025-02-05,Yuan Renminbi,CNY,156,Yen,JPY,392,21.45,20.85,21.15

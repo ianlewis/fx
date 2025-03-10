@@ -1,4 +1,4 @@
-date,baseCurrencyName,baseCurrencyCode,baseCurrencyNum,quoteCurrencyName,quoteCurrencyCode,quoteCurrencyNum,tts,ttb,ttm
+date,baseCurrencyName,baseCurrencyCode,baseCurrencyNum,quoteCurrencyName,quoteCurrencyCode,quoteCurrencyNum,ask,bid,mid
 2025-02-03,Czech Koruna,CZK,203,Yen,JPY,392,6.44,6.2,6.32
 2025-02-04,Czech Koruna,CZK,203,Yen,JPY,392,6.48,6.24,6.36
 2025-02-05,Czech Koruna,CZK,203,Yen,JPY,392,6.48,6.24,6.36

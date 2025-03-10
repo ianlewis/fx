@@ -1,4 +1,4 @@
-date,baseCurrencyName,baseCurrencyCode,baseCurrencyNum,quoteCurrencyName,quoteCurrencyCode,quoteCurrencyNum,tts,ttb,ttm
+date,baseCurrencyName,baseCurrencyCode,baseCurrencyNum,quoteCurrencyName,quoteCurrencyCode,quoteCurrencyNum,ask,bid,mid
 2025-01-06,UAE Dirham,AED,784,Yen,JPY,392,43.69,42.33,43.01
 2025-01-07,UAE Dirham,AED,784,Yen,JPY,392,43.83,42.47,43.15
 2025-01-08,UAE Dirham,AED,784,Yen,JPY,392,43.79,42.43,43.11

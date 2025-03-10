@@ -1,4 +1,4 @@
-date,baseCurrencyName,baseCurrencyCode,baseCurrencyNum,quoteCurrencyName,quoteCurrencyCode,quoteCurrencyNum,tts,ttb,ttm
+date,baseCurrencyName,baseCurrencyCode,baseCurrencyNum,quoteCurrencyName,quoteCurrencyCode,quoteCurrencyNum,ask,bid,mid
 2025-01-06,Canadian Dollar,CAD,124,Yen,JPY,392,110.88,107.68,109.28
 2025-01-07,Canadian Dollar,CAD,124,Yen,JPY,392,111.94,108.74,110.34
 2025-01-08,Canadian Dollar,CAD,124,Yen,JPY,392,111.67,108.47,110.07
@@ -40,3 +40,5 @@ date,baseCurrencyName,baseCurrencyCode,baseCurrencyNum,quoteCurrencyName,quoteCu
 2025-03-04,Canadian Dollar,CAD,124,Yen,JPY,392,104.59,101.39,102.99
 2025-03-05,Canadian Dollar,CAD,124,Yen,JPY,392,105.6,102.4,104.
 2025-03-06,Canadian Dollar,CAD,124,Yen,JPY,392,105.61,102.41,104.01
+2025-03-07,Canadian Dollar,CAD,124,Yen,JPY,392,105.15,101.95,103.55
+2025-03-10,Canadian Dollar,CAD,124,Yen,JPY,392,104.2,101.,102.6

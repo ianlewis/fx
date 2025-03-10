@@ -1,4 +1,4 @@
-date,baseCurrencyName,baseCurrencyCode,baseCurrencyNum,quoteCurrencyName,quoteCurrencyCode,quoteCurrencyNum,tts,ttb,ttm
+date,baseCurrencyName,baseCurrencyCode,baseCurrencyNum,quoteCurrencyName,quoteCurrencyCode,quoteCurrencyNum,ask,bid,mid
 2025-01-06,Swiss Franc,CHF,756,Yen,JPY,392,174.21,172.41,173.31
 2025-01-07,Swiss Franc,CHF,756,Yen,JPY,392,175.63,173.83,174.73
 2025-01-08,Swiss Franc,CHF,756,Yen,JPY,392,174.72,172.92,173.82
@@ -40,3 +40,5 @@ date,baseCurrencyName,baseCurrencyCode,baseCurrencyNum,quoteCurrencyName,quoteCu
 2025-03-04,Swiss Franc,CHF,756,Yen,JPY,392,167.35,165.55,166.45
 2025-03-05,Swiss Franc,CHF,756,Yen,JPY,392,169.33,167.53,168.43
 2025-03-06,Swiss Franc,CHF,756,Yen,JPY,392,168.41,166.61,167.51
+2025-03-07,Swiss Franc,CHF,756,Yen,JPY,392,168.65,166.85,167.75
+2025-03-10,Swiss Franc,CHF,756,Yen,JPY,392,168.99,167.19,168.09

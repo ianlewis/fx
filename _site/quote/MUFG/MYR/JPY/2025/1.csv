@@ -1,4 +1,4 @@
-date,baseCurrencyName,baseCurrencyCode,baseCurrencyNum,quoteCurrencyName,quoteCurrencyCode,quoteCurrencyNum,tts,ttb,ttm
+date,baseCurrencyName,baseCurrencyCode,baseCurrencyNum,quoteCurrencyName,quoteCurrencyCode,quoteCurrencyNum,ask,bid,mid
 2025-01-06,Malaysian Ringgit,MYR,458,Yen,JPY,392,20.71,19.85,20.28
 2025-01-07,Malaysian Ringgit,MYR,458,Yen,JPY,392,20.78,19.92,20.35
 2025-01-08,Malaysian Ringgit,MYR,458,Yen,JPY,392,20.76,19.9,20.33

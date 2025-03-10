@@ -137,24 +137,24 @@ class MUFGProvider:
                     case 3:
 
                         try:
-                            kwargs["tts"] = str_to_money(jpy_code, cell.get_text(strip=True))
+                            kwargs["ask"] = str_to_money(jpy_code, cell.get_text(strip=True))
                         except ValueError as e:
                             self.logger.debug(f"tts: {type(e).__name__}: {e}")
                             pass
                     case 4:
                         try:
-                            kwargs["ttb"] = str_to_money(jpy_code, cell.get_text(strip=True))
+                            kwargs["bid"] = str_to_money(jpy_code, cell.get_text(strip=True))
                         except ValueError as e:
                             self.logger.debug(f"ttb: {type(e).__name__}: {e}")
                             pass
                     case 5:
                         try:
-                            kwargs["ttm"] = str_to_money(jpy_code, cell.get_text(strip=True))
+                            kwargs["mid"] = str_to_money(jpy_code, cell.get_text(strip=True))
                         except ValueError as e:
                             self.logger.debug(f"ttm: {type(e).__name__}: {e}")
                             pass
 
-                        if kwargs.get("tts") or kwargs.get("ttb") or kwargs.get("ttm"):
+                        if kwargs.get("ask") or kwargs.get("bid") or kwargs.get("mid"):
                             quotes.append(Quote(**kwargs))
 
         return quotes

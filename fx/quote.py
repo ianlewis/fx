@@ -49,9 +49,9 @@ def write_quotes_csv(f, quote_dicts):
             "quoteCurrencyName",
             "quoteCurrencyCode",
             "quoteCurrencyNum",
-            "tts",
-            "ttb",
-            "ttm",
+            "ask",
+            "bid",
+            "mid",
         ],
     )
     w.writeheader()
@@ -65,9 +65,9 @@ def write_quotes_csv(f, quote_dicts):
                 "quoteCurrencyName": q["quoteCurrency"]["name"],
                 "quoteCurrencyCode": q["quoteCurrency"]["alphabeticCode"],
                 "quoteCurrencyNum": q["quoteCurrency"]["numericCode"],
-                "tts": dict_to_str(q["tts"]),
-                "ttb": dict_to_str(q["ttb"]),
-                "ttm": dict_to_str(q["ttm"]),
+                "ask": dict_to_str(q["ask"]),
+                "bid": dict_to_str(q["bid"]),
+                "mid": dict_to_str(q["mid"]),
             }
         )
 
@@ -132,10 +132,7 @@ def update_day_quotes(base_dir, start_date, end_date, providers, logger):
         for provider in providers:
             for base_currency in provider.supported_base_currencies():
                 for quote_currency in provider.supported_quote_currencies():
-                    try:
-                        update_quote(provider.get_quote(base_currency, quote_currency, dt), base_dir, logger)
-                    except Exception as e:
-                        logger.warning(f"{dt} {type(e).__name__}: {e}")
+                    update_quote(provider.get_quote(base_currency, quote_currency, dt), base_dir, logger)
 
 
 def update_month_quotes(base_dir, logger):

@@ -1,4 +1,4 @@
-date,baseCurrencyName,baseCurrencyCode,baseCurrencyNum,quoteCurrencyName,quoteCurrencyCode,quoteCurrencyNum,tts,ttb,ttm
+date,baseCurrencyName,baseCurrencyCode,baseCurrencyNum,quoteCurrencyName,quoteCurrencyCode,quoteCurrencyNum,ask,bid,mid
 2025-01-06,Rupiah,IDR,360,Yen,JPY,392,1.1,0.86,0.98
 2025-01-07,Rupiah,IDR,360,Yen,JPY,392,1.1,0.86,0.98
 2025-01-08,Rupiah,IDR,360,Yen,JPY,392,1.1,0.86,0.98
@@ -40,3 +40,5 @@ date,baseCurrencyName,baseCurrencyCode,baseCurrencyNum,quoteCurrencyName,quoteCu
 2025-03-04,Rupiah,IDR,360,Yen,JPY,392,1.03,0.79,0.91
 2025-03-05,Rupiah,IDR,360,Yen,JPY,392,1.03,0.79,0.91
 2025-03-06,Rupiah,IDR,360,Yen,JPY,392,1.03,0.79,0.91
+2025-03-07,Rupiah,IDR,360,Yen,JPY,392,1.03,0.79,0.91
+2025-03-10,Rupiah,IDR,360,Yen,JPY,392,1.03,0.79,0.91

@@ -1,4 +1,4 @@
-date,baseCurrencyName,baseCurrencyCode,baseCurrencyNum,quoteCurrencyName,quoteCurrencyCode,quoteCurrencyNum,tts,ttb,ttm
+date,baseCurrencyName,baseCurrencyCode,baseCurrencyNum,quoteCurrencyName,quoteCurrencyCode,quoteCurrencyNum,ask,bid,mid
 2025-01-06,Singapore Dollar,SGD,702,Yen,JPY,392,115.91,114.25,115.08
 2025-01-07,Singapore Dollar,SGD,702,Yen,JPY,392,116.84,115.18,116.01
 2025-01-08,Singapore Dollar,SGD,702,Yen,JPY,392,116.65,114.99,115.82

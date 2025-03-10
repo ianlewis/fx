@@ -1,4 +1,4 @@
-date,baseCurrencyName,baseCurrencyCode,baseCurrencyNum,quoteCurrencyName,quoteCurrencyCode,quoteCurrencyNum,tts,ttb,ttm
+date,baseCurrencyName,baseCurrencyCode,baseCurrencyNum,quoteCurrencyName,quoteCurrencyCode,quoteCurrencyNum,ask,bid,mid
 2025-01-06,Turkish Lira,TRY,949,Yen,JPY,392,6.97,1.97,4.47
 2025-01-07,Turkish Lira,TRY,949,Yen,JPY,392,6.99,1.99,4.49
 2025-01-08,Turkish Lira,TRY,949,Yen,JPY,392,6.98,1.98,4.48
@@ -40,3 +40,5 @@ date,baseCurrencyName,baseCurrencyCode,baseCurrencyNum,quoteCurrencyName,quoteCu
 2025-03-04,Turkish Lira,TRY,949,Yen,JPY,392,6.6,1.6,4.1
 2025-03-05,Turkish Lira,TRY,949,Yen,JPY,392,6.61,1.61,4.11
 2025-03-06,Turkish Lira,TRY,949,Yen,JPY,392,6.59,1.59,4.09
+2025-03-07,Turkish Lira,TRY,949,Yen,JPY,392,6.57,1.57,4.07
+2025-03-10,Turkish Lira,TRY,949,Yen,JPY,392,6.54,1.54,4.04
