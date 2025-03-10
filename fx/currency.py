@@ -32,6 +32,14 @@ ISO_DOWNLOAD_XML="https://www.six-group.com/dam/download/financial-information/d
 ISO_DOWNLOAD_HISTORIC_XML="https://www.six-group.com/dam/download/financial-information/data-center/iso-currrency/lists/list-three.xml"
 
 
+def update_currencies(base_dir, logger):
+    # Get and update currencies.
+    currencies = get_currencies(logger)
+    write_currencies(base_dir, currencies, logger)
+
+    return currencies
+
+
 def write_currencies(base_path, currencies, logger):
     currency_path = os.path.join(base_path, "currency")
 
