@@ -33,15 +33,17 @@ def update_providers(base_dir, providers, logger):
     os.makedirs(provider_path, exist_ok=True)
 
     for provider in providers:
-        logger.info(f'Updating provider {provider.code}...')
+        logger.info(f"Updating provider {provider.code}...")
 
         json_path = os.path.join(provider_path, f"{provider.code}.json")
         csv_path = os.path.join(provider_path, f"{provider.code}.csv")
 
-        provider_dict = MessageToDict(Provider(
-            code=provider.code,
-            name=provider.name,
-        ))
+        provider_dict = MessageToDict(
+            Provider(
+                code=provider.code,
+                name=provider.name,
+            )
+        )
         with open(json_path, "w") as f:
             json.dump(provider_dict, f)
 
