@@ -19,7 +19,6 @@ import re
 from collections import defaultdict
 import csv
 import json
-import logging
 import os
 import os.path
 from datetime import date
@@ -27,7 +26,6 @@ from datetime import date
 from dateutil.relativedelta import relativedelta
 from google.protobuf.json_format import MessageToDict
 
-from fx.currency import get_currencies, write_currencies
 from fx.mufg import MUFGProvider
 from fx.money import dict_to_str
 
@@ -88,8 +86,8 @@ def update_quote(quote, base_path, logger):
         str(quote.date.month),
     )
 
-    json_path = os.path.join(date_path, f'{str(quote.date.day)}.json')
-    csv_path = os.path.join(date_path, f'{str(quote.date.day)}.csv')
+    json_path = os.path.join(date_path, f"{str(quote.date.day)}.json")
+    csv_path = os.path.join(date_path, f"{str(quote.date.day)}.csv")
 
     os.makedirs(date_path, exist_ok=True)
 
@@ -97,7 +95,7 @@ def update_quote(quote, base_path, logger):
     try:
         with open(json_path) as f:
             formatted_date = date(quote.date.year, quote.date.month, quote.date.day).isoformat()
-            logger.debug(f'{formatted_date}: appending quote {quote.base_currency.alphabetic_code}/{quote.quote_currency.alphabetic_code}')
+            logger.debug(f"{formatted_date}: appending quote {quote.base_currency.alphabetic_code}/{quote.quote_currency.alphabetic_code}")
             quotes = json.load(f)
     except (FileNotFoundError, json.JSONDecodeError):
         quotes = []
@@ -127,7 +125,6 @@ def update_quotes(base_dir, start_date, end_date, currencies, logger):
         update_year_quotes(base_dir, logger)
 
 
-
 def update_day_quotes(base_dir, start_date, end_date, providers, logger):
     for dt in dateIterator(start_date, end_date, relativedelta(days=1)):
         logger.debug(dt)
@@ -138,15 +135,15 @@ def update_day_quotes(base_dir, start_date, end_date, providers, logger):
                     try:
                         update_quote(provider.get_quote(base_currency, quote_currency, dt), base_dir, logger)
                     except Exception as e:
-                        logger.warning(f'{dt} {type(e).__name__}: {e}')
+                        logger.warning(f"{dt} {type(e).__name__}: {e}")
 
 
 def update_month_quotes(base_dir, logger):
     quotes = defaultdict(list)
     for root, dirs, files in os.walk(base_dir):
-        if re.match(base_dir + r'/[a-zA-Z]{3}/[a-zA-Z]{3}/[0-9]{4}/[0-9]{1,2}$', root):
+        if re.match(base_dir + r"/[a-zA-Z]{3}/[a-zA-Z]{3}/[0-9]{4}/[0-9]{1,2}$", root):
             for filename in files:
-                if os.path.splitext(filename)[1] == '.json':
+                if os.path.splitext(filename)[1] == ".json":
                     with open(os.path.join(root, filename)) as f:
                         day_quotes = json.load(f)
                         quotes[root].extend(day_quotes)
@@ -155,19 +152,19 @@ def update_month_quotes(base_dir, logger):
         # sort month_quotes by date
         month_quotes = sorted(month_quotes, key=lambda q: (q["date"]["year"], q["date"]["month"], q["date"]["day"]))
         year_dir, month_str = os.path.split(root)
-        with open(os.path.join(year_dir, f'{month_str}.json'), 'w') as f:
+        with open(os.path.join(year_dir, f"{month_str}.json"), "w") as f:
             json.dump(month_quotes, f)
 
-        with open(os.path.join(year_dir, f'{month_str}.csv'), 'w') as f:
+        with open(os.path.join(year_dir, f"{month_str}.csv"), "w") as f:
             write_quotes_csv(f, month_quotes)
 
 
 def update_year_quotes(base_dir, logger):
     quotes = defaultdict(list)
     for root, dirs, files in os.walk(base_dir):
-        if re.match(base_dir + r'/[a-zA-Z]{3}/[a-zA-Z]{3}/[0-9]{4}$', root):
+        if re.match(base_dir + r"/[a-zA-Z]{3}/[a-zA-Z]{3}/[0-9]{4}$", root):
             for filename in files:
-                if os.path.splitext(filename)[1] == '.json':
+                if os.path.splitext(filename)[1] == ".json":
                     with open(os.path.join(root, filename)) as f:
                         day_quotes = json.load(f)
                         quotes[root].extend(day_quotes)
@@ -176,10 +173,8 @@ def update_year_quotes(base_dir, logger):
         # TODO: sort year_quotes by date
         year_quotes = sorted(year_quotes, key=lambda q: (q["date"]["year"], q["date"]["month"], q["date"]["day"]))
         parent_dir, year_str = os.path.split(root)
-        with open(os.path.join(parent_dir, f'{year_str}.json'), 'w') as f:
+        with open(os.path.join(parent_dir, f"{year_str}.json"), "w") as f:
             json.dump(year_quotes, f)
 
-        with open(os.path.join(parent_dir, f'{year_str}.csv'), 'w') as f:
+        with open(os.path.join(parent_dir, f"{year_str}.csv"), "w") as f:
             write_quotes_csv(f, year_quotes)
-
-

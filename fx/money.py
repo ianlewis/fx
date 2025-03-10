@@ -17,22 +17,23 @@
 from google.type.money_pb2 import Money
 from google.protobuf.json_format import MessageToDict
 
+
 def str_to_money(code, s):
-    parts = s.split('.')
+    parts = s.split(".")
     if len(parts) > 2:
-        raise ValueError(f'invalid number: {s}')
+        raise ValueError(f"invalid number: {s}")
 
     units = int(parts[0])
     nanos = 0
 
     if len(parts) > 1:
-        nanos_str = parts[1] + '0' * (9 - len(parts[1]))
+        nanos_str = parts[1] + "0" * (9 - len(parts[1]))
         if len(nanos_str) > 9:
             nanos_str = nanos_str[:9]
 
         nanos = int(nanos_str)
         if nanos < 0:
-            raise ValueError(f'invalid number: {s}')
+            raise ValueError(f"invalid number: {s}")
 
     # If units is negative (or zero) nanos must also be negative (or zero).
     if units < 0:
@@ -54,7 +55,7 @@ def dict_to_str(d):
     if nanos < 0:
         nanos = -1 * nanos
 
-    n += ".{:09d}".format(nanos).rstrip('0')
+    n += ".{:09d}".format(nanos).rstrip("0")
 
     return n
 

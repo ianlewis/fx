@@ -88,7 +88,7 @@ class MUFGProvider:
             raise ValueError(f'currency "{quote_currency}" not supported')
 
         url = f'https://murc-kawasesouba.jp/fx/past_3month_result.php?y={quote_date.strftime("%Y")}&m={quote_date.strftime("%m")}&d={quote_date.strftime("%d")}'
-        self.logger.debug(f'GET: {url}')
+        self.logger.debug(f"GET: {url}")
         resp = request.urlopen(url)
 
         quotes = []
@@ -139,19 +139,19 @@ class MUFGProvider:
                         try:
                             kwargs["tts"] = str_to_money(jpy_code, cell.get_text(strip=True))
                         except ValueError as e:
-                            self.logger.debug(f'tts: {type(e).__name__}: {e}')
+                            self.logger.debug(f"tts: {type(e).__name__}: {e}")
                             pass
                     case 4:
                         try:
                             kwargs["ttb"] = str_to_money(jpy_code, cell.get_text(strip=True))
                         except ValueError as e:
-                            self.logger.debug(f'ttb: {type(e).__name__}: {e}')
+                            self.logger.debug(f"ttb: {type(e).__name__}: {e}")
                             pass
                     case 5:
                         try:
                             kwargs["ttm"] = str_to_money(jpy_code, cell.get_text(strip=True))
                         except ValueError as e:
-                            self.logger.debug(f'ttm: {type(e).__name__}: {e}')
+                            self.logger.debug(f"ttm: {type(e).__name__}: {e}")
                             pass
 
                         if kwargs.get("tts") or kwargs.get("ttb") or kwargs.get("ttm"):

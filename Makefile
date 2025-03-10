@@ -142,7 +142,6 @@ flake8: .venv/.installed ## Runs the flake8 linter.
 		files=$$( \
 			git ls-files --deduplicate \
 				'*.py' \
-				'**/*.py' \
 		); \
 		.venv/bin/flake8 --config ./.flake8 $${files}
 
