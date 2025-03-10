@@ -40,7 +40,7 @@ jobs:
           git config --global user.name github-actions
           git config --global user.email github-actions@github.com
           git add .
-          git commit -am "Update data $(date +"%Y-%m-%d")"
+          git commit -m "Update data $(date +"%Y-%m-%d")" || true
           git push
       - name: Configure Pages
         uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b # v5.0.0
