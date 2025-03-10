@@ -1,0 +1,21 @@
+{
+  "alphabeticCode": "RUR",
+  "numericCode": "810",
+  "name": "Russian Ruble",
+  "countries": [
+    "AZERBAIJAN",
+    "BELARUS",
+    "GEORGIA",
+    "KAZAKHSTAN",
+    "KYRGYZSTAN",
+    "MOLDOVA, REPUBLIC OF",
+    "RUSSIAN FEDERATION",
+    "TAJIKISTAN",
+    "TURKMENISTAN",
+    "UZBEKISTAN"
+  ],
+  "withdrawalDate": {
+    "year": 1994,
+    "month": 8
+  }
+}

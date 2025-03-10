@@ -1,0 +1,9 @@
+{
+  "alphabeticCode": "BOP",
+  "numericCode": "068",
+  "name": "Peso boliviano",
+  "withdrawalDate": {
+    "year": 1987,
+    "month": 2
+  }
+}

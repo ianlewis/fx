@@ -1,0 +1,9 @@
+{
+  "alphabeticCode": "BEL",
+  "numericCode": "992",
+  "name": "Financial Franc",
+  "withdrawalDate": {
+    "year": 1990,
+    "month": 3
+  }
+}

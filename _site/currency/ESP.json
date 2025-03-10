@@ -1,0 +1,12 @@
+{
+  "alphabeticCode": "ESP",
+  "numericCode": "724",
+  "name": "Spanish Peseta",
+  "countries": [
+    "SPAIN"
+  ],
+  "withdrawalDate": {
+    "year": 2002,
+    "month": 3
+  }
+}

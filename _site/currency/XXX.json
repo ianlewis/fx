@@ -1,0 +1,8 @@
+{
+  "alphabeticCode": "XXX",
+  "numericCode": "999",
+  "name": "The codes assigned for transactions where no currency is involved",
+  "countries": [
+    "ZZ07_No_Currency"
+  ]
+}

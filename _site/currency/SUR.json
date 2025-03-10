@@ -1,0 +1,9 @@
+{
+  "alphabeticCode": "SUR",
+  "numericCode": "810",
+  "name": "Rouble",
+  "withdrawalDate": {
+    "year": 1990,
+    "month": 12
+  }
+}

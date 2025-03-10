@@ -89,11 +89,27 @@ license-headers: ## Update license headers.
 			autogen -i --no-code --no-tlc -c "$${name}" -l apache Makefile; \
 		fi;
 
+.PHONY: protoc
+protoc: fx/quote_pb2.py ## Compile protobuf files.
+
+fx/quote_pb2.py: fx/quote.proto
+	@protoc --proto_path=. --proto_path=.venv/lib/python3.10/site-packages/ --python_out=. $<
+
 ## Formatting
 #####################################################################
 
 .PHONY: format
-format: md-format yaml-format ## Format all files
+format: black md-format yaml-format ## Format all files
+
+.PHONY: black
+black: .venv/.installed ## Format Python files.
+	@set -euo pipefail;\
+		files=$$( \
+			git ls-files --deduplicate \
+				'*.py' \
+				'**/*.py' \
+		); \
+		.venv/bin/black --quiet --line-length 179 $${files}
 
 .PHONY: md-format
 md-format: node_modules/.installed ## Format Markdown files.
@@ -118,7 +134,17 @@ yaml-format: node_modules/.installed ## Format YAML files.
 #####################################################################
 
 .PHONY: lint
-lint: yamllint markdownlint actionlint zizmor ## Run all linters.
+lint: flake8 yamllint markdownlint actionlint zizmor ## Run all linters.
+
+.PHONY: flake8
+flake8: .venv/.installed ## Runs the flake8 linter.
+	@set -euo pipefail;\
+		files=$$( \
+			git ls-files --deduplicate \
+				'*.py' \
+				'**/*.py' \
+		); \
+		.venv/bin/flake8 --config ./.flake8 $${files}
 
 .PHONY: actionlint
 actionlint: ## Runs the actionlint linter.

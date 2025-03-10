@@ -1,0 +1,9 @@
+{
+  "alphabeticCode": "DEM",
+  "numericCode": "276",
+  "name": "Deutsche Mark",
+  "withdrawalDate": {
+    "year": 2002,
+    "month": 3
+  }
+}

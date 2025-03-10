@@ -1,0 +1,9 @@
+{
+  "alphabeticCode": "BEF",
+  "numericCode": "056",
+  "name": "Belgian Franc",
+  "withdrawalDate": {
+    "year": 2002,
+    "month": 3
+  }
+}

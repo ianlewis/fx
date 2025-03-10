@@ -1,0 +1,9 @@
+{
+  "alphabeticCode": "ARP",
+  "numericCode": "032",
+  "name": "Peso Argentino",
+  "withdrawalDate": {
+    "year": 1985,
+    "month": 7
+  }
+}

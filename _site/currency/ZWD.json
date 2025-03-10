@@ -1,0 +1,12 @@
+{
+  "alphabeticCode": "ZWD",
+  "numericCode": "716",
+  "name": "Zimbabwe Dollar (old)",
+  "countries": [
+    "ZIMBABWE"
+  ],
+  "withdrawalDate": {
+    "year": 2006,
+    "month": 8
+  }
+}

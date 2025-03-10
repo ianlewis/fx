@@ -1,0 +1,12 @@
+{
+  "alphabeticCode": "ZAL",
+  "numericCode": "991",
+  "name": "Financial Rand",
+  "countries": [
+    "SOUTH AFRICA"
+  ],
+  "withdrawalDate": {
+    "year": 1995,
+    "month": 3
+  }
+}

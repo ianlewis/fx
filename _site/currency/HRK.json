@@ -1,0 +1,12 @@
+{
+  "alphabeticCode": "HRK",
+  "numericCode": "191",
+  "name": "Croatian Kuna",
+  "countries": [
+    "CROATIA"
+  ],
+  "withdrawalDate": {
+    "year": 2015,
+    "month": 6
+  }
+}

@@ -7,3 +7,5 @@ node_modules/
 
 # SARIF files
 *.sarif.json
+
+__pycache__

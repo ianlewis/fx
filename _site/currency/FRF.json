@@ -1,0 +1,22 @@
+{
+  "alphabeticCode": "FRF",
+  "numericCode": "250",
+  "name": "French Franc",
+  "countries": [
+    "FRANCE",
+    "FRENCH  GUIANA",
+    "FRENCH SOUTHERN TERRITORIES",
+    "GUADELOUPE",
+    "MARTINIQUE",
+    "MAYOTTE",
+    "MONACO",
+    "R\u00c9UNION",
+    "SAINT MARTIN",
+    "SAINT PIERRE AND MIQUELON",
+    "SAINT-BARTH\u00c9LEMY"
+  ],
+  "withdrawalDate": {
+    "year": 2002,
+    "month": 3
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "alphabeticCode": "ITL",
+  "numericCode": "380",
+  "name": "Italian Lira",
+  "countries": [
+    "ITALY",
+    "SAN MARINO"
+  ],
+  "withdrawalDate": {
+    "year": 2002,
+    "month": 3
+  }
+}

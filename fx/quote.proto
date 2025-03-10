@@ -1,0 +1,63 @@
+syntax = "proto3";
+
+import "google/type/money.proto";
+import "google/type/date.proto";
+
+// Currency represents a monetary currency as defined in ISO 4217.
+message Currency {
+    // alphabetic_code is the 3-letter currency code.
+    string alphabetic_code = 1;
+
+    // numeric_code is the currency's numeric code. The numeric code may be
+    // zero for some historic currencies.
+    string numeric_code = 2;
+
+    // name is the human readable name for the currency.
+    string name = 3;
+
+    // minor_units is the decimal relationship between the currency's major and
+    // minor units. "1", "2" and "3" signify a ratio of 10:1, 100:1 and 1000:1
+    // respectively. If no minor units exist, this value is zero. Minor units
+    // is zero for historic currencies.
+    int32 minor_units = 4;
+
+    // countries are the registered countries where the currency is/was used.
+    repeated string countries = 5;
+    
+    // withdrawal_date is the historical date that the currency was withdrawn.
+    // withdrawal_date.day can be be zero to indicate a month withdrawal date. 
+    google.type.Date withdrawal_date = 6; 
+}
+
+// Provider represents a currency exchange provider.
+message Provider {
+    // Code is a URL-fragment code for the provider.
+    string code = 1; 
+    
+    // name is the human readable name for the provider.
+    string name = 2;
+}
+
+// Quote is a currency conversion quote.
+message Quote {
+    // provider is the provider that provides the quote.
+    Provider provider = 1;
+
+    // date is the date on which the quote was given.
+    google.type.Date date = 2; 
+
+    // bose_currency is the currency pair base currency.
+    Currency base_currency = 3;
+    
+    // quote_currency is the currency pair's quote currency (target currency).
+    Currency quote_currency = 4;
+
+    // tts is the Telegraphic Transfer Selling Rate in the quote currency.
+    google.type.Money tts = 5;
+
+    // tts is the Telegraphic Transfer Buying Rate in the quote currency.
+    google.type.Money ttb = 6;
+
+    // tts is the Telegraphic Transfer Middle Rate in the quote currency.
+    google.type.Money ttm = 7;
+}

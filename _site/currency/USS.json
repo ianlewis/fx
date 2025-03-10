@@ -1,0 +1,9 @@
+{
+  "alphabeticCode": "USS",
+  "numericCode": "998",
+  "name": "US Dollar (Same day)",
+  "withdrawalDate": {
+    "year": 2014,
+    "month": 3
+  }
+}

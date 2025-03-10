@@ -1,0 +1,12 @@
+{
+  "alphabeticCode": "FIM",
+  "numericCode": "246",
+  "name": "Markka",
+  "countries": [
+    "FINLAND"
+  ],
+  "withdrawalDate": {
+    "year": 2002,
+    "month": 3
+  }
+}
