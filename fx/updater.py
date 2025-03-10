@@ -28,7 +28,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--start", help="Start date", type=date.fromisoformat, default=today.strftime("%Y-%m-%d"))
     parser.add_argument("--end", help="End date", type=date.fromisoformat, default=today.strftime("%Y-%m-%d"))
-    parser.add_argument("--out", help="Output directory", type=str, default="_site")
+    parser.add_argument("--out", help="Output directory", type=str, default="_site/v1")
     parser.add_argument("--debug", help="enable debug", action="store_true", default=False)
     args = parser.parse_args()
 
