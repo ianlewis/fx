@@ -65,12 +65,9 @@ def write_quotes_csv(f, quote_dicts):
         )
 
 
-def update_quote(quote, base_path, logger):
-    if not quote:
-        return
-
+def update_day_quote(quote, base_dir, logger):
     date_path = os.path.join(
-        base_path,
+        base_dir,
         "provider",
         quote.provider_code,
         "quote",
@@ -80,12 +77,27 @@ def update_quote(quote, base_path, logger):
         "{:02d}".format(quote.date.month),
     )
 
-    formatted_day = "{:02d}".format(quote.date.day)
+    update_quote(quote, date_path, "{:02d}".format(quote.date.day), logger)
 
-    json_path = os.path.join(date_path, f"{formatted_day}.json")
-    csv_path = os.path.join(date_path, f"{formatted_day}.csv")
 
-    os.makedirs(date_path, exist_ok=True)
+def update_latest_quote(quote, base_dir, logger):
+    latest_path = os.path.join(
+        base_dir,
+        "provider",
+        quote.provider_code,
+        "quote",
+        quote.base_currency_code,
+        quote.quote_currency_code,
+    )
+
+    update_quote(quote, latest_path, "latest", logger)
+
+
+def update_quote(quote, base_dir, name, logger):
+    os.makedirs(base_dir, exist_ok=True)
+
+    json_path = os.path.join(base_dir, f"{name}.json")
+    csv_path = os.path.join(base_dir, f"{name}.csv")
 
     # Get existing quotes if they already exist and merge with them.
     try:
@@ -122,6 +134,8 @@ def update_quotes(base_dir, start_date, end_date, providers, currencies, logger)
 
 
 def update_day_quotes(base_dir, start_date, end_date, providers, logger):
+    latest = {}
+
     for dt in dateIterator(start_date, end_date, relativedelta(days=1)):
         logger.debug(dt)
 
@@ -129,7 +143,13 @@ def update_day_quotes(base_dir, start_date, end_date, providers, logger):
         for provider in providers:
             for base_currency_code in provider.supported_base_currencies():
                 for quote_currency_code in provider.supported_quote_currencies():
-                    update_quote(provider.get_quote(base_currency_code, quote_currency_code, dt), base_dir, logger)
+                    quote = provider.get_quote(base_currency_code, quote_currency_code, dt)
+                    if quote:
+                        latest[(provider.code, base_currency_code, quote_currency_code)] = quote
+                        update_day_quote(quote, base_dir, logger)
+
+    for quote in latest.values():
+        update_latest_quote(quote, base_dir, logger)
 
 
 def update_month_quotes(base_dir, logger):
