@@ -46,7 +46,7 @@ message Quote {
     // date is the date on which the quote was given.
     google.type.Date date = 2; 
 
-    // bose_currency is the currency pair base currency.
+    // base_currency is the currency pair base currency.
     Currency base_currency = 3;
     
     // quote_currency is the currency pair's quote currency (target currency).
