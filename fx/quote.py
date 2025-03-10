@@ -77,12 +77,14 @@ def update_quote(quote, base_path, logger):
         "quote",
         quote.base_currency_code,
         quote.quote_currency_code,
-        str(quote.date.year),
-        str(quote.date.month),
+        "{:04d}".format(quote.date.year),
+        "{:02d}".format(quote.date.month),
     )
 
-    json_path = os.path.join(date_path, f"{str(quote.date.day)}.json")
-    csv_path = os.path.join(date_path, f"{str(quote.date.day)}.csv")
+    formatted_day = "{:02d}".format(quote.date.day)
+
+    json_path = os.path.join(date_path, f"{formatted_day}.json")
+    csv_path = os.path.join(date_path, f"{formatted_day}.csv")
 
     os.makedirs(date_path, exist_ok=True)
 
