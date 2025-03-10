@@ -43,12 +43,9 @@ def write_quotes_csv(f, quote_dicts):
         f,
         fieldnames=[
             "date",
-            "baseCurrencyName",
+            "providerCode",
             "baseCurrencyCode",
-            "baseCurrencyNum",
-            "quoteCurrencyName",
             "quoteCurrencyCode",
-            "quoteCurrencyNum",
             "ask",
             "bid",
             "mid",
@@ -59,12 +56,9 @@ def write_quotes_csv(f, quote_dicts):
         w.writerow(
             {
                 "date": date(q["date"]["year"], q["date"]["month"], q["date"]["day"]).isoformat(),
-                "baseCurrencyName": q["baseCurrency"]["name"],
-                "baseCurrencyCode": q["baseCurrency"]["alphabeticCode"],
-                "baseCurrencyNum": q["baseCurrency"]["numericCode"],
-                "quoteCurrencyName": q["quoteCurrency"]["name"],
-                "quoteCurrencyCode": q["quoteCurrency"]["alphabeticCode"],
-                "quoteCurrencyNum": q["quoteCurrency"]["numericCode"],
+                "providerCode": q["providerCode"],
+                "baseCurrencyCode": q["baseCurrencyCode"],
+                "quoteCurrencyCode": q["quoteCurrencyCode"],
                 "ask": dict_to_str(q["ask"]),
                 "bid": dict_to_str(q["bid"]),
                 "mid": dict_to_str(q["mid"]),
@@ -78,10 +72,11 @@ def update_quote(quote, base_path, logger):
 
     date_path = os.path.join(
         base_path,
+        "provider",
+        quote.provider_code,
         "quote",
-        quote.provider.code,
-        quote.base_currency.alphabetic_code,
-        quote.quote_currency.alphabetic_code,
+        quote.base_currency_code,
+        quote.quote_currency_code,
         str(quote.date.year),
         str(quote.date.month),
     )
@@ -95,7 +90,7 @@ def update_quote(quote, base_path, logger):
     try:
         with open(json_path) as f:
             formatted_date = date(quote.date.year, quote.date.month, quote.date.day).isoformat()
-            logger.debug(f"{formatted_date}: appending quote {quote.base_currency.alphabetic_code}/{quote.quote_currency.alphabetic_code}")
+            logger.debug(f"{formatted_date}: appending quote {quote.base_currency_code}/{quote.quote_currency_code}")
             quotes = json.load(f)
     except (FileNotFoundError, json.JSONDecodeError):
         quotes = []
@@ -118,8 +113,9 @@ def update_quotes(base_dir, start_date, end_date, currencies, logger):
     for provider in providers:
         base_dir = os.path.join(
             base_dir,
-            "quote",
+            "provider",
             provider.code,
+            "quote",
         )
         update_month_quotes(base_dir, logger)
         update_year_quotes(base_dir, logger)
@@ -130,9 +126,9 @@ def update_day_quotes(base_dir, start_date, end_date, providers, logger):
         logger.debug(dt)
 
         for provider in providers:
-            for base_currency in provider.supported_base_currencies():
-                for quote_currency in provider.supported_quote_currencies():
-                    update_quote(provider.get_quote(base_currency, quote_currency, dt), base_dir, logger)
+            for base_currency_code in provider.supported_base_currencies():
+                for quote_currency_code in provider.supported_quote_currencies():
+                    update_quote(provider.get_quote(base_currency_code, quote_currency_code, dt), base_dir, logger)
 
 
 def update_month_quotes(base_dir, logger):

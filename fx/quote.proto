@@ -40,17 +40,17 @@ message Provider {
 
 // Quote is a currency conversion quote.
 message Quote {
-    // provider is the provider that provides the quote.
-    Provider provider = 1;
+    // provider_code is the provider code of that provides the quote.
+    string provider_code = 1;
 
     // date is the date on which the quote was given.
     google.type.Date date = 2; 
 
-    // base_currency is the currency pair base currency.
-    Currency base_currency = 3;
+    // base_currency_code is the currency pair base currency alphabetic code.
+    string base_currency_code = 3;
     
-    // quote_currency is the currency pair's quote currency (target currency).
-    Currency quote_currency = 4;
+    // quote_currency_code is the currency pair quote currency (target) alphabetic code.
+    string quote_currency_code = 4;
 
     // ask is the ask/sell price in the quote currency.
     google.type.Money ask = 5;

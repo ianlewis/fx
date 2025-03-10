@@ -18,7 +18,7 @@ from urllib import request
 
 from bs4 import BeautifulSoup
 
-from fx.quote_pb2 import Quote, Provider
+from fx.quote_pb2 import Quote
 from google.type.date_pb2 import Date
 
 from fx.money import str_to_money
@@ -76,7 +76,7 @@ class MUFGProvider:
             self._cache[(quote_currency_code, quote_date)] = self._get_quotes_by_date(quote_currency_code, quote_date)
 
         for q in self._cache[(quote_currency_code, quote_date)]:
-            if q.base_currency.alphabetic_code == base_currency_code:
+            if q.base_currency_code == base_currency_code:
                 return q
 
         return None
@@ -112,16 +112,13 @@ class MUFGProvider:
             #       opening <tr> tag for table rows after the first row. Thus we
             #       don't select for <tr> tags but go directly to the <td> tag.
             kwargs = {
-                "provider": Provider(
-                    code=self.code,
-                    name=self.name,
-                ),
+                "provider_code": self.code,
                 "date": Date(
                     year=quote_date.year,
                     month=quote_date.month,
                     day=quote_date.day,
                 ),
-                "quote_currency": self.currencies["JPY"],
+                "quote_currency_code": self.currencies["JPY"].alphabetic_code,
             }
 
             for i, cell in enumerate(table.select("td")):
@@ -133,7 +130,7 @@ class MUFGProvider:
                         # Japanese name is ignored
                         pass
                     case 2:
-                        kwargs["base_currency"] = self.currencies[cell.get_text(strip=True)]
+                        kwargs["base_currency_code"] = self.currencies[cell.get_text(strip=True)].alphabetic_code
                     case 3:
 
                         try:
