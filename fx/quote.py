@@ -170,7 +170,6 @@ def update_year_quotes(base_dir, logger):
                         quotes[root].extend(day_quotes)
 
     for root, year_quotes in quotes.items():
-        # TODO: sort year_quotes by date
         year_quotes = sorted(year_quotes, key=lambda q: (q["date"]["year"], q["date"]["month"], q["date"]["day"]))
         parent_dir, year_str = os.path.split(root)
         with open(os.path.join(parent_dir, f"{year_str}.json"), "w") as f:
