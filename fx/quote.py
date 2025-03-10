@@ -125,6 +125,7 @@ def update_day_quotes(base_dir, start_date, end_date, providers, logger):
     for dt in dateIterator(start_date, end_date, relativedelta(days=1)):
         logger.debug(dt)
 
+        logger.info(f'Updating quotes for {dt.isoformat()}...')
         for provider in providers:
             for base_currency_code in provider.supported_base_currencies():
                 for quote_currency_code in provider.supported_quote_currencies():

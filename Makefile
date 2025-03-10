@@ -63,7 +63,7 @@ node_modules/.installed: package.json package-lock.json
 
 .PHONY: build
 build: .venv/.installed ## Update API contents.
-	PYTHONPATH=. ./.venv/bin/python fx/updater.py --start "$$(date -d "-90 days" +"%Y-%m-%d")"
+	@PYTHONPATH=. ./.venv/bin/python fx/updater.py --start "$$(date -d "-14 days" +"%Y-%m-%d")"
 
 ## Tools
 #####################################################################
