@@ -1,0 +1,4 @@
+[build]
+base = "."
+publish = "_site/"  # relative to `base` directory
+environment = { PYTHON_VERSION = "3.10" }
