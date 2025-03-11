@@ -134,7 +134,8 @@ def update_quotes(base_dir, start_date, end_date, providers, currencies, logger)
 
 
 def update_day_quotes(base_dir, start_date, end_date, providers, logger):
-    latest = {}
+    # TODO(#23): Update latest endpoint.
+    # latest = {}
 
     for dt in dateIterator(start_date, end_date, relativedelta(days=1)):
         logger.debug(dt)
@@ -145,11 +146,11 @@ def update_day_quotes(base_dir, start_date, end_date, providers, logger):
                 for quote_currency_code in provider.supported_quote_currencies():
                     quote = provider.get_quote(base_currency_code, quote_currency_code, dt)
                     if quote:
-                        latest[(provider.code, base_currency_code, quote_currency_code)] = quote
+                        # latest[(provider.code, base_currency_code, quote_currency_code)] = quote
                         update_day_quote(quote, base_dir, logger)
 
-    for quote in latest.values():
-        update_latest_quote(quote, base_dir, logger)
+    # for quote in latest.values():
+    #     update_latest_quote(quote, base_dir, logger)
 
 
 def update_month_quotes(base_dir, logger):
