@@ -58,9 +58,9 @@ def write_quotes_csv(f, quote_dicts):
                 "providerCode": q["providerCode"],
                 "baseCurrencyCode": q["baseCurrencyCode"],
                 "quoteCurrencyCode": q["quoteCurrencyCode"],
-                "ask": dict_to_str(q["ask"]),
-                "bid": dict_to_str(q["bid"]),
-                "mid": dict_to_str(q["mid"]),
+                "ask": dict_to_str(q.get("ask")),
+                "bid": dict_to_str(q.get("bid")),
+                "mid": dict_to_str(q.get("mid")),
             }
         )
 
