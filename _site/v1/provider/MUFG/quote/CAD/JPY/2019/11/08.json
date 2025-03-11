@@ -1,0 +1,1 @@
+[{"providerCode": "MUFG", "date": {"year": 2019, "month": 11, "day": 8}, "baseCurrencyCode": "CAD", "quoteCurrencyCode": "JPY", "ask": {"currencyCode": "JPY", "units": "84", "nanos": 610000000}, "bid": {"currencyCode": "JPY", "units": "81", "nanos": 410000000}, "mid": {"currencyCode": "JPY", "units": "83", "nanos": 10000000}}]
