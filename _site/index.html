@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="None">
+        
+        
+        <link rel="shortcut icon" href="img/favicon.ico">
+        <title>fx.ianlewis.org</title>
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+        <link href="css/fontawesome.min.css" rel="stylesheet">
+        <link href="css/brands.min.css" rel="stylesheet">
+        <link href="css/solid.min.css" rel="stylesheet">
+        <link href="css/v4-font-face.min.css" rel="stylesheet">
+        <link href="css/base.css" rel="stylesheet">
+        <link id="hljs-light" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" >
+        <link id="hljs-dark" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css" disabled>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script> 
+    </head>
+
+    <body class="homepage">
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href=".">fx.ianlewis.org</a>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+
+                    <ul class="nav navbar-nav ms-md-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse" data-bs-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-bs-level="1"><a href="#fxianlewisorg" class="nav-link">fx.ianlewis.org</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-bs-level="2"><a href="#provider" class="nav-link">Provider</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#currencies" class="nav-link">Currencies</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#quotes" class="nav-link">Quotes</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="fxianlewisorg">fx.ianlewis.org</h1>
+<p><code>fx.ianlewis.org</code> is a currency conversion API. It currently supports MUFG published rates between 31 currencies and JPY.</p>
+<h2 id="provider">Provider</h2>
+<p>Currency exchange provider information can be retrieved via the provider endpoint.</p>
+<p><a href="https://fx.ianlewis.org/v1/provider/MUFG.json">https://fx.ianlewis.org/v1/provider/MUFG.json</a></p>
+<pre><code class="language-json">{
+  &quot;code&quot;: &quot;MUFG&quot;,
+  &quot;name&quot;: &quot;MUFG Bank, Ltd.&quot;
+}
+</code></pre>
+<h2 id="currencies">Currencies</h2>
+<p>Currency information can be retrieved via the currency endpoint using the currency's ISO 4217 alphabetic code.</p>
+<p><a href="https://fx.ianlewis.org/v1/currency/USD.json">https://fx.ianlewis.org/v1/currency/USD.json</a></p>
+<pre><code class="language-json">{
+  &quot;alphabeticCode&quot;: &quot;USD&quot;,
+  &quot;numericCode&quot;: &quot;840&quot;,
+  &quot;name&quot;: &quot;US Dollar&quot;,
+  &quot;countries&quot;: [
+    &quot;AMERICAN SAMOA&quot;,
+    &quot;BONAIRE, SINT EUSTATIUS AND SABA&quot;,
+    &quot;BRITISH INDIAN OCEAN TERRITORY (THE)&quot;,
+    &quot;ECUADOR&quot;,
+    &quot;EL SALVADOR&quot;,
+    &quot;GUAM&quot;,
+    &quot;HAITI&quot;,
+    &quot;MARSHALL ISLANDS (THE)&quot;,
+    &quot;MICRONESIA (FEDERATED STATES OF)&quot;,
+    &quot;NORTHERN MARIANA ISLANDS (THE)&quot;,
+    &quot;PALAU&quot;,
+    &quot;PANAMA&quot;,
+    &quot;PUERTO RICO&quot;,
+    &quot;TIMOR-LESTE&quot;,
+    &quot;TURKS AND CAICOS ISLANDS (THE)&quot;,
+    &quot;UNITED STATES MINOR OUTLYING ISLANDS (THE)&quot;,
+    &quot;UNITED STATES OF AMERICA (THE)&quot;,
+    &quot;VIRGIN ISLANDS (BRITISH)&quot;,
+    &quot;VIRGIN ISLANDS (U.S.)&quot;
+  ]
+}
+</code></pre>
+<h2 id="quotes">Quotes</h2>
+<p>Currency exchange rate quotes can be retrieved via a provider's quote endpoint. The <code>Quote</code> object's format is defined in <a href="https://github.com/ianlewis/fx/blob/main/fx/quote.proto"><code>quote.proto</code></a>.</p>
+<p><a href="https://fx.ianlewis.org/v1/provider/MUFG/quote/USD/JPY/2024/03/11.json">https://fx.ianlewis.org/v1/provider/MUFG/quote/USD/JPY/2024/03/11.json</a></p>
+<pre><code class="language-json">[
+  {
+    &quot;providerCode&quot;: &quot;MUFG&quot;,
+    &quot;date&quot;: {
+      &quot;year&quot;: 2024,
+      &quot;month&quot;: 3,
+      &quot;day&quot;: 11
+    },
+    &quot;baseCurrencyCode&quot;: &quot;USD&quot;,
+    &quot;quoteCurrencyCode&quot;: &quot;JPY&quot;,
+    &quot;ask&quot;: {
+      &quot;currencyCode&quot;: &quot;JPY&quot;,
+      &quot;units&quot;: &quot;147&quot;,
+      &quot;nanos&quot;: 820000000
+    },
+    &quot;bid&quot;: {
+      &quot;currencyCode&quot;: &quot;JPY&quot;,
+      &quot;units&quot;: &quot;145&quot;,
+      &quot;nanos&quot;: 820000000
+    },
+    &quot;mid&quot;: {
+      &quot;currencyCode&quot;: &quot;JPY&quot;,
+      &quot;units&quot;: &quot;146&quot;,
+      &quot;nanos&quot;: 820000000
+    }
+  }
+]
+</code></pre></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script src="js/bootstrap.bundle.min.js"></script>
+        <script>
+            var base_url = ".",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="js/base.js"></script>
+        <script src="search/main.js"></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>
+
+<!--
+MkDocs version : 1.6.1
+Build Date UTC : 2025-03-11 10:51:01.013854+00:00
+-->
