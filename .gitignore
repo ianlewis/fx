@@ -8,4 +8,7 @@ node_modules/
 # SARIF files
 *.sarif.json
 
+# mkdocs temporary directory.
+.site
+
 __pycache__

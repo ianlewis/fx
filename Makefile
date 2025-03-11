@@ -62,8 +62,20 @@ node_modules/.installed: package.json package-lock.json
 #####################################################################
 
 .PHONY: build
-build: .venv/.installed ## Update API contents.
-	@PYTHONPATH=. ./.venv/bin/python fx/updater.py --start "$$(date -d "-14 days" +"%Y-%m-%d")"
+build: update mkdocs ## Full build.
+
+.PHONY: update
+update: .venv/.installed ## Update API data.
+	@./.venv/bin/python fx/updater.py --start "$$(date -d "-14 days" +"%Y-%m-%d")"
+
+.PHONY: mkdocs
+mkdocs: .venv/.installed ## Generate API documentation. 
+	@./.venv/bin/mkdocs build
+	@cp -r .site/* _site/
+
+.PHONY: serve
+serve: mkdocs ## Serve the API locally.
+	@./.venv/bin/python -m http.server --directory _site/
 
 ## Tools
 #####################################################################
@@ -73,13 +85,14 @@ license-headers: ## Update license headers.
 	@set -euo pipefail; \
 		files=$$( \
 			git ls-files --deduplicate \
-				'*.go' '**/*.go' \
-				'*.ts' '**/*.ts' \
-				'*.js' '**/*.js' \
-				'*.py' '**/*.py' \
-				'*.yaml' '**/*.yaml' \
-				'*.yml' '**/*.yml' \
+				'*.go' \
+				'*.ts' \
+				'*.js' \
+				'*.py' \
+				'*.yaml' \
+				'*.yml' \
 				'Makefile' \
+				':!:_site/**' \
 		); \
 		name=$$(git config user.name); \
 		if [ "$${name}" == "" ]; then \
@@ -115,6 +128,7 @@ black: .venv/.installed ## Format Python files.
 			git ls-files --deduplicate \
 				'*.py' \
 				'**/*.py' \
+				':!:_site/**' \
 		); \
 		.venv/bin/black --quiet --line-length 179 $${files}
 
@@ -123,7 +137,9 @@ md-format: node_modules/.installed ## Format Markdown files.
 	@set -euo pipefail; \
 		files=$$( \
 			git ls-files --deduplicate \
-				'*.md' '**/*.md' \
+				'*.md' \
+				'**/*.md' \
+				':!:_site/**' \
 		); \
 		npx prettier --write --no-error-on-unmatched-pattern $${files}
 
@@ -132,8 +148,9 @@ yaml-format: node_modules/.installed ## Format YAML files.
 	@set -euo pipefail; \
 		files=$$( \
 			git ls-files --deduplicate \
-				'*.yml' '**/*.yml' \
-				'*.yaml' '**/*.yaml' \
+				'*.yml' \
+				'*.yaml' \
+				':!:_site/**' \
 		); \
 		npx prettier --write --no-error-on-unmatched-pattern $${files}
 
@@ -149,6 +166,7 @@ flake8: .venv/.installed ## Runs the flake8 linter.
 		files=$$( \
 			git ls-files --deduplicate \
 				'*.py' \
+				':!:_site/**' \
 		); \
 		.venv/bin/flake8 --config ./.flake8 $${files}
 
@@ -194,9 +212,10 @@ markdownlint: node_modules/.installed ## Runs the markdownlint linter.
 	@set -euo pipefail;\
 		files=$$( \
 			git ls-files --deduplicate \
-				'*.md' '**/*.md' \
+				'*.md' \
 				':!:.github/pull_request_template.md' \
 				':!:.github/ISSUE_TEMPLATE/*.md' \
+				':!:_site/**' \
 		); \
 		if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
 			exit_code=0; \
@@ -242,8 +261,9 @@ yamllint: .venv/.installed ## Runs the yamllint linter.
 		extraargs=""; \
 		files=$$( \
 			git ls-files --deduplicate \
-				'*.yml' '**/*.yml' \
-				'*.yaml' '**/*.yaml' \
+				'*.yml' \
+				'*.yaml' \
+				':!:_site/**' \
 		); \
 		if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
 			extraargs="-f github"; \
