@@ -173,7 +173,6 @@ zizmor: .venv/.installed ## Runs the zizmor linter.
 	@#       rather than outputting errors to the terminal. This is so that
 	@#       security issues can be uploaded privately rather than being made
 	@#       public.
-	@# TODO: restore writing sarif when repo is made public.
 	@set -euo pipefail;\
 		extraargs=""; \
 		files=$$( \
