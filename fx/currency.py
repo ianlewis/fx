@@ -25,7 +25,7 @@ import xml.etree.ElementTree as ET
 from google.protobuf.json_format import MessageToJson
 from google.type.date_pb2 import Date
 
-from fx.quote_pb2 import Currency
+from quote_pb2 import Currency
 
 ISO_DOWNLOAD_XML = "https://www.six-group.com/dam/download/financial-information/data-center/iso-currrency/lists/list-one.xml"
 ISO_DOWNLOAD_HISTORIC_XML = "https://www.six-group.com/dam/download/financial-information/data-center/iso-currrency/lists/list-three.xml"
