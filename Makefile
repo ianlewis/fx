@@ -181,7 +181,11 @@ zizmor: .venv/.installed ## Runs the zizmor linter.
 				'.github/workflows/*.yml' \
 				'.github/workflows/*.yaml' \
 		); \
-		.venv/bin/zizmor --quiet --pedantic --format plain $${files}
+		if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
+			.venv/bin/zizmor --pedantic --format sarif $${files} > zizmor.sarif.json; \
+		else \
+			.venv/bin/zizmor --pedantic --format plain $${files}; \
+		fi
 
 .PHONY: markdownlint
 markdownlint: node_modules/.installed ## Runs the markdownlint linter.
