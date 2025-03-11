@@ -54,7 +54,7 @@ def write_quotes_csv(f, quote_dicts):
     for q in quote_dicts:
         w.writerow(
             {
-                "date": date(q["date"]["year"], q["date"]["month"], q["date"]["day"]).isoformat(),
+                "date": "{:04d}/{:02d}/{:02d}".format(q["date"]["year"], q["date"]["month"], q["date"]["day"]),
                 "providerCode": q["providerCode"],
                 "baseCurrencyCode": q["baseCurrencyCode"],
                 "quoteCurrencyCode": q["quoteCurrencyCode"],
