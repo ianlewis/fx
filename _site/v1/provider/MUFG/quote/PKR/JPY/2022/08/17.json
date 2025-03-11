@@ -1,1 +1,1 @@
-[{"providerCode": "MUFG", "date": {"year": 2022, "month": 8, "day": 17}, "baseCurrencyCode": "PKR", "quoteCurrencyCode": "JPY", "ask": {"currencyCode": "JPY", "nanos": 780000000}, "bid": {"currencyCode": "JPY", "nanos": 480000000}, "mid": {"currencyCode": "JPY", "nanos": 630000000}}]
+{"providerCode": "MUFG", "date": {"year": 2022, "month": 8, "day": 17}, "baseCurrencyCode": "PKR", "quoteCurrencyCode": "JPY", "ask": {"currencyCode": "JPY", "nanos": 780000000}, "bid": {"currencyCode": "JPY", "nanos": 480000000}, "mid": {"currencyCode": "JPY", "nanos": 630000000}}

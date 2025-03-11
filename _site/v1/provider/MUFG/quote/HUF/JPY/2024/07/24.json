@@ -1,1 +1,1 @@
-[{"providerCode": "MUFG", "date": {"year": 2024, "month": 7, "day": 24}, "baseCurrencyCode": "HUF", "quoteCurrencyCode": "JPY", "ask": {"currencyCode": "JPY", "nanos": 450000000}, "bid": {"currencyCode": "JPY", "nanos": 410000000}, "mid": {"currencyCode": "JPY", "nanos": 430000000}}]
+{"providerCode": "MUFG", "date": {"year": 2024, "month": 7, "day": 24}, "baseCurrencyCode": "HUF", "quoteCurrencyCode": "JPY", "ask": {"currencyCode": "JPY", "nanos": 450000000}, "bid": {"currencyCode": "JPY", "nanos": 410000000}, "mid": {"currencyCode": "JPY", "nanos": 430000000}}

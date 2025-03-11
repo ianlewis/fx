@@ -1,1 +1,1 @@
-[{"providerCode": "MUFG", "date": {"year": 2017, "month": 3, "day": 1}, "baseCurrencyCode": "NZD", "quoteCurrencyCode": "JPY", "ask": {"currencyCode": "JPY", "units": "83"}, "bid": {"currencyCode": "JPY", "units": "79"}, "mid": {"currencyCode": "JPY", "units": "81"}}]
+{"providerCode": "MUFG", "date": {"year": 2017, "month": 3, "day": 1}, "baseCurrencyCode": "NZD", "quoteCurrencyCode": "JPY", "ask": {"currencyCode": "JPY", "units": "83"}, "bid": {"currencyCode": "JPY", "units": "79"}, "mid": {"currencyCode": "JPY", "units": "81"}}

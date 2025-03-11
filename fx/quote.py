@@ -87,24 +87,13 @@ def update_quote(quote, base_dir, name, logger):
     json_path = os.path.join(base_dir, f"{name}.json")
     csv_path = os.path.join(base_dir, f"{name}.csv")
 
-    # Get existing quotes if they already exist and merge with them.
-    try:
-        with open(json_path) as f:
-            formatted_date = date(quote.date.year, quote.date.month, quote.date.day).isoformat()
-            logger.debug(f"{formatted_date}: appending quote {quote.base_currency_code}/{quote.quote_currency_code}")
-            quotes = json.load(f)
-    except (FileNotFoundError, json.JSONDecodeError):
-        quotes = []
-
     quote_dict = MessageToDict(quote)
-    quotes = [q for q in quotes if q != quote_dict]
-    quotes.append(quote_dict)
 
     with open(json_path, "w") as f:
-        json.dump(quotes, f)
+        json.dump(quote_dict, f)
 
     with open(csv_path, "w") as f:
-        write_quotes_csv(f, quotes)
+        write_quotes_csv(f, [quote_dict])
 
 
 def update_quotes(base_dir, start_date, end_date, providers, currencies, logger):
@@ -142,8 +131,7 @@ def update_month_quotes(base_dir, logger):
             for filename in files:
                 if os.path.splitext(filename)[1] == ".json":
                     with open(os.path.join(root, filename)) as f:
-                        day_quotes = json.load(f)
-                        quotes[root].extend(day_quotes)
+                        quotes[root].append(json.load(f))
 
     for root, month_quotes in quotes.items():
         # sort month_quotes by date
@@ -165,8 +153,7 @@ def update_year_quotes(base_dir, logger):
             for filename in files:
                 if os.path.splitext(filename)[1] == ".json":
                     with open(os.path.join(root, filename)) as f:
-                        day_quotes = json.load(f)
-                        quotes[root].extend(day_quotes)
+                        quotes[root].extend(json.load(f))
 
     for root, year_quotes in quotes.items():
         year_quotes = sorted(year_quotes, key=lambda q: (q["date"]["year"], q["date"]["month"], q["date"]["day"]))

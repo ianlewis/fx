@@ -1,1 +1,1 @@
-[{"providerCode": "MUFG", "date": {"year": 2020, "month": 4, "day": 24}, "baseCurrencyCode": "TRY", "quoteCurrencyCode": "JPY", "ask": {"currencyCode": "JPY", "units": "18"}, "bid": {"currencyCode": "JPY", "units": "13"}, "mid": {"currencyCode": "JPY", "units": "15", "nanos": 500000000}}]
+{"providerCode": "MUFG", "date": {"year": 2020, "month": 4, "day": 24}, "baseCurrencyCode": "TRY", "quoteCurrencyCode": "JPY", "ask": {"currencyCode": "JPY", "units": "18"}, "bid": {"currencyCode": "JPY", "units": "13"}, "mid": {"currencyCode": "JPY", "units": "15", "nanos": 500000000}}

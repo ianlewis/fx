@@ -1,1 +1,1 @@
-[{"providerCode": "MUFG", "date": {"year": 2017, "month": 6, "day": 30}, "baseCurrencyCode": "KWD", "quoteCurrencyCode": "JPY", "ask": {"currencyCode": "JPY", "units": "378"}, "bid": {"currencyCode": "JPY", "units": "362"}, "mid": {"currencyCode": "JPY", "units": "370"}}]
+{"providerCode": "MUFG", "date": {"year": 2017, "month": 6, "day": 30}, "baseCurrencyCode": "KWD", "quoteCurrencyCode": "JPY", "ask": {"currencyCode": "JPY", "units": "378"}, "bid": {"currencyCode": "JPY", "units": "362"}, "mid": {"currencyCode": "JPY", "units": "370"}}
