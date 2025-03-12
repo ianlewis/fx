@@ -14,11 +14,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import urllib3
-
 from bs4 import BeautifulSoup
-
 from google.type.date_pb2 import Date
+import urllib3
 
 from quote_pb2 import Quote
 from utils import str_to_money
@@ -30,6 +28,8 @@ class MUFGProvider:
 
     def __init__(self, args):
         self.logger = args.logger
+        self.timeout = args.timeout
+        self.retries = args.retry
         self._cache = {}
 
     def supported_quote_currencies(self):
@@ -90,8 +90,8 @@ class MUFGProvider:
         self.logger.debug(f"GET {url}")
 
         http = urllib3.PoolManager(
-            retries=urllib3.Retry(connect=5, read=5, redirect=2),
-            timeout=urllib3.Timeout(connect=2.0, read=7.0),
+            retries=urllib3.Retry(connect=self.retries, read=self.retries, redirect=2),
+            timeout=urllib3.Timeout(connect=self.timeout, read=self.timeout),
         )
 
         resp = http.request("GET", url)

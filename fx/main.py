@@ -53,6 +53,8 @@ def main():
     update.add_argument("--start", help="update dating starting with this date", type=date.fromisoformat, default=today.strftime("%Y-%m-%d"))
     update.add_argument("--end", help="update data up to and including this date", type=date.fromisoformat, default=today.strftime("%Y-%m-%d"))
     update.add_argument("--data-dir", help="data directory", type=str, default="data")
+    update.add_argument("--timeout", help="timeout for external requests in seconds", type=float, default=10.0)
+    update.add_argument("--retry", help="number of retries for external requests", type=int, default=5)
     update.set_defaults(func=update_command, logger=logger)
 
     build = subparsers.add_parser("build", help="Build static API files")
