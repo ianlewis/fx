@@ -59,8 +59,8 @@ def download_quotes(provider, base_currency_code, quote_currency_code, start_dat
     download_quotes gets quotes for each day in the given date range.
     """
     quotes = []
+    logger.info(f"downloading {provider.code} quotes for currency pair {base_currency_code}/{quote_currency_code} for {start_date.isoformat()} to {end_date.isoformat()}...")
     for dt in dateIterator(start_date, end_date, relativedelta(days=1)):
-        logger.info(f"downloading {provider.code} quotes for currency pair {base_currency_code}/{quote_currency_code} for {dt.isoformat()}...")
         quote = provider.get_quote(base_currency_code, quote_currency_code, dt)
         if quote:
             quotes.append(quote)
@@ -73,11 +73,11 @@ def read_quotelist_data(proto_path, logger):
     returns the list.
     """
 
-    logger.debug(f"reading quotes from {proto_path}...")
-
     qlist = QuoteList()
     with open(proto_path, "rb") as f:
         qlist.ParseFromString(f.read())
+
+    logger.debug(f"read {len(qlist.quotes)} quotes from {proto_path}...")
 
     return qlist
 
@@ -96,19 +96,19 @@ def write_quotes_data(proto_path, quotes, logger):
     except FileNotFoundError:
         existing_quotelist = QuoteList()
 
-    quotes = [q for q in existing_quotelist.quotes if not quote_in(q, quotes)]
+    quotes.extend([q for q in existing_quotelist.quotes if not quote_in(q, quotes)])
     quotes = sorted(quotes, key=lambda q: (q.date.year, q.date.month, q.date.day))
 
     qlist = QuoteList()
     qlist.quotes.extend(quotes)
     with open(proto_path, "wb") as f:
-        logger.debug(f"writing {f.name}...")
+        logger.debug(f"writing {len(qlist.quotes)} quotes to {f.name}...")
         f.write(qlist.SerializeToString())
 
 
 def write_quotes_csv(path, quotes, logger):
-    logger.debug(f"writing {len(quotes)} quotes to {path}...")
     with open(path, "w") as f:
+        logger.debug(f"writing {len(quotes)} quotes to {f.name}...")
         w = csv.DictWriter(
             f,
             fieldnames=[
