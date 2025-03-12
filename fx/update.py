@@ -33,7 +33,7 @@ def update_command(args):
     # Update currencies
     # Data is stored in data/currencies.binpb
     currencies_proto_path = os.path.join(args.data_dir, "currencies.binpb")
-    write_currencies_data(currencies_proto_path, download_currencies(args.logger), args.logger)
+    write_currencies_data(currencies_proto_path, download_currencies(args), args.logger)
 
     # Update quotes
 

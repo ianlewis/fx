@@ -19,11 +19,11 @@ from datetime import datetime
 import json
 import os
 import os.path
-from urllib import request
 import xml.etree.ElementTree as ET
 
 from google.protobuf.json_format import MessageToDict
 from google.type.date_pb2 import Date
+import urllib3
 
 from currency_pb2 import Currency, CurrencyList
 from utils import date_msg_to_str
@@ -32,82 +32,85 @@ ISO_DOWNLOAD_XML = "https://www.six-group.com/dam/download/financial-information
 ISO_DOWNLOAD_HISTORIC_XML = "https://www.six-group.com/dam/download/financial-information/data-center/iso-currrency/lists/list-three.xml"
 
 
-def download_currencies(logger):
+def download_currencies(args):
     """
     download_currencies downloads and parses the ISO 4217 currency list and
     returns a list of unique Currency entries.
     """
 
-    logger.debug("downloading currencies...")
+    args.logger.debug("downloading currencies...")
+    args.logger.debug(f"GET {ISO_DOWNLOAD_XML}")
 
-    logger.debug(f"GET {ISO_DOWNLOAD_XML}")
-    resp = request.urlopen(ISO_DOWNLOAD_XML)
+    http = urllib3.PoolManager(
+        retries=urllib3.Retry(connect=args.retry, read=args.retry, redirect=2),
+        timeout=urllib3.Timeout(connect=args.timeout, read=args.timeout),
+    )
+
+    resp = http.request("GET", ISO_DOWNLOAD_XML)
 
     currencies = {}
-    with resp as f:
-        root = ET.fromstring(f.read())
-        ccytbl = root.find("CcyTbl")
-        for ccyntry in ccytbl.findall("CcyNtry"):
-            code = ccyntry.findtext("Ccy")
+    root = ET.fromstring(resp.data)
+    ccytbl = root.find("CcyTbl")
+    for ccyntry in ccytbl.findall("CcyNtry"):
+        code = ccyntry.findtext("Ccy")
 
-            if code is None:
+        if code is None:
+            continue
+
+        country_name = ccyntry.findtext("CtryNm")
+        numeric_code = ccyntry.findtext("CcyNbr")
+        currency_name = ccyntry.findtext("CcyNm")
+
+        args.logger.debug(currency_name)
+        try:
+            minor_units = int(ccyntry.findtext("CcyMnrUnts"))
+        except (ValueError, TypeError):
+            minor_units = 0
+
+        if code in currencies:
+            currencies[code].countries.append(country_name)
+
+            assert currencies[code].numeric_code == numeric_code
+            assert currencies[code].name == currency_name
+            assert currencies[code].minor_units == minor_units
+        else:
+            args.logger.debug(f"Registered currency: {code}")
+
+            currencies[code] = Currency(
+                alphabetic_code=code,
+                numeric_code=numeric_code,
+                name=currency_name,
+                minor_units=minor_units,
+                countries=[ccyntry.findtext("CtryNm")],
+            )
+
+    args.logger.debug(f"GET {ISO_DOWNLOAD_HISTORIC_XML}")
+    resp = http.request("GET", ISO_DOWNLOAD_HISTORIC_XML)
+
+    root = ET.fromstring(resp.data)
+    ccytbl = root.find("HstrcCcyTbl")
+    for ccyntry in ccytbl.findall("HstrcCcyNtry"):
+        code = ccyntry.findtext("Ccy")
+        if code in currencies:
+            currencies[code].countries.append(ccyntry.findtext("CtryNm"))
+        else:
+            args.logger.debug(f"Registered historical currency: {code}")
+            try:
+                wdate = datetime.strptime(ccyntry.findtext("WthdrwlDt"), "%Y-%m").date()
+            except ValueError as e:
+                args.logger.warning("invalid WthdrwlDt: %s", e)
                 continue
 
-            country_name = ccyntry.findtext("CtryNm")
-            numeric_code = ccyntry.findtext("CcyNbr")
-            currency_name = ccyntry.findtext("CcyNm")
-
-            logger.debug(currency_name)
-            try:
-                minor_units = int(ccyntry.findtext("CcyMnrUnts"))
-            except (ValueError, TypeError):
-                minor_units = 0
-
-            if code in currencies:
-                currencies[code].countries.append(country_name)
-
-                assert currencies[code].numeric_code == numeric_code
-                assert currencies[code].name == currency_name
-                assert currencies[code].minor_units == minor_units
-            else:
-                logger.debug(f"Registered currency: {code}")
-
-                currencies[code] = Currency(
-                    alphabetic_code=code,
-                    numeric_code=numeric_code,
-                    name=currency_name,
-                    minor_units=minor_units,
-                    countries=[ccyntry.findtext("CtryNm")],
-                )
-
-    logger.debug(f"GET {ISO_DOWNLOAD_HISTORIC_XML}")
-    resp = request.urlopen(ISO_DOWNLOAD_HISTORIC_XML)
-
-    with resp as f:
-        root = ET.fromstring(f.read())
-        ccytbl = root.find("HstrcCcyTbl")
-        for ccyntry in ccytbl.findall("HstrcCcyNtry"):
-            code = ccyntry.findtext("Ccy")
-            if code in currencies:
-                currencies[code].countries.append(ccyntry.findtext("CtryNm"))
-            else:
-                logger.debug(f"Registered historical currency: {code}")
-                try:
-                    wdate = datetime.strptime(ccyntry.findtext("WthdrwlDt"), "%Y-%m").date()
-                except ValueError as e:
-                    logger.warning("invalid WthdrwlDt: %s", e)
-                    continue
-
-                currencies[code] = Currency(
-                    alphabetic_code=code,
-                    numeric_code=ccyntry.findtext("CcyNbr"),
-                    name=ccyntry.findtext("CcyNm"),
-                    minor_units=0,
-                    withdrawal_date=Date(
-                        year=wdate.year,
-                        month=wdate.month,
-                    ),
-                )
+            currencies[code] = Currency(
+                alphabetic_code=code,
+                numeric_code=ccyntry.findtext("CcyNbr"),
+                name=ccyntry.findtext("CcyNm"),
+                minor_units=0,
+                withdrawal_date=Date(
+                    year=wdate.year,
+                    month=wdate.month,
+                ),
+            )
 
     return currencies.values()
 
