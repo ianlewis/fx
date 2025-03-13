@@ -3,3 +3,9 @@ base = "."
 publish = "_site/"  # relative to `base` directory
 command = "make build" # TODO(#37): make sure this can be run on netlify.
 environment = { PYTHON_VERSION = "3.10" }
+
+[[headers]]
+  for = "/v1/*"
+  [headers.values]
+    # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin
+    access-control-allow-origin = "*"
