@@ -1,0 +1,514 @@
+# Copyright 2025 Ian Lewis
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+openapi: 3.0.4
+info:
+  title: fx.ianlewis.org
+  description: A simple currency exchange rate API.
+  version: v1
+
+servers:
+  - url: https://fx.ianlewis.org/v1
+    description: The main production server.
+
+paths:
+  /currency.{format}:
+    get:
+      summary: Returns a list of currencies.
+      description: Returns a full list of currencies. Not all providers support all currencies.
+      parameters:
+        - name: format
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The response format. One of `json`,`csv`,`binpb`.
+      responses:
+        "200": # status code
+          description: A currency object.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  currencies:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        alphabeticCode:
+                          type: string
+                        numericCode:
+                          type: string
+                        name:
+                          type: string
+                        minorUnits:
+                          type: integer
+                        countries:
+                          type: array
+                          items:
+                            type: string
+            text/csv:
+              schema:
+                type: string
+              example: |-
+                alphabeticCode,numericCode,name,minorUnits,countries,withdrawalDate
+                USD,840,US Dollar,2,"AMERICAN SAMOA,BONAIRE, ...",
+            application/x-protobuf:
+              schema:
+                type: string
+                format: binary
+
+  /currency/{currency_code}.{format}:
+    get:
+      summary: Returns a currency.
+      description: Returns a currency corresponding to `code`.
+      parameters:
+        - name: currency_code
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ISO 4217 currency code.
+        - name: format
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The response format. One of `json`,`csv`,`binpb`.
+      responses:
+        "200": # status code
+          description: A currency object.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  alphabeticCode:
+                    type: string
+                  numericCode:
+                    type: string
+                  name:
+                    type: string
+                  minorUnits:
+                    type: integer
+                  countries:
+                    type: array
+                    items:
+                      type: string
+            text/csv:
+              schema:
+                type: string
+              example: |-
+                alphabeticCode,numericCode,name,minorUnits,countries,withdrawalDate
+                USD,840,US Dollar,2,"AMERICAN SAMOA,BONAIRE, ...",
+            application/x-protobuf:
+              schema:
+                type: string
+                format: binary
+
+  /provider.{format}:
+    get:
+      summary: Returns a list of providers.
+      description: Returns a full list of supported currency conversion providers.
+      parameters:
+        - name: format
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The response format. One of `json`,`csv`,`binpb`.
+      responses:
+        "200": # status code
+          description: A currency object.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  providers:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                        code:
+                          type: string
+            text/csv:
+              schema:
+                type: string
+              example: |-
+                name,code
+                "MUFG Bank, Ltd.",MUFG
+            application/x-protobuf:
+              schema:
+                type: string
+                format: binary
+
+  /provider/{provider_code}.{format}:
+    get:
+      summary: Returns a provider.
+      description: Returns a supported currency conversion provider.
+      parameters:
+        - name: provider_code
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The provider code.
+        - name: format
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The response format. One of `json`,`csv`,`binpb`.
+      responses:
+        "200": # status code
+          description: A currency object.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  code:
+                    type: string
+            text/csv:
+              schema:
+                type: string
+              example: |-
+                name,code
+                "MUFG Bank, Ltd.",MUFG
+            application/x-protobuf:
+              schema:
+                type: string
+                format: binary
+
+  /provider/{provider_code}/quote/{base_currency_code}/{quote_currency_code}/{year}/{month}/{day}.{format}:
+    get:
+      summary: Returns a daily quote.
+      description: Returns a daily currency conversion quote for the given provider.
+      parameters:
+        - name: provider_code
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The provider code.
+        - name: base_currency_code
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ISO 4217 currency code for the base currency.
+        - name: quote_currency_code
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ISO 4217 currency code for the quote currency.
+        - name: year
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Year in YYYY format
+        - name: month
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Month in MM format
+        - name: day
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Day in DD format
+        - name: format
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The response format. One of `json`,`csv`,`binpb`.
+      responses:
+        "200": # status code
+          description: A quote object.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  providerCode:
+                    type: string
+                  date:
+                    type: object
+                    properties:
+                      year:
+                        type: integer
+                      month:
+                        type: integer
+                      day:
+                        type: integer
+                  baseCurrencyCode:
+                    type: string
+                  quoteCurrencyCode:
+                    type: string
+                  ask:
+                    type: object
+                    properties:
+                      currencyCode:
+                        type: string
+                      units:
+                        type: string
+                      nanos:
+                        type: integer
+                  bid:
+                    type: object
+                    properties:
+                      currencyCode:
+                        type: string
+                      units:
+                        type: string
+                      nanos:
+                        type: integer
+                  mid:
+                    type: object
+                    properties:
+                      currencyCode:
+                        type: string
+                      units:
+                        type: string
+                      nanos:
+                        type: integer
+            text/csv:
+              schema:
+                type: string
+              example: |-
+                date,providerCode,baseCurrencyCode,quoteCurrencyCode,ask,bid,mid
+                2025/03/11,MUFG,USD,JPY,147.68,145.68,146.68
+            application/x-protobuf:
+              schema:
+                type: string
+                format: binary
+
+  /provider/{provider_code}/quote/{base_currency_code}/{quote_currency_code}/{year}/{month}.{format}:
+    get:
+      summary: Returns a list of quote for the month.
+      description: Returns a list daily currency conversion quote for the provider in the given month.
+      parameters:
+        - name: provider_code
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The provider code.
+        - name: base_currency_code
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ISO 4217 currency code for the base currency.
+        - name: quote_currency_code
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ISO 4217 currency code for the quote currency.
+        - name: year
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Year in YYYY format
+        - name: month
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Month in MM format
+        - name: format
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The response format. One of `json`,`csv`,`binpb`.
+      responses:
+        "200": # status code
+          description: A quote object.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  currencies:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        providerCode:
+                          type: string
+                        date:
+                          type: object
+                          properties:
+                            year:
+                              type: integer
+                            month:
+                              type: integer
+                            day:
+                              type: integer
+                        baseCurrencyCode:
+                          type: string
+                        quoteCurrencyCode:
+                          type: string
+                        ask:
+                          type: object
+                          properties:
+                            currencyCode:
+                              type: string
+                            units:
+                              type: string
+                            nanos:
+                              type: integer
+                        bid:
+                          type: object
+                          properties:
+                            currencyCode:
+                              type: string
+                            units:
+                              type: string
+                            nanos:
+                              type: integer
+                        mid:
+                          type: object
+                          properties:
+                            currencyCode:
+                              type: string
+                            units:
+                              type: string
+                            nanos:
+                              type: integer
+            text/csv:
+              schema:
+                type: string
+              example: |-
+                date,providerCode,baseCurrencyCode,quoteCurrencyCode,ask,bid,mid
+                2025/03/11,MUFG,USD,JPY,147.68,145.68,146.68
+            application/x-protobuf:
+              schema:
+                type: string
+                format: binary
+
+  /provider/{provider_code}/quote/{base_currency_code}/{quote_currency_code}/{year}.{format}:
+    get:
+      summary: Returns a list of quote for the year.
+      description: Returns a list daily currency conversion quote for the provider in the given year.
+      parameters:
+        - name: provider_code
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The provider code.
+        - name: base_currency_code
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ISO 4217 currency code for the base currency.
+        - name: quote_currency_code
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ISO 4217 currency code for the quote currency.
+        - name: year
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Year in YYYY format
+        - name: format
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The response format. One of `json`,`csv`,`binpb`.
+      responses:
+        "200": # status code
+          description: A quote object.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  currencies:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        providerCode:
+                          type: string
+                        date:
+                          type: object
+                          properties:
+                            year:
+                              type: integer
+                            month:
+                              type: integer
+                            day:
+                              type: integer
+                        baseCurrencyCode:
+                          type: string
+                        quoteCurrencyCode:
+                          type: string
+                        ask:
+                          type: object
+                          properties:
+                            currencyCode:
+                              type: string
+                            units:
+                              type: string
+                            nanos:
+                              type: integer
+                        bid:
+                          type: object
+                          properties:
+                            currencyCode:
+                              type: string
+                            units:
+                              type: string
+                            nanos:
+                              type: integer
+                        mid:
+                          type: object
+                          properties:
+                            currencyCode:
+                              type: string
+                            units:
+                              type: string
+                            nanos:
+                              type: integer
+            text/csv:
+              schema:
+                type: string
+              example: |-
+                date,providerCode,baseCurrencyCode,quoteCurrencyCode,ask,bid,mid
+                2025/03/11,MUFG,USD,JPY,147.68,145.68,146.68
+            application/x-protobuf:
+              schema:
+                type: string
+                format: binary
