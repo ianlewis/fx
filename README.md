@@ -4,3 +4,9 @@
 
 `fx` is a simple currency exchange rate API. It currently supports MUFG
 published rates between 31 currencies and JPY.
+
+Full API documentation can be found at <https://fx.ianlewis.org/>.
+
+The API is a static file API. Canonical data is stored in [Protocol
+Buffers](https://protobuf.dev/) format. API static files are built at deploy
+time.
