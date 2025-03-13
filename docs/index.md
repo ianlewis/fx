@@ -2,15 +2,20 @@
 
 `fx.ianlewis.org` is a currency conversion API. It currently supports MUFG published rates between 31 currencies and JPY.
 
-## Data Types
+## Data Types & Endpoints
 
 The following sections outline the various data types available in the API.
+
+- [Swagger UI](https://petstore.swagger.io/?url=https://fx.ianlewis.org/openapi.yaml)
+- [Redoc](https://redocly.github.io/redoc/?url=https://fx.ianlewis.org/openapi.yaml)
+
+The full OpenAPI definition can be viewed at [/openapi.yaml](/openapi.yaml).
 
 ### Provider
 
 Currency exchange provider information can be retrieved via the provider endpoint. The `Provider` object's format is defined in [`provider.proto`](https://github.com/ianlewis/fx/blob/main/fx/provider.proto).
 
-</v1/provider.json>
+[/v1/provider.json](/v1/provider.json)
 
 ```json
 {
@@ -25,7 +30,7 @@ Currency exchange provider information can be retrieved via the provider endpoin
 
 Individual providers can be accessed via their code.
 
-</v1/provider/MUFG.json>
+[/v1/provider/MUFG.json](/v1/provider/MUFG.json)
 
 ```json
 {
