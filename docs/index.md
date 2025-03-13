@@ -6,10 +6,10 @@
 
 The following sections outline the various data types available in the API.
 
-- [Swagger UI](https://petstore.swagger.io/?url=https://fx.ianlewis.org/openapi.yaml)
-- [Redoc](https://redocly.github.io/redoc/?url=https://fx.ianlewis.org/openapi.yaml)
+- [Swagger UI](https://petstore.swagger.io/?url=https://fx.ianlewis.org/v1/openapi.yaml)
+- [Redoc](https://redocly.github.io/redoc/?url=https://fx.ianlewis.org/v1/openapi.yaml)
 
-The full OpenAPI definition can be viewed at [/openapi.yaml](/openapi.yaml).
+The full OpenAPI definition can be viewed at [/v1/openapi.yaml](/v1/openapi.yaml).
 
 ### Provider
 
