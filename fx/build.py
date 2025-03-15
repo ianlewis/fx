@@ -16,6 +16,7 @@
 
 import re
 import os.path
+import time
 
 from provider import write_providers_site
 from currency import read_currencies_data, write_currencies_site
@@ -35,6 +36,7 @@ def build_command(args):
 
     write_currencies_site(args.site_dir, currencies, args.logger)
 
+    build_start = time.time()
     for provider in args.provider:
         provider_data_dir = os.path.join(args.data_dir, provider.code)
         for root, dirs, files in os.walk(provider_data_dir):
@@ -46,7 +48,12 @@ def build_command(args):
                     quote_currency_code = match.group(2)
                     year = int(match.group(3))
 
+                    args.logger.info(f"building {base_currency_code}/{quote_currency_code} for {year}...")
+
                     quotelist = read_quotelist_data(file_path, args.logger)
 
                     base_dir = os.path.join(args.site_dir, f"provider/{provider.code}/quote/{base_currency_code}/{quote_currency_code}")
                     write_year_quotes_site(base_dir, year, quotelist, args.logger)
+    build_end = time.time()
+
+    args.logger.info(f"API built in {build_end-build_start:.2f} seconds")
