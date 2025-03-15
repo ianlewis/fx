@@ -63,11 +63,11 @@ node_modules/.installed: package.json package-lock.json
 
 .PHONY: build
 build: .venv/.installed mkdocs ## Build the site files.
-	@./.venv/bin/python fx/main.py --debug build
+	@./.venv/bin/python fx/main.py build
 
 .PHONY: update
 update: .venv/.installed ## Update API data.
-	@./.venv/bin/python fx/main.py --debug update --start "$$(date -d "-14 days" +"%Y-%m-%d")"
+	@./.venv/bin/python fx/main.py update --start "$$(date -d "-14 days" +"%Y-%m-%d")"
 
 .PHONY: mkdocs
 mkdocs: .venv/.installed ## Generate API documentation. 
