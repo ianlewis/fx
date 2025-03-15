@@ -1,7 +1,7 @@
 [build]
 base = "."
 publish = "_site/"  # relative to `base` directory
-command = "make build" # TODO(#37): make sure this can be run on netlify.
+command = "make build"
 environment = { PYTHON_VERSION = "3.10" }
 
 [[headers]]
