@@ -34,6 +34,8 @@ def write_providers_site(base_dir, providers, logger):
         plist.providers.add(
             name=p.name,
             code=p.code,
+            supported_base_currencies=p.supported_base_currencies,
+            supported_quote_currencies=p.supported_quote_currencies,
         )
 
     os.makedirs(base_dir, exist_ok=True)
