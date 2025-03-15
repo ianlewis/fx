@@ -41,8 +41,8 @@ def update_command(args):
     for Provider in args.provider:
         provider = Provider(args)
         for year_start in dateIterator(date(args.start.year, 1, 1), args.end, relativedelta(years=1)):
-            for base_currency_code in provider.supported_base_currencies():
-                for quote_currency_code in provider.supported_quote_currencies():
+            for base_currency_code in provider.supported_base_currencies:
+                for quote_currency_code in provider.supported_quote_currencies:
                     start_date = year_start
                     if args.start.year == year_start.year:
                         start_date = args.start

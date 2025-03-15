@@ -21,6 +21,12 @@ message Provider {
     
     // name is the human readable name for the provider.
     string name = 2;
+
+    // supported_base_currencies is the list of provider's supported base currencies.
+    repeated string supported_base_currencies = 3;
+
+    // supported_quote_currencies is the list of provider's supported quote currencies.
+    repeated string supported_quote_currencies = 4;
 }
 
 // ProviderList represents a lits of Provider objects.

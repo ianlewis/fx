@@ -31,7 +31,7 @@ _sym_db = _symbol_database.Default()
 
 
 DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(
-    b'\n\x11\x66x/provider.proto"&\n\x08Provider\x12\x0c\n\x04\x63ode\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t",\n\x0cProviderList\x12\x1c\n\tproviders\x18\x01 \x03(\x0b\x32\t.Providerb\x06proto3'
+    b'\n\x11\x66x/provider.proto"m\n\x08Provider\x12\x0c\n\x04\x63ode\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12!\n\x19supported_base_currencies\x18\x03 \x03(\t\x12"\n\x1asupported_quote_currencies\x18\x04 \x03(\t",\n\x0cProviderList\x12\x1c\n\tproviders\x18\x01 \x03(\x0b\x32\t.Providerb\x06proto3'
 )
 
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, globals())
@@ -40,7 +40,7 @@ if _descriptor._USE_C_DESCRIPTORS == False:
 
     DESCRIPTOR._options = None
     _PROVIDER._serialized_start = 21
-    _PROVIDER._serialized_end = 59
-    _PROVIDERLIST._serialized_start = 61
-    _PROVIDERLIST._serialized_end = 105
+    _PROVIDER._serialized_end = 130
+    _PROVIDERLIST._serialized_start = 132
+    _PROVIDERLIST._serialized_end = 176
 # @@protoc_insertion_point(module_scope)

@@ -23,7 +23,9 @@ Currency exchange provider information can be retrieved via the provider endpoin
     {
       "code": "MUFG",
       "name": "MUFG Bank, Ltd."
+      // ...
     }
+    // ...
   ]
 }
 ```
@@ -35,7 +37,41 @@ Individual providers can be accessed via their code.
 ```json
 {
   "code": "MUFG",
-  "name": "MUFG Bank, Ltd."
+  "name": "MUFG Bank, Ltd.",
+  "supportedBaseCurrencies": [
+    "USD",
+    "EUR",
+    "CAD",
+    "GBP",
+    "CHF",
+    "DKK",
+    "NOK",
+    "SEK",
+    "AUD",
+    "NZD",
+    "HKD",
+    "MYR",
+    "SGD",
+    "SAR",
+    "AED",
+    "CNY",
+    "THB",
+    "INR",
+    "PKR",
+    "KWD",
+    "QAR",
+    "IDR",
+    "MXN",
+    "KRW",
+    "PHP",
+    "ZAR",
+    "CZK",
+    "RUB",
+    "HUF",
+    "PLN",
+    "TRY"
+  ],
+  "supportedQuoteCurrencies": ["JPY"]
 }
 ```
 

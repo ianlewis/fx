@@ -26,49 +26,46 @@ class MUFGProvider:
     code = "MUFG"
     name = "MUFG Bank, Ltd."
 
+    supported_base_currencies = [
+        "USD",
+        "EUR",
+        "CAD",
+        "GBP",
+        "CHF",
+        "DKK",
+        "NOK",
+        "SEK",
+        "AUD",
+        "NZD",
+        "HKD",
+        "MYR",
+        "SGD",
+        "SAR",
+        "AED",
+        "CNY",
+        "THB",
+        "INR",
+        "PKR",
+        "KWD",
+        "QAR",
+        "IDR",
+        "MXN",
+        "KRW",
+        "PHP",
+        "ZAR",
+        "CZK",
+        "RUB",
+        "HUF",
+        "PLN",
+        "TRY",
+    ]
+    supported_quote_currencies = ["JPY"]
+
     def __init__(self, args):
         self.logger = args.logger
         self.timeout = args.timeout
         self.retries = args.retry
         self._cache = {}
-
-    def supported_quote_currencies(self):
-        return ["JPY"]
-
-    def supported_base_currencies(self):
-        return [
-            "USD",
-            "EUR",
-            "CAD",
-            "GBP",
-            "CHF",
-            "DKK",
-            "NOK",
-            "SEK",
-            "AUD",
-            "NZD",
-            "HKD",
-            "MYR",
-            "SGD",
-            "SAR",
-            "AED",
-            "CNY",
-            "THB",
-            "INR",
-            "PKR",
-            "KWD",
-            "QAR",
-            "IDR",
-            "MXN",
-            "KRW",
-            "PHP",
-            "ZAR",
-            "CZK",
-            "RUB",
-            "HUF",
-            "PLN",
-            "TRY",
-        ]
 
     def get_quote(self, base_currency_code, quote_currency_code, quote_date):
         if (quote_currency_code, quote_date) not in self._cache:
