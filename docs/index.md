@@ -181,3 +181,19 @@ date,providerCode,baseCurrencyCode,quoteCurrencyCode,ask,bid,mid
 2025/03/12,MUFG,USD,JPY,149.08,147.08,148.08
 ...
 ```
+
+## Importing Data
+
+You can import CSV data into spreadsheets.
+
+### Google Sheets
+
+Use the `IMPORTDATA` function to import data into the sheet. In the top-left
+cell where you would like to import the data add the following formula with the
+URL to the desired data.
+
+```text
+=IMPORTDATA("https://fx.ianlewis.org/v1/provider/MUFG/quote/USD/JPY/2024.csv")
+```
+
+![Google Sheets showing the imported data](img/google_sheets.png)
