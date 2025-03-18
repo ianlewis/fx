@@ -87,7 +87,8 @@ class MUFGProvider:
         self.logger.debug(f"GET {url}")
 
         http = urllib3.PoolManager(
-            retries=urllib3.Retry(connect=self.retries, read=self.retries, redirect=2),
+            # backoff_factor=0.2 creates retries at 0.0s, 0.4s, 0.8s, 1.6s, ...
+            retries=urllib3.Retry(connect=self.retries, read=self.retries, backoff_factor=0.2, redirect=2),
             timeout=urllib3.Timeout(connect=self.timeout, read=self.timeout),
         )
 
@@ -96,7 +97,9 @@ class MUFGProvider:
         quotes = []
         body = resp.data
         try:
-            # NOTE: Some pages say they are EUC-JP but they are actually SHIFT-JIS.
+            # NOTE: Some pages say they are EUC-JP but they are actually
+            #       SHIFT-JIS so we can't always rely on BeautifulSoup to
+            #       detect the character set.
             body = body.decode("shift-jis")
         except UnicodeDecodeError as e:
             # The decoding error is logged at debug level since it's "expected".
