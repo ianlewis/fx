@@ -1,5 +1,3 @@
-#!/usr/bin/python
-#
 # Copyright 2025 Ian Lewis
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -49,12 +47,36 @@ def main():
             raise argparse.ArgumentTypeError(msg.format(arg, choices))
 
     update = subparsers.add_parser("update", help="Update currency exchange data")
-    update.add_argument("--provider", nargs="*", help="update these providers", type=provider_code, default=all_providers)
-    update.add_argument("--start", help="update dating starting with this date", type=date.fromisoformat, default=today.strftime("%Y-%m-%d"))
-    update.add_argument("--end", help="update data up to and including this date", type=date.fromisoformat, default=today.strftime("%Y-%m-%d"))
+    update.add_argument(
+        "--provider",
+        nargs="*",
+        help="update these providers",
+        type=provider_code,
+        default=all_providers,
+    )
+    update.add_argument(
+        "--start",
+        help="update dating starting with this date",
+        type=date.fromisoformat,
+        default=today.strftime("%Y-%m-%d"),
+    )
+    update.add_argument(
+        "--end",
+        help="update data up to and including this date",
+        type=date.fromisoformat,
+        default=today.strftime("%Y-%m-%d"),
+    )
     update.add_argument("--data-dir", help="data directory", type=str, default="data")
-    update.add_argument("--timeout", help="timeout for external requests in seconds", type=float, default=10.0)
+    update.add_argument(
+        "--timeout",
+        help="timeout for external requests in seconds",
+        type=float,
+        default=10.0,
+    )
     update.add_argument("--retry", help="number of retries for external requests", type=int, default=5)
+    # backoff factor is multiplied by 2^n where n is the retry number
+    # e.g. 0.5 will result in 0.5, 1, 2, 4, 8 seconds between retries
+    update.add_argument("--backoff", help="backoff factor for retries", type=int, default=0.5)
     update.set_defaults(func=update_command, logger=logger)
 
     build = subparsers.add_parser("build", help="Build static API files")

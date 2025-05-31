@@ -65,6 +65,7 @@ class MUFGProvider:
         self.logger = args.logger
         self.timeout = args.timeout
         self.retries = args.retry
+        self.backoff = args.backoff
         self._cache = {}
 
     def get_quote(self, base_currency_code, quote_currency_code, quote_date):
@@ -83,16 +84,16 @@ class MUFGProvider:
         if quote_currency != jpy_code:
             raise ValueError(f'currency "{quote_currency}" not supported')
 
-        url = f'https://murc-kawasesouba.jp/fx/past_3month_result.php?y={quote_date.strftime("%Y")}&m={quote_date.strftime("%m")}&d={quote_date.strftime("%d")}'
+        url = f"https://murc-kawasesouba.jp/fx/past_3month_result.php?y={quote_date.strftime('%Y')}&m={quote_date.strftime('%m')}&d={quote_date.strftime('%d')}"
         self.logger.debug(f"GET {url}")
 
-        http = urllib3.PoolManager(
-            # backoff_factor=0.2 creates retries at 0.0s, 0.4s, 0.8s, 1.6s, ...
-            retries=urllib3.Retry(connect=self.retries, read=self.retries, backoff_factor=0.2, redirect=2),
-            timeout=urllib3.Timeout(connect=self.timeout, read=self.timeout),
+        resp = urllib3.request(
+            "GET",
+            url,
+            retries=self.retries,
+            backoff_factor=self.backoff,
+            timeout=self.timeout,
         )
-
-        resp = http.request("GET", url)
 
         quotes = []
         body = resp.data
