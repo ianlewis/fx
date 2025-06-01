@@ -28,8 +28,13 @@ def main():
     logger = logging.getLogger("fx")
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("--debug", help="enable debug", action="store_true", default=False)
-    parser.set_defaults(func=lambda args: parser.print_help(), logger=logger)
+    parser.add_argument(
+        "--debug",
+        help="enable debug",
+        action="store_true",
+        default=False,
+    )
+    parser.set_defaults(func=lambda _args: parser.print_help(), logger=logger)
 
     subparsers = parser.add_subparsers(help="subcommand help")
 
@@ -41,10 +46,10 @@ def main():
     def provider_code(arg):
         if arg in provider_map:
             return provider_map[arg]
-        else:
-            msg = "invalid provider: {!r} (choose from {})"
-            choices = ", ".join(sorted(repr(choice) for choice in provider_map.keys()))
-            raise argparse.ArgumentTypeError(msg.format(arg, choices))
+
+        msg = "invalid provider: {!r} (choose from {})"
+        choices = ", ".join(sorted(repr(choice) for choice in provider_map))
+        raise argparse.ArgumentTypeError(msg.format(arg, choices))
 
     update = subparsers.add_parser("update", help="Update currency exchange data")
     update.add_argument(
@@ -73,15 +78,30 @@ def main():
         type=float,
         default=10.0,
     )
-    update.add_argument("--retry", help="number of retries for external requests", type=int, default=5)
+    update.add_argument(
+        "--retry",
+        help="number of retries for external equests",
+        type=int,
+        default=10,
+    )
     # backoff factor is multiplied by 2^n where n is the retry number
     # e.g. 0.5 will result in 0.5, 1, 2, 4, 8 seconds between retries
-    update.add_argument("--backoff", help="backoff factor for retries", type=int, default=0.5)
+    update.add_argument(
+        "--backoff",
+        help="backoff factor for retries",
+        type=int,
+        default=0.5,
+    )
     update.set_defaults(func=update_command, logger=logger)
 
     build = subparsers.add_parser("build", help="Build static API files")
     build.add_argument("--data-dir", help="data directory", type=str, default="data")
-    build.add_argument("--site-dir", help="site directory", type=str, default="_site/v1")
+    build.add_argument(
+        "--site-dir",
+        help="site directory",
+        type=str,
+        default="_site/v1",
+    )
     build.set_defaults(func=build_command, logger=logger, provider=all_providers)
 
     args = parser.parse_args()
