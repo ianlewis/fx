@@ -70,7 +70,10 @@ class MUFGProvider:
 
     def get_quote(self, base_currency_code, quote_currency_code, quote_date):
         if (quote_currency_code, quote_date) not in self._cache:
-            self._cache[(quote_currency_code, quote_date)] = self._get_quotes_by_date(quote_currency_code, quote_date)
+            self._cache[(quote_currency_code, quote_date)] = self._get_quotes_by_date(
+                quote_currency_code,
+                quote_date,
+            )
 
         for q in self._cache[(quote_currency_code, quote_date)]:
             if q.base_currency_code == base_currency_code:
@@ -90,8 +93,10 @@ class MUFGProvider:
         resp = urllib3.request(
             "GET",
             url,
-            retries=self.retries,
-            backoff_factor=self.backoff,
+            retries=urllib3.Retry(
+                total=self.retries,
+                backoff_factor=self.backoff,
+            ),
             timeout=self.timeout,
         )
 
