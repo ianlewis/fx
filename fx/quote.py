@@ -54,12 +54,16 @@ def quote_equal(q1, q2):
     )
 
 
-def download_quotes(provider, base_currency_code, quote_currency_code, start_date, end_date, logger):
+def download_quotes(
+    provider, base_currency_code, quote_currency_code, start_date, end_date, logger
+):
     """
     download_quotes gets quotes for each day in the given date range.
     """
     quotes = []
-    logger.info(f"downloading {provider.code} quotes for currency pair {base_currency_code}/{quote_currency_code} for {start_date.isoformat()} to {end_date.isoformat()}...")
+    logger.info(
+        f"downloading {provider.code} quotes for currency pair {base_currency_code}/{quote_currency_code} for {start_date.isoformat()} to {end_date.isoformat()}..."
+    )
     for dt in dateIterator(start_date, end_date, relativedelta(days=1)):
         quote = provider.get_quote(base_currency_code, quote_currency_code, dt)
         if quote:
@@ -165,7 +169,9 @@ def write_year_quotes_site(base_dir, year, quotelist, logger):
         month_qlists[q.date.month].quotes.append(q)
 
     for month, month_qlist in month_qlists.items():
-        write_month_quotes_site(os.path.join(base_dir, f"{year:04d}"), month, month_qlist, logger)
+        write_month_quotes_site(
+            os.path.join(base_dir, f"{year:04d}"), month, month_qlist, logger
+        )
 
 
 def write_month_quotes_site(base_dir, month, quotelist, logger):

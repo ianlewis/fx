@@ -4,20 +4,8 @@ This document describes the security policy that applies to this repository.
 
 ## Supported Versions
 
-Security updates for this repositiory will be applied the most recent major
-version and its minor versions.
-
-For example if 2.2.0 is the latest version:
-
-| Version | Supported          |
-| ------- | ------------------ |
-| v2.2.x  | :white_check_mark: |
-| v2.1.x  | :white_check_mark: |
-| v2.0.x  | :white_check_mark: |
-| < 2.0.0 | :x:                |
-
-However, if the repository has not made a stable release (e.g. the latest
-release is < v1.0.0) then only the most latest minor version will be patched.
+Only the repository HEAD revision is supported, and security updates for this
+repository will be applied to HEAD only.
 
 ## Security Release & Disclosure Process
 
@@ -44,7 +32,7 @@ A public disclosure date is negotiated with the report submitter. We prefer to
 fully disclose the bug as soon as possible once a user mitigation is available.
 It is reasonable to delay disclosure when the bug or the fix is not yet fully
 understood, the solution is not well-tested, or for vendor coordination. The
-timeframe for disclosure is from immediate (especially if it's already publicly
+time frame for disclosure is from immediate (especially if it's already publicly
 known) to several weeks. For a vulnerability with a straightforward mitigation,
 we expect report date to disclosure date to be on the order of 14 days.
 
@@ -78,7 +66,7 @@ Vulnerability severity is evaluated on a case-by-case basis, guided by [CVSS
 ## Security Posture
 
 We aim to reduce the number of security issues through several general
-security-concious development practices including the use of unit-tests,
+security-conscious development practices including the use of unit-tests,
 end-to-end (e2e) tests, static and dynamic analysis tools, and use of
 memory-safe languages.
 
@@ -91,7 +79,7 @@ development (This is not an exhaustive list).
 
 - Where possible, all PRs are reviewed by at least one [CODEOWNER](./CODEOWNERS).
 - All unit and linter pre-submit tests must pass before a PRs is merged. See
-  the [Pre-submits](./CONTRIBUTING.md#pre-submits) section of the Contributor
+  the [pre-submits](./CONTRIBUTING.md#pre-submits) section of the Contributor
   Guide for more information.
 - All releases include no known test or linter failures.
 - We refrain from using memory-unsafe languages (e.g. C, C++) or memory-unsafe

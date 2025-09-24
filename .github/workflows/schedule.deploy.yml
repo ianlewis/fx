@@ -23,6 +23,7 @@ permissions: {}
 
 jobs:
   update:
+    name: Update Data
     permissions:
       contents: write
     runs-on: ubuntu-latest

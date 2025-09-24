@@ -1,6 +1,7 @@
-# fx.ianlewis.org
+# `fx.ianlewis.org`
 
-`fx.ianlewis.org` is a currency conversion API. It currently supports MUFG published rates between 31 currencies and JPY.
+`fx.ianlewis.org` is a currency conversion API. It currently supports MUFG
+published rates between 31 currencies and JPY.
 
 ## Data Types & Endpoints
 
@@ -9,69 +10,72 @@ The following sections outline the various data types available in the API.
 - [Swagger UI](https://petstore.swagger.io/?url=https://fx.ianlewis.org/v1/openapi.yaml)
 - [Redoc](https://redocly.github.io/redoc/?url=https://fx.ianlewis.org/v1/openapi.yaml)
 
-The full OpenAPI definition can be viewed at [/v1/openapi.yaml](/v1/openapi.yaml).
+The full OpenAPI definition can be viewed at
+[`/v1/openapi.yaml`](/v1/openapi.yaml).
 
 ### Provider
 
-Currency exchange provider information can be retrieved via the provider endpoint. The `Provider` object's format is defined in [`provider.proto`](https://github.com/ianlewis/fx/blob/main/fx/provider.proto).
+Currency exchange provider information can be retrieved via the provider
+endpoint. The `Provider` object's format is defined in
+[`provider.proto`](https://github.com/ianlewis/fx/blob/main/fx/provider.proto).
 
-[/v1/provider.json](/v1/provider.json)
+#### [`/v1/provider.json`](/v1/provider.json)
 
 ```json
 {
-  "providers": [
-    {
-      "code": "MUFG",
-      "name": "MUFG Bank, Ltd."
-      // ...
-    }
-    // ...
-  ]
+    "providers": [
+        {
+            "code": "MUFG",
+            "name": "MUFG Bank, Ltd."
+            // ...
+        }
+        // ...
+    ]
 }
 ```
 
 Individual providers can be accessed via their code.
 
-[/v1/provider/MUFG.json](/v1/provider/MUFG.json)
+#### [`/v1/provider/MUFG.json`](/v1/provider/MUFG.json)
 
 ```json
 {
-  "code": "MUFG",
-  "name": "MUFG Bank, Ltd.",
-  "supportedBaseCurrencies": [
-    "USD",
-    "EUR",
-    "CAD",
-    "GBP",
-    "CHF",
-    "DKK",
-    "NOK",
-    "SEK",
-    "AUD",
-    "NZD",
-    "HKD",
-    "MYR",
-    "SGD",
-    "SAR",
-    "AED",
-    "CNY",
-    "THB",
-    "INR",
-    "PKR",
-    "KWD",
-    "QAR",
-    "IDR",
-    "MXN",
-    "KRW",
-    "PHP",
-    "ZAR",
-    "CZK",
-    "RUB",
-    "HUF",
-    "PLN",
-    "TRY"
-  ],
-  "supportedQuoteCurrencies": ["JPY"]
+    "code": "MUFG",
+    "name": "MUFG Bank, Ltd.",
+    "supportedBaseCurrencies": [
+        "USD",
+        "EUR",
+        "CAD",
+        "GBP",
+        "CHF",
+        "DKK",
+        "NOK",
+        "SEK",
+        "AUD",
+        "NZD",
+        "HKD",
+        "MYR",
+        "SGD",
+        "SAR",
+        "AED",
+        "CNY",
+        "THB",
+        "INR",
+        "PKR",
+        "KWD",
+        "QAR",
+        "IDR",
+        "MXN",
+        "KRW",
+        "PHP",
+        "ZAR",
+        "CZK",
+        "RUB",
+        "HUF",
+        "PLN",
+        "TRY"
+    ],
+    "supportedQuoteCurrencies": ["JPY"]
 }
 ```
 
@@ -79,51 +83,51 @@ Individual providers can be accessed via their code.
 
 Currency information can be retrieved via the currency endpoint using the currency's ISO 4217 alphabetic code. The `Currency` object's format is defined in [`currency.proto`](https://github.com/ianlewis/fx/blob/main/fx/currency.proto).
 
-[/v1/currency.json](/v1/currency.json)
+#### [`/v1/currency.json`](/v1/currency.json)
 
 ```json
 {
-  "currencies": [
-    {
-      "alphabeticCode": "AFN",
-      "numericCode": "971",
-      "name": "Afghani",
-      "minorUnits": 2,
-      "countries": ["AFGHANISTAN"]
-    }
-    // ...
-  ]
+    "currencies": [
+        {
+            "alphabeticCode": "AFN",
+            "numericCode": "971",
+            "name": "Afghani",
+            "minorUnits": 2,
+            "countries": ["AFGHANISTAN"]
+        }
+        // ...
+    ]
 }
 ```
 
-[/v1/currency/USD.json](/v1/currency/USD.json)
+#### [`/v1/currency/USD.json`](/v1/currency/USD.json)
 
 ```json
 {
-  "alphabeticCode": "USD",
-  "numericCode": "840",
-  "name": "US Dollar",
-  "countries": [
-    "AMERICAN SAMOA",
-    "BONAIRE, SINT EUSTATIUS AND SABA",
-    "BRITISH INDIAN OCEAN TERRITORY (THE)",
-    "ECUADOR",
-    "EL SALVADOR",
-    "GUAM",
-    "HAITI",
-    "MARSHALL ISLANDS (THE)",
-    "MICRONESIA (FEDERATED STATES OF)",
-    "NORTHERN MARIANA ISLANDS (THE)",
-    "PALAU",
-    "PANAMA",
-    "PUERTO RICO",
-    "TIMOR-LESTE",
-    "TURKS AND CAICOS ISLANDS (THE)",
-    "UNITED STATES MINOR OUTLYING ISLANDS (THE)",
-    "UNITED STATES OF AMERICA (THE)",
-    "VIRGIN ISLANDS (BRITISH)",
-    "VIRGIN ISLANDS (U.S.)"
-  ]
+    "alphabeticCode": "USD",
+    "numericCode": "840",
+    "name": "US Dollar",
+    "countries": [
+        "AMERICAN SAMOA",
+        "BONAIRE, SINT EUSTATIUS AND SABA",
+        "BRITISH INDIAN OCEAN TERRITORY (THE)",
+        "ECUADOR",
+        "EL SALVADOR",
+        "GUAM",
+        "HAITI",
+        "MARSHALL ISLANDS (THE)",
+        "MICRONESIA (FEDERATED STATES OF)",
+        "NORTHERN MARIANA ISLANDS (THE)",
+        "PALAU",
+        "PANAMA",
+        "PUERTO RICO",
+        "TIMOR-LESTE",
+        "TURKS AND CAICOS ISLANDS (THE)",
+        "UNITED STATES MINOR OUTLYING ISLANDS (THE)",
+        "UNITED STATES OF AMERICA (THE)",
+        "VIRGIN ISLANDS (BRITISH)",
+        "VIRGIN ISLANDS (U.S.)"
+    ]
 }
 ```
 
@@ -133,41 +137,44 @@ Currency exchange rate quotes can be retrieved via a provider's quote endpoint. 
 
 Quotes for a single day can be accessed by date.
 
-[/v1/provider/MUFG/quote/USD/JPY/2025/03/11.json](/v1/provider/MUFG/quote/USD/JPY/2025/03/11.json)
+#### [`/v1/provider/MUFG/quote/USD/JPY/2025/03/11.json`](/v1/provider/MUFG/quote/USD/JPY/2025/03/11.json)
 
 ```json
 {
-  "providerCode": "MUFG",
-  "date": {
-    "year": 2025,
-    "month": 3,
-    "day": 11
-  },
-  "baseCurrencyCode": "USD",
-  "quoteCurrencyCode": "JPY",
-  "ask": {
-    "currencyCode": "JPY",
-    "units": "147",
-    "nanos": 680000000
-  },
-  "bid": {
-    "currencyCode": "JPY",
-    "units": "145",
-    "nanos": 680000000
-  },
-  "mid": {
-    "currencyCode": "JPY",
-    "units": "146",
-    "nanos": 680000000
-  }
+    "providerCode": "MUFG",
+    "date": {
+        "year": 2025,
+        "month": 3,
+        "day": 11
+    },
+    "baseCurrencyCode": "USD",
+    "quoteCurrencyCode": "JPY",
+    "ask": {
+        "currencyCode": "JPY",
+        "units": "147",
+        "nanos": 680000000
+    },
+    "bid": {
+        "currencyCode": "JPY",
+        "units": "145",
+        "nanos": 680000000
+    },
+    "mid": {
+        "currencyCode": "JPY",
+        "units": "146",
+        "nanos": 680000000
+    }
 }
 ```
 
 ## Formats
 
-Each endpoint can be accessed in JSON (.json), CSV (.csv), and Protocol Buffers Wire format (.binpb) via their associated file extension.
+Each endpoint can be accessed in JSON (`.json`), CSV (`.csv`), and Protocol
+Buffers Wire format (`.binpb`) via their associated file extension.
 
-[/v1/provider/MUFG/quote/USD/JPY/2025/03.csv](/v1/provider/MUFG/quote/USD/JPY/2025/03.csv)
+For example, the endpoint
+[`/v1/provider/MUFG/quote/USD/JPY/2025/03.csv`](/v1/provider/MUFG/quote/USD/JPY/2025/03.csv)
+returns the following CSV data.
 
 ```csv
 date,providerCode,baseCurrencyCode,quoteCurrencyCode,ask,bid,mid
