@@ -14,13 +14,35 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import re
+import datetime
 import os.path
+import re
 import time
 
 from provider import write_providers_site
 from currency import read_currencies_data, write_currencies_site
-from quote import read_quotelist_data, write_year_quotes_site
+from quote import read_quotelist_data, write_latest_quote_site, write_year_quotes_site
+
+
+def update_latest_quotes(latest_quotes, provider_code, quotelist):
+    """
+    update_latest_quotes updates the given latest_quotes dictionary with the
+    quotes from the given quotelist.
+    """
+    for quote in quotelist.quotes:
+        pair = (provider_code, quote.base_currency_code, quote.quote_currency_code)
+        if pair not in latest_quotes:
+            latest_quotes[pair] = quote
+        else:
+            existing_quote = latest_quotes[pair]
+            if datetime.date(
+                quote.date.year, quote.date.month, quote.date.day
+            ) > datetime.date(
+                existing_quote.date.year,
+                existing_quote.date.month,
+                existing_quote.date.day,
+            ):
+                latest_quotes[pair] = quote
 
 
 def build_command(args):
@@ -35,6 +57,8 @@ def build_command(args):
     currencies = read_currencies_data(currencies_proto_path, args.logger)
 
     write_currencies_site(args.site_dir, currencies, args.logger)
+
+    latest_quotes = {}
 
     build_start = time.time()
     for provider in args.provider:
@@ -59,11 +83,26 @@ def build_command(args):
 
                     quotelist = read_quotelist_data(file_path, args.logger)
 
+                    update_latest_quotes(latest_quotes, provider.code, quotelist)
+
                     base_dir = os.path.join(
                         args.site_dir,
                         f"provider/{provider.code}/quote/{base_currency_code}/{quote_currency_code}",
                     )
                     write_year_quotes_site(base_dir, year, quotelist, args.logger)
+
+    # Write the latest quotes for each currency pair.
+    for (
+        provider_code,
+        base_currency_code,
+        quote_currency_code,
+    ), quote in latest_quotes.items():
+        base_dir = os.path.join(
+            args.site_dir,
+            f"provider/{provider_code}/quote/{base_currency_code}/{quote_currency_code}",
+        )
+        write_latest_quote_site(base_dir, quote, args.logger)
+
     build_end = time.time()
 
     args.logger.info(f"API built in {build_end - build_start:.2f} seconds")
