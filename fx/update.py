@@ -40,7 +40,9 @@ def update_command(args):
     # Process the date range by year
     for Provider in args.provider:
         provider = Provider(args)
-        for year_start in dateIterator(date(args.start.year, 1, 1), args.end, relativedelta(years=1)):
+        for year_start in dateIterator(
+            date(args.start.year, 1, 1), args.end, relativedelta(years=1)
+        ):
             for base_currency_code in provider.supported_base_currencies:
                 for quote_currency_code in provider.supported_quote_currencies:
                     start_date = year_start
@@ -51,9 +53,22 @@ def update_command(args):
                     if args.end.year == year_start.year:
                         end_date = args.end
 
-                    quotes = download_quotes(provider, base_currency_code, quote_currency_code, start_date, end_date, args.logger)
+                    quotes = download_quotes(
+                        provider,
+                        base_currency_code,
+                        quote_currency_code,
+                        start_date,
+                        end_date,
+                        args.logger,
+                    )
 
                     # Data will be stored in files of the form:
                     #   data/MUFG/USD/JPY/2025.binpb
-                    quotes_proto_path = os.path.join(args.data_dir, provider.code, base_currency_code, quote_currency_code, f"{year_start.year}.binpb")
+                    quotes_proto_path = os.path.join(
+                        args.data_dir,
+                        provider.code,
+                        base_currency_code,
+                        quote_currency_code,
+                        f"{year_start.year}.binpb",
+                    )
                     write_quotes_data(quotes_proto_path, quotes, args.logger)
