@@ -167,6 +167,38 @@ Quotes for a single day can be accessed by date.
 }
 ```
 
+#### [`/v1/provider/MUFG/quote/USD/JPY/latest.json`](/v1/provider/MUFG/quote/USD/JPY/latest.json)
+
+The most recent quote for a currency pair can be accessed via the `latest` endpoint.
+
+```json
+{
+    "providerCode": "MUFG",
+    "date": {
+        "year": 2025,
+        "month": 9,
+        "day": 22
+    },
+    "baseCurrencyCode": "USD",
+    "quoteCurrencyCode": "JPY",
+    "ask": {
+        "currencyCode": "JPY",
+        "units": "149",
+        "nanos": 290000000
+    },
+    "bid": {
+        "currencyCode": "JPY",
+        "units": "147",
+        "nanos": 290000000
+    },
+    "mid": {
+        "currencyCode": "JPY",
+        "units": "148",
+        "nanos": 290000000
+    }
+}
+```
+
 ## Formats
 
 Each endpoint can be accessed in JSON (`.json`), CSV (`.csv`), and Protocol

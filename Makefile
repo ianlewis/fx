@@ -165,11 +165,19 @@ all: test build ## Run all tests and build the site.
 
 .PHONY: build
 build: .venv/.installed mkdocs ## Build the site files.
-	@$(REPO_ROOT)/.venv/bin/python fx/main.py build
+	debugarg=""; \
+	if [ -n "$(DEBUG_LOGGING)" ]; then \
+		debugarg="--debug"; \
+	fi; \
+	$(REPO_ROOT)/.venv/bin/python3 fx/main.py $${debugarg} build
 
 .PHONY: update
 update: .venv/.installed ## Update API data.
-	@$(REPO_ROOT)/.venv/bin/python fx/main.py update --start "$$(date -d "-14 days" +"%Y-%m-%d")"
+	debugarg=""; \
+	if [ -n "$(DEBUG_LOGGING)" ]; then \
+		debugarg="--debug"; \
+	fi; \
+	$(REPO_ROOT)/.venv/bin/python3 fx/main.py $${debugarg} update --start "$$(date -d "-14 days" +"%Y-%m-%d")"
 
 .PHONY: mkdocs
 mkdocs: .venv/.installed ## Generate API documentation.
@@ -177,7 +185,7 @@ mkdocs: .venv/.installed ## Generate API documentation.
 
 .PHONY: serve
 serve: build ## Serve the API locally.
-	@$(REPO_ROOT)/.venv/bin/python -m http.server --directory _site/
+	@$(REPO_ROOT)/.venv/bin/python3 -m http.server --directory _site/
 
 .PHONY: protoc
 protoc: fx/currency_pb2.py fx/provider_pb2.py fx/quote_pb2.py ## Compile protobuf files.

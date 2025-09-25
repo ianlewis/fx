@@ -199,9 +199,17 @@ def write_month_quotes_site(base_dir, month, quotelist, logger):
 
 
 def write_day_quote_site(base_dir, quote, logger):
+    _write_quote_site(base_dir, f"{quote.date.day:02d}", quote, logger)
+
+
+def write_latest_quote_site(base_dir, quote, logger):
+    _write_quote_site(base_dir, "latest", quote, logger)
+
+
+def _write_quote_site(base_dir, file_name, quote, logger):
     os.makedirs(base_dir, exist_ok=True)
 
-    json_path = os.path.join(base_dir, f"{quote.date.day:02d}.json")
+    json_path = os.path.join(base_dir, f"{file_name}.json")
     logger.debug(f"writing {json_path}...")
 
     # write currencies list JSON.
@@ -209,11 +217,11 @@ def write_day_quote_site(base_dir, quote, logger):
         json.dump(MessageToDict(quote), f)
 
     # write quote list CSV.
-    csv_path = os.path.join(base_dir, f"{quote.date.day:02d}.csv")
+    csv_path = os.path.join(base_dir, f"{file_name}.csv")
     write_quotes_csv(csv_path, [quote], logger)
 
     # Write quote list proto
-    proto_path = os.path.join(base_dir, f"{quote.date.day:02d}.binpb")
+    proto_path = os.path.join(base_dir, f"{file_name}.binpb")
     with open(proto_path, "wb") as f:
         logger.debug(f"writing {f.name}...")
         f.write(quote.SerializeToString())
