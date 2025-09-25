@@ -116,7 +116,7 @@ components:
 paths:
   /currency.json:
     get:
-      summary: Returns a list of currencies.
+      summary: Get supported currencies.
       description: Returns a full list of currencies. Not all providers support all currencies.
       responses:
         "200": # status code
@@ -128,8 +128,8 @@ paths:
 
   /currency/{currency_code}.json:
     get:
-      summary: Returns a currency.
-      description: Returns a currency corresponding to `code`.
+      summary: Get a currency by code.
+      description: Returns a currency corresponding to the currency code.
       parameters:
         - name: currency_code
           in: path
@@ -147,7 +147,7 @@ paths:
 
   /provider.json:
     get:
-      summary: Returns a list of providers.
+      summary: Get supported providers.
       description: Returns a full list of supported currency conversion providers.
       responses:
         "200": # status code
@@ -159,7 +159,7 @@ paths:
 
   /provider/{provider_code}.json:
     get:
-      summary: Returns a provider.
+      summary: Get a provider by code.
       description: Returns a supported currency conversion provider.
       parameters:
         - name: provider_code
@@ -176,9 +176,40 @@ paths:
               schema:
                 $ref: "#/components/schemas/Provider"
 
+  /provider/{provider_code}/quote/{base_currency_code}/{quote_currency_code}/latest.json:
+    get:
+      summary: Get the most recent daily quote.
+      description: Returns the most recent currency conversion quote for the given provider.
+      parameters:
+        - name: provider_code
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The provider code.
+        - name: base_currency_code
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ISO 4217 currency code for the base currency.
+        - name: quote_currency_code
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ISO 4217 currency code for the quote currency.
+      responses:
+        "200": # status code
+          description: A Quote object.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Quote"
+
   /provider/{provider_code}/quote/{base_currency_code}/{quote_currency_code}/{year}/{month}/{day}.json:
     get:
-      summary: Returns a daily quote.
+      summary: Get a quote by date.
       description: Returns a daily currency conversion quote for the given provider.
       parameters:
         - name: provider_code
@@ -230,7 +261,7 @@ paths:
 
   /provider/{provider_code}/quote/{base_currency_code}/{quote_currency_code}/{year}/{month}.json:
     get:
-      summary: Returns a list of quote for the month.
+      summary: Get quotes by month.
       description: Returns a list daily currency conversion quote for the provider in the given month.
       parameters:
         - name: provider_code
@@ -275,7 +306,7 @@ paths:
 
   /provider/{provider_code}/quote/{base_currency_code}/{quote_currency_code}/{year}.json:
     get:
-      summary: Returns a list of quote for the year.
+      summary: Get quotes by year.
       description: Returns a list daily currency conversion quote for the provider in the given year.
       parameters:
         - name: provider_code
