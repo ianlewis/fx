@@ -45,5 +45,5 @@ jobs:
           git config --global user.name github-actions
           git config --global user.email github-actions@github.com
           git add .
-          git commit -m "Update data $(date +"%Y-%m-%d")" || true
+          git commit -m "chore(data): update data $(date +"%Y-%m-%d")" || true
           git push
