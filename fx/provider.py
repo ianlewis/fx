@@ -20,7 +20,7 @@ import json
 
 from google.protobuf.json_format import MessageToDict
 
-from provider_pb2 import ProviderList
+from fx.provider_pb2 import ProviderList
 
 
 def write_providers_site(base_dir, providers, logger):

@@ -163,35 +163,55 @@ $(AQUA_ROOT_DIR)/.installed: .aqua.yaml .bin/aqua-$(AQUA_VERSION)/aqua
 .PHONY: all
 all: test build ## Run all tests and build the site.
 
+.PHONY: package
+package: .venv/.installed ## Package the project for distribution.
+	@# bash \
+	$(REPO_ROOT)/.venv/bin/python3 -m build
+
+.PHONY: install
+install: .venv/.installed ## Install the package in the local venv.
+	@# bash \
+	$(REPO_ROOT)/.venv/bin/pip install .
+
 .PHONY: build
-build: .venv/.installed mkdocs ## Build the site files.
+build: install mkdocs ## Build the site files.
+	@# bash \
 	debugarg=""; \
 	if [ -n "$(DEBUG_LOGGING)" ]; then \
 		debugarg="--debug"; \
 	fi; \
-	$(REPO_ROOT)/.venv/bin/python3 fx/main.py $${debugarg} build
+	$(REPO_ROOT)/.venv/bin/fx \
+		$${debugarg} \
+		build
 
 .PHONY: update
-update: .venv/.installed ## Update API data.
+update: install ## Update API data.
+	@# bash \
 	debugarg=""; \
 	if [ -n "$(DEBUG_LOGGING)" ]; then \
 		debugarg="--debug"; \
 	fi; \
-	$(REPO_ROOT)/.venv/bin/python3 fx/main.py $${debugarg} update --start "$$(date -d "-14 days" +"%Y-%m-%d")"
+	$(REPO_ROOT)/.venv/bin/fx \
+		$${debugarg} \
+		update \
+		--start "$$(date -d "-14 days" +"%Y-%m-%d")"
 
 .PHONY: mkdocs
 mkdocs: .venv/.installed ## Generate API documentation.
-	@$(REPO_ROOT)/.venv/bin/mkdocs build
+	@# bash \
+	$(REPO_ROOT)/.venv/bin/mkdocs build
 
 .PHONY: serve
 serve: build ## Serve the API locally.
-	@$(REPO_ROOT)/.venv/bin/python3 -m http.server --directory _site/
+	@# bash \
+	$(REPO_ROOT)/.venv/bin/python3 -m http.server --directory _site/
 
 .PHONY: protoc
 protoc: fx/currency_pb2.py fx/provider_pb2.py fx/quote_pb2.py ## Compile protobuf files.
 
 fx/%_pb2.py: .venv/.installed fx/%.proto
-	@protoc --proto_path=. --proto_path=.venv/lib/python3.10/site-packages/ --python_out=. $(word 2,$^)
+	@# bash \
+	protoc --proto_path=. --proto_path=.venv/lib/python3.10/site-packages/ --python_out=. $(word 2,$^)
 
 ## Testing
 #####################################################################
@@ -610,6 +630,7 @@ clean: ## Delete temporary files.
 	@$(RM) -r .venv/
 	@$(RM) -r node_modules/
 	@$(RM) *.sarif.json
+	@$(RM) -r build/
 	@$(RM) -r dist/
 	@$(RM) -r *.egg-info/
 	@$(RM) -r _site/

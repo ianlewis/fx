@@ -21,13 +21,16 @@ authors = [
 description = "A simple currency exchange rate API"
 readme = "README.md"
 # NOTE: this should be compatible with the `.python-version` file.
-requires-python = "==3.13.5"
+requires-python = ">=3.13.0"
 classifiers = [
     "Programming Language :: Python :: 3",
     "Operating System :: OS Independent",
 ]
 license = "Apache-2.0"
 license-files = ["LICENSE"]
+
+[project.scripts]
+fx = "fx.main:main"
 
 [project.urls]
 Homepage = "https://fx.ianlewis.org/"

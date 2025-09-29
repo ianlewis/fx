@@ -20,9 +20,9 @@ from datetime import date
 
 from dateutil.relativedelta import relativedelta
 
-from currency import download_currencies, write_currencies_data
-from quote import download_quotes, write_quotes_data
-from utils import dateIterator
+from fx.currency import download_currencies, write_currencies_data
+from fx.quote import download_quotes, write_quotes_data
+from fx.utils import dateIterator
 
 
 def update_command(args):

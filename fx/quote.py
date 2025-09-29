@@ -24,8 +24,8 @@ import os.path
 from dateutil.relativedelta import relativedelta
 from google.protobuf.json_format import MessageToDict
 
-from quote_pb2 import QuoteList
-from utils import dateIterator, date_msg_to_str, money_to_str
+from fx.quote_pb2 import QuoteList
+from fx.utils import dateIterator, date_msg_to_str, money_to_str
 
 
 def quote_in(q, quotes):
