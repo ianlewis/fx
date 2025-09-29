@@ -219,6 +219,7 @@ fx/%_pb2.py: .venv/.installed fx/%.proto
 .PHONY: test
 test: lint unit-tests ## Run all linters and tests.
 
+.PHONY: unit-tests
 unit-tests: .venv/.installed ## Run unit tests.
 	@# bash \
 	$(REPO_ROOT)/.venv/bin/python3 -m unittest discover .
