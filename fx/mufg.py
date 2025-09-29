@@ -1,5 +1,3 @@
-#!/usr/bin/python
-#
 # Copyright 2025 Ian Lewis
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -68,6 +66,18 @@ class MUFGProvider:
         self.backoff = args.backoff
         self._cache = {}
 
+    def _request(self, url: str):
+        self.logger.debug(f"GET {url}")
+        return urllib3.request(
+            "GET",
+            url,
+            retries=urllib3.Retry(
+                total=self.retries,
+                backoff_factor=self.backoff,
+            ),
+            timeout=self.timeout,
+        )
+
     def get_quote(self, base_currency_code, quote_currency_code, quote_date):
         if (quote_currency_code, quote_date) not in self._cache:
             self._cache[(quote_currency_code, quote_date)] = self._get_quotes_by_date(
@@ -84,21 +94,12 @@ class MUFGProvider:
     def _get_quotes_by_date(self, quote_currency, quote_date):
         jpy_code = "JPY"
 
-        if quote_currency != jpy_code:
+        if quote_currency not in self.supported_quote_currencies:
             raise ValueError(f'currency "{quote_currency}" not supported')
 
         url = f"https://murc-kawasesouba.jp/fx/past_3month_result.php?y={quote_date.strftime('%Y')}&m={quote_date.strftime('%m')}&d={quote_date.strftime('%d')}"
-        self.logger.debug(f"GET {url}")
 
-        resp = urllib3.request(
-            "GET",
-            url,
-            retries=urllib3.Retry(
-                total=self.retries,
-                backoff_factor=self.backoff,
-            ),
-            timeout=self.timeout,
-        )
+        resp = self._request(url)
 
         quotes = []
         body = resp.data
@@ -171,8 +172,8 @@ class MUFGProvider:
                         self.logger.debug(f"ttm: {type(e).__name__}: {e}")
                         pass
 
-                    if kwargs.get("base_currency_code") and (
-                        kwargs.get("ask") or kwargs.get("bid") or kwargs.get("mid")
+                    if "base_currency_code" in kwargs and (
+                        "ask" in kwargs or "bid" in kwargs or "mid" in kwargs
                     ):
                         quotes.append(Quote(**kwargs))
 
