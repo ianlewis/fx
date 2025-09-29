@@ -2,7 +2,8 @@
 base = "."
 publish = "_site/"  # relative to `base` directory
 command = "make build"
-environment = { PYTHON_VERSION = "3.10" }
+# NOTE: This should match the Python version in `.python-version`.
+environment = { PYTHON_VERSION = "3.13.5" }
 
 [[headers]]
   for = "/v1/*"
