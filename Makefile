@@ -168,23 +168,33 @@ package: .venv/.installed ## Package the project for distribution.
 	@# bash \
 	$(REPO_ROOT)/.venv/bin/python3 -m build
 
+.PHONY: install
+install: .venv/.installed ## Install the package in the local venv.
+	@# bash \
+	$(REPO_ROOT)/.venv/bin/pip install .
+
 .PHONY: build
-build: .venv/.installed mkdocs ## Build the site files.
+build: install mkdocs ## Build the site files.
 	@# bash \
 	debugarg=""; \
 	if [ -n "$(DEBUG_LOGGING)" ]; then \
 		debugarg="--debug"; \
 	fi; \
-	$(REPO_ROOT)/.venv/bin/python3 fx/main.py $${debugarg} build
+	$(REPO_ROOT)/.venv/bin/fx \
+		$${debugarg} \
+		build
 
 .PHONY: update
-update: .venv/.installed ## Update API data.
+update: install ## Update API data.
 	@# bash \
 	debugarg=""; \
 	if [ -n "$(DEBUG_LOGGING)" ]; then \
 		debugarg="--debug"; \
 	fi; \
-	$(REPO_ROOT)/.venv/bin/python3 fx/main.py $${debugarg} update --start "$$(date -d "-14 days" +"%Y-%m-%d")"
+	$(REPO_ROOT)/.venv/bin/fx \
+		$${debugarg} \
+		update \
+		--start "$$(date -d "-14 days" +"%Y-%m-%d")"
 
 .PHONY: mkdocs
 mkdocs: .venv/.installed ## Generate API documentation.
