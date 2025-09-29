@@ -19,9 +19,13 @@ import os.path
 import re
 import time
 
-from provider import write_providers_site
-from currency import read_currencies_data, write_currencies_site
-from quote import read_quotelist_data, write_latest_quote_site, write_year_quotes_site
+from fx.provider import write_providers_site
+from fx.currency import read_currencies_data, write_currencies_site
+from fx.quote import (
+    read_quotelist_data,
+    write_latest_quote_site,
+    write_year_quotes_site,
+)
 
 
 def update_latest_quotes(latest_quotes, provider_code, quotelist):

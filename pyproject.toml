@@ -29,6 +29,9 @@ classifiers = [
 license = "Apache-2.0"
 license-files = ["LICENSE"]
 
+[project.scripts]
+fx = "fx.main:main"
+
 [project.urls]
 Homepage = "https://fx.ianlewis.org/"
 Issues = "https://github.com/ianlewis/fx/issues"

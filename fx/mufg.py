@@ -18,8 +18,8 @@ from bs4 import BeautifulSoup
 from google.type.date_pb2 import Date
 import urllib3
 
-from quote_pb2 import Quote
-from utils import str_to_money
+from fx.quote_pb2 import Quote
+from fx.utils import str_to_money
 
 
 class MUFGProvider:

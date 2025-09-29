@@ -16,9 +16,9 @@ import argparse
 import logging
 from datetime import date
 
-from build import build_command
-from update import update_command
-from mufg import MUFGProvider
+from fx.build import build_command
+from fx.update import update_command
+from fx.mufg import MUFGProvider
 
 
 def main():

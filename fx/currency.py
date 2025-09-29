@@ -25,8 +25,8 @@ from google.protobuf.json_format import MessageToDict
 from google.type.date_pb2 import Date
 import urllib3
 
-from currency_pb2 import Currency, CurrencyList
-from utils import date_msg_to_str
+from fx.currency_pb2 import Currency, CurrencyList
+from fx.utils import date_msg_to_str
 
 ISO_DOWNLOAD_XML = "https://www.six-group.com/dam/download/financial-information/data-center/iso-currrency/lists/list-one.xml"
 ISO_DOWNLOAD_HISTORIC_XML = "https://www.six-group.com/dam/download/financial-information/data-center/iso-currrency/lists/list-three.xml"
