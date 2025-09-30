@@ -34,7 +34,8 @@ ISO_DOWNLOAD_XML = "https://www.six-group.com/dam/download/financial-information
 ISO_DOWNLOAD_HISTORIC_XML = "https://www.six-group.com/dam/download/financial-information/data-center/iso-currrency/lists/list-three.xml"
 
 
-def download_currencies(args: Any) -> CurrencyList:  # noqa: ANN401
+# TODO(#100): Refactor to reduce complexity
+def download_currencies(args: Any) -> CurrencyList:  # noqa: ANN401, C901
     """
     Download and parse the ISO 4217 currency list.
 

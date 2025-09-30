@@ -252,7 +252,7 @@ def write_month_quotes_site(
     )
 
     # write currencies list JSON.
-    with json_path.open(json_path, "w") as f:
+    with json_path.open("w") as f:
         json.dump(MessageToDict(quotelist), f)
 
     # write quote list CSV.

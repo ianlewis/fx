@@ -1,4 +1,3 @@
-#
 # Copyright 2025 Ian Lewis
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,7 +15,6 @@
 """Build module for generating static API site files."""
 
 import datetime
-import os.path
 import re
 import time
 from pathlib import Path
@@ -67,7 +65,7 @@ def build_command(args: Any) -> None:  # noqa: ANN401
 
     write_providers_site(args.site_dir, args.provider, args.logger)
 
-    currencies_proto_path = Path(args.data_dir) / "currencies.binpb"
+    currencies_proto_path = Path(args.data_dir).joinpath("currencies.binpb")
     currencies = read_currencies_data(currencies_proto_path, args.logger)
 
     write_currencies_site(args.site_dir, currencies, args.logger)
@@ -76,13 +74,13 @@ def build_command(args: Any) -> None:  # noqa: ANN401
 
     build_start = time.time()
     for provider in args.provider:
-        provider_data_dir = Path(args.data_dir) / provider.code
-        for root, _dirs, files in os.walk(provider_data_dir):
+        provider_data_path = Path(args.data_dir).joinpath(provider.code)
+        for root, _dirs, files in provider_data_path.walk():
             for filename in files:
-                file_path = Path(root) / filename
+                file_path = Path(root).joinpath(filename)
                 match = re.match(
                     r"^"
-                    + re.escape(str(provider_data_dir))
+                    + re.escape(str(provider_data_path))
                     + r"/([a-zA-Z]{3})/([a-zA-Z]{3})/([0-9]{4}).binpb$",
                     str(file_path),
                 )

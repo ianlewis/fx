@@ -105,7 +105,8 @@ class MUFGProvider:
 
         return None
 
-    def _get_quotes_by_date(
+    # TODO(#100): Refactor to reduce complexity
+    def _get_quotes_by_date(  # noqa: C901, PLR0912
         self,
         quote_currency: str,
         quote_date: datetime.date,
