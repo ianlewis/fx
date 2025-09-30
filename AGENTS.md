@@ -45,7 +45,7 @@ Make targets automatically handle dependency installation.
 
 ### Core Components
 
-- `fx.main` - CLI entrypoint with subcommands (`update`, `build`)
+- `fx.main` - CLI entry point with sub-commands (`update`, `build`)
 - `fx.provider` - Abstract base class for exchange rate providers
 - `fx.mufg` - MUFG Bank provider implementation (primary source)
 - `fx.quote` - Exchange rate quote data structures
@@ -59,28 +59,28 @@ Make targets automatically handle dependency installation.
    Buffers format in `data/` directory
 2. **Build phase**: `fx build` processes stored data to generate static JSON API files
    in `_site/v1/` directory
-3. **Serve phase**: Static files served via HTTP server or deployed to CDN
+3. **Serve phase**: Static files served via Netlify.
 
 ### Key Files
 
-- **data/** - Raw exchange rate data in Protocol Buffers format
-- **\_site/v1/** - Generated static API files (JSON)
-- **fx/\*.proto** - Protocol Buffer schemas for data structures
-- **fx/\*\_pb2.py** - Generated Python classes from protobuf (don't edit manually)
+- `data/` - Raw exchange rate data in Protocol Buffers format
+- `_site/v1/` - Generated static API files (JSON)
+- `fx/*.proto` - Protocol Buffer schema for data structures
+- `fx/*_pb2.py` - Generated Python classes from Protocol Buffers (don't edit manually)
 
 ### Testing Configuration
 
-- Unit tests use Python's built-in unittest framework
+- Unit tests use Python's built-in `unittest` framework
 - Test files follow `test_*.py` naming convention
 - Run individual test: `python3 -m unittest fx.test_mufg`
 
 ### Linting Configuration
 
-- **Python**: Uses ruff for linting/formatting, configured in pyproject.toml
-- **Protobuf files** (\*\_pb2.py) are excluded from linting
-- **Markdown**: markdownlint with custom config
-- **YAML**: yamllint with custom config
-- **GitHub Actions**: actionlint and zizmor for security
+- **Python**: Uses ruff for linting/formatting, configured in `pyproject.toml`
+- **Protocol Buffers files** (`*_pb2.py`) are excluded from linting
+- **Markdown**: `markdownlint` with custom configuration
+- **YAML**: `yamllint` with custom configuration
+- **GitHub Actions**: `actionlint` and `zizmor` for security
 
 ### Development Workflow
 
@@ -88,4 +88,4 @@ Make targets automatically handle dependency installation.
 2. Run `make lint` to check code quality
 3. Run `make test` to verify functionality
 4. Use `make format` to auto-format files
-5. Commit with conventional commit format (feat:, fix:, etc.)
+5. Commit with conventional commit format ("feat:", "fix:", etc.)
