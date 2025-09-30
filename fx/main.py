@@ -12,17 +12,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""The main fx program entrypoint."""
+
 import argparse
+import datetime
 import logging
-from datetime import date
 
 from fx.build import build_command
-from fx.update import update_command
 from fx.mufg import MUFGProvider
+from fx.update import update_command
 
 
-def main():
-    today = date.today()
+def main() -> None:
+    """Execute the main fx program entrypoint."""
+    today = datetime.datetime.now(tz=datetime.UTC).date()
 
     logging.basicConfig()
     logger = logging.getLogger("fx")
@@ -43,7 +46,8 @@ def main():
     }
     all_providers = provider_map.values()
 
-    def provider_code(arg):
+    def provider_code(arg: str) -> type:
+        """Convert a provider code to a provider class."""
         if arg in provider_map:
             return provider_map[arg]
 
@@ -62,13 +66,13 @@ def main():
     update.add_argument(
         "--start",
         help="update dating starting with this date",
-        type=date.fromisoformat,
+        type=datetime.date.fromisoformat,
         default=today.strftime("%Y-%m-%d"),
     )
     update.add_argument(
         "--end",
         help="update data up to and including this date",
-        type=date.fromisoformat,
+        type=datetime.date.fromisoformat,
         default=today.strftime("%Y-%m-%d"),
     )
     update.add_argument("--data-dir", help="data directory", type=str, default="data")
@@ -84,7 +88,7 @@ def main():
         type=int,
         default=10,
     )
-    # backoff factor is multiplied by 2^n where n is the retry number
+    # The backoff factor is multiplied by 2^n where n is the retry number
     # e.g. 0.5 will result in 0.5, 1, 2, 4, 8 seconds between retries
     update.add_argument(
         "--backoff",

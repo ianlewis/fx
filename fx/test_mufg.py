@@ -12,16 +12,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""Tests for MUFGProvider."""
+
 import datetime
 import logging
-from unittest import mock
 import unittest
+from unittest import mock
 
 from fx.mufg import MUFGProvider
 
 
 class TestMUFGProvider(unittest.TestCase):
-    def setUp(self):
+    """Tests for MUFGProvider."""
+
+    def setUp(self) -> None:
+        """Set up the test case."""
+
         class Args:
             logger = logging.getLogger("fx")
             timeout = 10
@@ -31,10 +37,10 @@ class TestMUFGProvider(unittest.TestCase):
         self.provider = MUFGProvider(Args())
 
         class MockResponse:
-            def __init__(self, data):
+            def __init__(self, data: bytes) -> None:
                 self.data = data
 
-        self.provider._request = mock.MagicMock(
+        self.provider._request = mock.MagicMock(  # noqa: SLF001
             return_value=MockResponse(
                 """
             <html>
@@ -61,11 +67,12 @@ class TestMUFGProvider(unittest.TestCase):
                     </table>
                 </body>
             </html>
-        """.encode("euc-jp")
-            )
+        """.encode("euc-jp"),
+            ),
         )
 
-    def test_get_quotes(self):
+    def test_get_quote(self) -> None:
+        """Test the get_quote provider method."""
         quote = self.provider.get_quote("USD", "JPY", datetime.date(2024, 6, 20))
         self.assertEqual(quote.date.year, 2024)
         self.assertEqual(quote.date.month, 6)
@@ -79,6 +86,7 @@ class TestMUFGProvider(unittest.TestCase):
         self.assertEqual(quote.mid.units, 110)
         self.assertEqual(quote.mid.nanos, 250000000)
 
-    def test_get_quotes_none(self):
+    def test_get_quotes_none(self) -> None:
+        """Test the get_quote provider method with no data."""
         quote = self.provider.get_quote("XYZ", "JPY", datetime.date(2024, 6, 20))
         self.assertIsNone(quote)
