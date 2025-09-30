@@ -1,4 +1,3 @@
-#!/usr/bin/python
 #
 # Copyright 2025 Ian Lewis
 #
@@ -14,16 +13,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import csv
-from datetime import datetime
-import json
-import os
-import os.path
-import xml.etree.ElementTree as ET
+"""Currency module for downloading and processing ISO 4217 currency data."""
 
+import csv
+import json
+import logging
+import xml.etree.ElementTree as ET
+from datetime import datetime
+from pathlib import Path
+from typing import Any
+
+import urllib3
 from google.protobuf.json_format import MessageToDict
 from google.type.date_pb2 import Date
-import urllib3
 
 from fx.currency_pb2 import Currency, CurrencyList
 from fx.utils import date_msg_to_str
@@ -32,14 +34,15 @@ ISO_DOWNLOAD_XML = "https://www.six-group.com/dam/download/financial-information
 ISO_DOWNLOAD_HISTORIC_XML = "https://www.six-group.com/dam/download/financial-information/data-center/iso-currrency/lists/list-three.xml"
 
 
-def download_currencies(args):
+def download_currencies(args: Any) -> CurrencyList:  # noqa: ANN401
     """
-    download_currencies downloads and parses the ISO 4217 currency list and
+    Download and parse the ISO 4217 currency list.
+
+    Downloads and parses the ISO 4217 currency list and
     returns a list of unique Currency entries.
     """
-
     args.logger.debug("downloading currencies...")
-    args.logger.debug(f"GET {ISO_DOWNLOAD_XML}")
+    args.logger.debug("GET %s", ISO_DOWNLOAD_XML)
 
     http = urllib3.PoolManager(
         retries=urllib3.Retry(connect=args.retry, read=args.retry, redirect=2),
@@ -70,11 +73,17 @@ def download_currencies(args):
         if code in currencies:
             currencies[code].countries.append(country_name)
 
-            assert currencies[code].numeric_code == numeric_code
-            assert currencies[code].name == currency_name
-            assert currencies[code].minor_units == minor_units
+            if currencies[code].numeric_code != numeric_code:
+                msg = f"Numeric code mismatch for {code}"
+                raise ValueError(msg)
+            if currencies[code].name != currency_name:
+                msg = f"Name mismatch for {code}"
+                raise ValueError(msg)
+            if currencies[code].minor_units != minor_units:
+                msg = f"Minor units mismatch for {code}"
+                raise ValueError(msg)
         else:
-            args.logger.debug(f"Registered currency: {code}")
+            args.logger.debug("Registered currency: %s", code)
 
             currencies[code] = Currency(
                 alphabetic_code=code,
@@ -84,7 +93,7 @@ def download_currencies(args):
                 countries=[ccyntry.findtext("CtryNm")],
             )
 
-    args.logger.debug(f"GET {ISO_DOWNLOAD_HISTORIC_XML}")
+    args.logger.debug("GET %s", ISO_DOWNLOAD_HISTORIC_XML)
     resp = http.request("GET", ISO_DOWNLOAD_HISTORIC_XML)
 
     root = ET.fromstring(resp.data)
@@ -94,9 +103,13 @@ def download_currencies(args):
         if code in currencies:
             currencies[code].countries.append(ccyntry.findtext("CtryNm"))
         else:
-            args.logger.debug(f"Registered historical currency: {code}")
+            args.logger.debug("Registered historical currency: %s", code)
             try:
-                wdate = datetime.strptime(ccyntry.findtext("WthdrwlDt"), "%Y-%m").date()
+                wdate = (
+                    datetime.strptime(ccyntry.findtext("WthdrwlDt"), "%Y-%m")
+                    .replace(tzinfo=datetime.UTC)
+                    .date()
+                )
             except ValueError as e:
                 args.logger.warning("invalid WthdrwlDt: %s", e)
                 continue
@@ -115,17 +128,21 @@ def download_currencies(args):
     return currencies.values()
 
 
-def read_currencies_data(proto_path, logger):
+def read_currencies_data(
+    proto_path: str | Path,
+    logger: logging.Logger,
+) -> dict[str, Currency]:
     """
-    read_currencies_data loads the serialized list of Currency objects and
+    Load serialized Currency objects.
+
+    Loads the serialized list of Currency objects and
     returns a dictionary whose key is the ISO 4217 alphabetic code and whose
     values are the corresponding Currency objects.
     """
-
-    logger.debug(f"loading currencies from {proto_path}...")
+    logger.debug("loading currencies from %s...", proto_path)
 
     clist = CurrencyList()
-    with open(proto_path, "rb") as f:
+    with Path(proto_path).open("rb") as f:
         clist.ParseFromString(f.read())
 
     cmap = {}
@@ -134,44 +151,57 @@ def read_currencies_data(proto_path, logger):
     return cmap
 
 
-def write_currencies_data(proto_path, currencies, logger):
+def write_currencies_data(
+    proto_path: str | Path,
+    currencies: list[Currency],
+    logger: logging.Logger,
+) -> None:
     """
-    write_currencies_data serializes a list of Currency objects to the given
+    Serialize Currency objects to file.
+
+    Serializes a list of Currency objects to the given
     path overwriting the existing list of currencies.
     """
+    logger.debug("writing %d currencies to %s...", len(currencies), proto_path)
 
-    logger.debug(f"writing {len(currencies)} currencies to {proto_path}...")
-
-    os.makedirs(os.path.dirname(proto_path), exist_ok=True)
+    Path(proto_path).parent.mkdir(parents=True, exist_ok=True)
 
     clist = CurrencyList()
     clist.currencies.extend(currencies)
-    with open(proto_path, "wb") as f:
-        logger.debug(f"writing {f.name}...")
+    with Path(proto_path).open("wb") as f:
+        logger.debug("writing %s...", f.name)
         f.write(clist.SerializeToString())
 
 
-def write_currencies_site(base_dir, currencies_dict, logger):
+def write_currencies_site(
+    base_dir: str | Path,
+    currencies_dict: dict[str, Currency],
+    logger: logging.Logger,
+) -> None:
     """
-    write_currencies_site writes currency API files to the site directory.
+    Write currency API files to the site directory.
 
-    currencies_dict - dictionary of currencies as read from `read_currencies_data`
+    Args:
+        base_dir: Base directory for output files
+        currencies_dict: Dictionary of currencies as read from `read_currencies_data`
+        logger: Logger instance
+
     """
     clist = CurrencyList()
     clist.currencies.extend(currencies_dict.values())
 
-    os.makedirs(base_dir, exist_ok=True)
+    Path(base_dir).mkdir(parents=True, exist_ok=True)
 
-    json_path = os.path.join(base_dir, "currency.json")
-    logger.debug(f"writing {len(clist.currencies)} currencies to {json_path}...")
+    json_path = Path(base_dir) / "currency.json"
+    logger.debug("writing %d currencies to %s...", len(clist.currencies), json_path)
 
     # write currencies list JSON.
-    with open(json_path, "w") as f:
+    with json_path.open("w") as f:
         json.dump(MessageToDict(clist), f)
 
     # write currencies list CSV.
-    csv_path = os.path.join(base_dir, "currency.csv")
-    logger.debug(f"writing {len(clist.currencies)} currencies to {csv_path}...")
+    csv_path = Path(base_dir) / "currency.csv"
+    logger.debug("writing %d currencies to %s...", len(clist.currencies), csv_path)
     csv_fields = [
         "alphabeticCode",
         "numericCode",
@@ -181,7 +211,7 @@ def write_currencies_site(base_dir, currencies_dict, logger):
         "withdrawalDate",
     ]
 
-    with open(csv_path, "w") as f:
+    with csv_path.open("w") as f:
         if len(clist.currencies) > 0:
             w = csv.DictWriter(f, fieldnames=csv_fields)
             w.writeheader()
@@ -194,30 +224,30 @@ def write_currencies_site(base_dir, currencies_dict, logger):
                         "minorUnits": c.minor_units,
                         "countries": ",".join(c.countries),
                         "withdrawalDate": date_msg_to_str(c.withdrawal_date) or "",
-                    }
+                    },
                 )
 
     # Write currencies list proto
-    proto_path = os.path.join(base_dir, "currency.binpb")
-    with open(proto_path, "wb") as f:
-        logger.debug(f"writing {f.name}...")
+    proto_path = Path(base_dir) / "currency.binpb"
+    with proto_path.open("wb") as f:
+        logger.debug("writing %s...", f.name)
         f.write(clist.SerializeToString())
 
     # Write individual currencies
-    currency_dir = os.path.join(base_dir, "currency")
-    os.makedirs(currency_dir, exist_ok=True)
+    currency_dir = Path(base_dir) / "currency"
+    currency_dir.mkdir(parents=True, exist_ok=True)
 
     for c in clist.currencies:
         # Write currency json
-        c_json_path = os.path.join(currency_dir, f"{c.alphabetic_code}.json")
-        with open(c_json_path, "w") as f:
-            logger.debug(f"writing {f.name}...")
+        c_json_path = currency_dir / f"{c.alphabetic_code}.json"
+        with c_json_path.open("w") as f:
+            logger.debug("writing %s...", f.name)
             json.dump(MessageToDict(c), f)
 
         # Write currency csv
-        c_csv_path = os.path.join(currency_dir, f"{c.alphabetic_code}.csv")
-        with open(c_csv_path, "w") as f:
-            logger.debug(f"writing {f.name}...")
+        c_csv_path = currency_dir / f"{c.alphabetic_code}.csv"
+        with c_csv_path.open("w") as f:
+            logger.debug("writing %s...", f.name)
             w = csv.DictWriter(f, fieldnames=csv_fields)
             w.writeheader()
             w.writerow(
@@ -228,11 +258,11 @@ def write_currencies_site(base_dir, currencies_dict, logger):
                     "minorUnits": c.minor_units,
                     "countries": ",".join(c.countries),
                     "withdrawalDate": date_msg_to_str(c.withdrawal_date) or "",
-                }
+                },
             )
 
         # Write currency proto
-        c_proto_path = os.path.join(currency_dir, f"{c.alphabetic_code}.binpb")
-        with open(c_proto_path, "wb") as f:
-            logger.debug(f"writing {f.name}...")
+        c_proto_path = currency_dir / f"{c.alphabetic_code}.binpb"
+        with c_proto_path.open("wb") as f:
+            logger.debug("writing %s...", f.name)
             f.write(c.SerializeToString())

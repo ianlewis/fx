@@ -1,5 +1,3 @@
-#!/usr/bin/python
-#
 # Copyright 2025 Ian Lewis
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,34 +12,50 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import os
-import os.path
+"""
+The Update Command.
+
+This module defines the update command which is used to update the local data store
+with currency and quote data from the specified providers.
+"""
+
 from datetime import date
+from pathlib import Path
 
 from dateutil.relativedelta import relativedelta
 
 from fx.currency import download_currencies, write_currencies_data
 from fx.quote import download_quotes, write_quotes_data
-from fx.utils import dateIterator
+from fx.utils import date_iterator
 
 
-def update_command(args):
+def update_command(args: any) -> None:
+    """
+    Update the local currency and quote data.
+
+    This comand downloads currency and quote data given the command line arguments
+    and stores them in the specified data directory.
+    """
     args.logger.debug("running update")
 
-    os.makedirs(args.data_dir, exist_ok=True)
+    Path.mkdir(args.data_dir, exist_ok=True)
+
+    data_path = Path(args.data_dir)
 
     # Update currencies
     # Data is stored in data/currencies.binpb
-    currencies_proto_path = os.path.join(args.data_dir, "currencies.binpb")
+    currencies_proto_path = data_path.joinpath("currencies.binpb")
     write_currencies_data(currencies_proto_path, download_currencies(args), args.logger)
 
     # Update quotes
 
     # Process the date range by year
-    for Provider in args.provider:
+    for Provider in args.provider:  # noqa: N806 // Provider is a class
         provider = Provider(args)
-        for year_start in dateIterator(
-            date(args.start.year, 1, 1), args.end, relativedelta(years=1)
+        for year_start in date_iterator(
+            date(args.start.year, 1, 1),
+            args.end,
+            relativedelta(years=1),
         ):
             for base_currency_code in provider.supported_base_currencies:
                 for quote_currency_code in provider.supported_quote_currencies:
@@ -64,8 +78,7 @@ def update_command(args):
 
                     # Data will be stored in files of the form:
                     #   data/MUFG/USD/JPY/2025.binpb
-                    quotes_proto_path = os.path.join(
-                        args.data_dir,
+                    quotes_proto_path = data_path.joinpath(
                         provider.code,
                         base_currency_code,
                         quote_currency_code,

@@ -12,19 +12,26 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""MUFG Bank exchange rate provider implementation."""
+
+import datetime
+from typing import Any, ClassVar
+
+import urllib3
 from bs4 import BeautifulSoup
 from google.type.date_pb2 import Date
-import urllib3
 
 from fx.quote_pb2 import Quote
 from fx.utils import str_to_money
 
 
 class MUFGProvider:
+    """MUFG Bank exchange rate provider."""
+
     code = "MUFG"
     name = "MUFG Bank, Ltd."
 
-    supported_base_currencies = [
+    supported_base_currencies: ClassVar[list[str]] = [
         "USD",
         "EUR",
         "CAD",
@@ -57,17 +64,18 @@ class MUFGProvider:
         "PLN",
         "TRY",
     ]
-    supported_quote_currencies = ["JPY"]
+    supported_quote_currencies: ClassVar[list[str]] = ["JPY"]
 
-    def __init__(self, args):
+    def __init__(self, args: Any) -> None:  # noqa: ANN401
+        """Initialize the MUFGProvider with the given arguments."""
         self.logger = args.logger
         self.timeout = args.timeout
         self.retries = args.retry
         self.backoff = args.backoff
         self._cache = {}
 
-    def _request(self, url: str):
-        self.logger.debug(f"GET {url}")
+    def _request(self, url: str) -> Any:  # noqa: ANN401
+        self.logger.debug("GET %s", url)
         return urllib3.request(
             "GET",
             url,
@@ -78,7 +86,13 @@ class MUFGProvider:
             timeout=self.timeout,
         )
 
-    def get_quote(self, base_currency_code, quote_currency_code, quote_date):
+    def get_quote(
+        self,
+        base_currency_code: str,
+        quote_currency_code: str,
+        quote_date: datetime.date,
+    ) -> Quote | None:
+        """Get the quote for the given currency pair and date."""
         if (quote_currency_code, quote_date) not in self._cache:
             self._cache[(quote_currency_code, quote_date)] = self._get_quotes_by_date(
                 quote_currency_code,
@@ -91,11 +105,16 @@ class MUFGProvider:
 
         return None
 
-    def _get_quotes_by_date(self, quote_currency, quote_date):
+    def _get_quotes_by_date(
+        self,
+        quote_currency: str,
+        quote_date: datetime.date,
+    ) -> list[Quote]:
         jpy_code = "JPY"
 
         if quote_currency not in self.supported_quote_currencies:
-            raise ValueError(f'currency "{quote_currency}" not supported')
+            msg = f'currency "{quote_currency}" not supported'
+            raise ValueError(msg)
 
         url = f"https://murc-kawasesouba.jp/fx/past_3month_result.php?y={quote_date.strftime('%Y')}&m={quote_date.strftime('%m')}&d={quote_date.strftime('%d')}"
 
@@ -137,7 +156,6 @@ class MUFGProvider:
                         ),
                         "quote_currency_code": "JPY",
                     }
-                    pass
                 case 1:
                     # Japanese name is ignored
                     pass
@@ -145,32 +163,31 @@ class MUFGProvider:
                     try:
                         kwargs["base_currency_code"] = cell.get_text(strip=True)
                     except KeyError as e:
-                        self.logger.debug(f"tts: {type(e).__name__}: {e}")
-                        pass
+                        self.logger.debug("tts: %s: %s", type(e).__name__, e)
                 case 3:
                     try:
                         kwargs["ask"] = str_to_money(
-                            jpy_code, cell.get_text(strip=True)
+                            jpy_code,
+                            cell.get_text(strip=True),
                         )
                     except ValueError as e:
-                        self.logger.debug(f"tts: {type(e).__name__}: {e}")
-                        pass
+                        self.logger.debug("tts: %s: %s", type(e).__name__, e)
                 case 4:
                     try:
                         kwargs["bid"] = str_to_money(
-                            jpy_code, cell.get_text(strip=True)
+                            jpy_code,
+                            cell.get_text(strip=True),
                         )
                     except ValueError as e:
-                        self.logger.debug(f"ttb: {type(e).__name__}: {e}")
-                        pass
+                        self.logger.debug("ttb: %s: %s", type(e).__name__, e)
                 case 5:
                     try:
                         kwargs["mid"] = str_to_money(
-                            jpy_code, cell.get_text(strip=True)
+                            jpy_code,
+                            cell.get_text(strip=True),
                         )
                     except ValueError as e:
-                        self.logger.debug(f"ttm: {type(e).__name__}: {e}")
-                        pass
+                        self.logger.debug("ttm: %s: %s", type(e).__name__, e)
 
                     if "base_currency_code" in kwargs and (
                         "ask" in kwargs or "bid" in kwargs or "mid" in kwargs

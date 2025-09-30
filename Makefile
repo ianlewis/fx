@@ -323,6 +323,7 @@ py-format: $(AQUA_ROOT_DIR)/.installed ## Format Python files.
 	if [ "$${files}" == "" ]; then \
 		exit 0; \
 	fi; \
+	ruff check --select I --fix; \
 	ruff format $${files}
 
 .PHONY: yaml-format
@@ -406,7 +407,7 @@ commitlint: node_modules/.installed ## Run commitlint linter.
 	commitlint_from=$(COMMITLINT_FROM_REF); \
 	commitlint_to=$(COMMITLINT_TO_REF); \
 	if [ "$${commitlint_from}" == "" ]; then \
-		commitlint_from=$$(git remote show origin | grep 'HEAD branch' | awk '{print $$NF}'); \
+		commitlint_from=$$(git symbolic-ref refs/remotes/origin/HEAD --short); \
 	fi; \
 	if [ "$${commitlint_to}" == "" ]; then \
 		# if head is on the commitlint_from branch, then we will lint the \
@@ -514,12 +515,17 @@ ruff: $(AQUA_ROOT_DIR)/.installed ## Runs the ruff linter.
 	files=$$( \
 		git ls-files --deduplicate \
 			'*.py' \
+			':!:*_pb2.py' \
 			| while IFS='' read -r f; do [ -f "$${f}" ] && echo "$${f}" || true; done \
 	); \
 	if [ "$${files}" == "" ]; then \
 		exit 0; \
 	fi; \
-	ruff check $${files}
+	output_format="full"; \
+	if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
+		output_format="github"; \
+	fi; \
+	ruff check --output-format="$${output_format}" $${files}
 
 .PHONY: textlint
 textlint: node_modules/.installed $(AQUA_ROOT_DIR)/.installed ## Runs the textlint linter.
