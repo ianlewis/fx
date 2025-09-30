@@ -235,7 +235,7 @@ def write_currencies_site(
 
     # Write individual currencies
     currency_path = Path(base_dir).joinpath("currency")
-    currency_dir.mkdir(parents=True, exist_ok=True)
+    currency_path.mkdir(parents=True, exist_ok=True)
 
     for c in clist.currencies:
         # Write currency json
