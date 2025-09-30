@@ -1,4 +1,3 @@
-#
 # Copyright 2025 Ian Lewis
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -193,7 +192,7 @@ def write_currencies_site(
 
     Path(base_dir).mkdir(parents=True, exist_ok=True)
 
-    json_path = Path(base_dir) / "currency.json"
+    json_path = Path(base_dir).joinpath("currency.json")
     logger.debug("writing %d currencies to %s...", len(clist.currencies), json_path)
 
     # write currencies list JSON.
@@ -201,7 +200,7 @@ def write_currencies_site(
         json.dump(MessageToDict(clist), f)
 
     # write currencies list CSV.
-    csv_path = Path(base_dir) / "currency.csv"
+    csv_path = Path(base_dir).joinpath("currency.csv")
     logger.debug("writing %d currencies to %s...", len(clist.currencies), csv_path)
     csv_fields = [
         "alphabeticCode",
@@ -229,24 +228,24 @@ def write_currencies_site(
                 )
 
     # Write currencies list proto
-    proto_path = Path(base_dir) / "currency.binpb"
+    proto_path = Path(base_dir).joinpath("currency.binpb")
     with proto_path.open("wb") as f:
         logger.debug("writing %s...", f.name)
         f.write(clist.SerializeToString())
 
     # Write individual currencies
-    currency_dir = Path(base_dir) / "currency"
+    currency_path = Path(base_dir).joinpath("currency")
     currency_dir.mkdir(parents=True, exist_ok=True)
 
     for c in clist.currencies:
         # Write currency json
-        c_json_path = currency_dir / f"{c.alphabetic_code}.json"
+        c_json_path = currency_path.joinpath(f"{c.alphabetic_code}.json")
         with c_json_path.open("w") as f:
             logger.debug("writing %s...", f.name)
             json.dump(MessageToDict(c), f)
 
         # Write currency csv
-        c_csv_path = currency_dir / f"{c.alphabetic_code}.csv"
+        c_csv_path = currency_path.joinpath(f"{c.alphabetic_code}.csv")
         with c_csv_path.open("w") as f:
             logger.debug("writing %s...", f.name)
             w = csv.DictWriter(f, fieldnames=csv_fields)
@@ -263,7 +262,7 @@ def write_currencies_site(
             )
 
         # Write currency proto
-        c_proto_path = currency_dir / f"{c.alphabetic_code}.binpb"
+        c_proto_path = currency_path.joinpath(f"{c.alphabetic_code}.binpb")
         with c_proto_path.open("wb") as f:
             logger.debug("writing %s...", f.name)
             f.write(c.SerializeToString())

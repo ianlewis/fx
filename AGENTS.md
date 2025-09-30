@@ -1,4 +1,4 @@
-# AGENTS.md
+# `AGENTS.md`
 
 This file provides guidance to coding agents when working with code in
 this repository.
@@ -9,7 +9,7 @@ this repository.
 
 - `make all` - Run all tests and build the site
 - `make build` - Build the static API site files
-- `make install` - Install the package in the local venv
+- `make install` - Install the package in the local virtual environment
 - `make serve` - Serve the API locally (after building)
 - `make update` - Update API data from sources (fetches latest exchange rates)
 
@@ -20,7 +20,7 @@ this repository.
 
 ### Code Quality
 
-- `make lint` - Run all linters (ruff, markdownlint, yamllint, actionlint, etc.)
+- `make lint` - Run all linters (`ruff`, `markdownlint`, `yamllint`, `actionlint`, etc.)
 - `make ruff` - Run Python linter/type checker
 - `make format` - Format all files (Python, JSON, Markdown, YAML)
 - `make py-format` - Format Python files only
@@ -32,26 +32,26 @@ this repository.
 - `make yamllint` - Lint YAML files
 - `make textlint` - Lint text content
 
-### Protobuf
+### Protocol Buffers
 
-- `make protoc` - Compile protobuf files to Python
+- `make protoc` - Compile Protocol Buffers files to Python
 
 ### Environment Setup
 
-The project uses both Python virtual environment (.venv) and Node.js for tooling.
+The project uses both Python virtual environment (`.venv`) and Node.js for tooling.
 Make targets automatically handle dependency installation.
 
 ## Architecture
 
 ### Core Components
 
-- **fx.main** - CLI entrypoint with subcommands (update, build)
-- **fx.provider** - Abstract base class for exchange rate providers
-- **fx.mufg** - MUFG Bank provider implementation (primary source)
-- **fx.quote** - Exchange rate quote data structures
-- **fx.currency** - Currency definitions and validation
-- **fx.build** - Static site generation for API endpoints
-- **fx.update** - Data fetching and persistence logic
+- `fx.main` - CLI entrypoint with subcommands (`update`, `build`)
+- `fx.provider` - Abstract base class for exchange rate providers
+- `fx.mufg` - MUFG Bank provider implementation (primary source)
+- `fx.quote` - Exchange rate quote data structures
+- `fx.currency` - Currency definitions and validation
+- `fx.build` - Static site generation for API endpoints
+- `fx.update` - Data fetching and persistence logic
 
 ### Data Flow
 
