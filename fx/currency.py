@@ -18,12 +18,12 @@
 import csv
 import json
 import logging
-import xml.etree.ElementTree as ET
 from datetime import datetime
 from pathlib import Path
 from typing import Any
 
 import urllib3
+from defusedxml import ElementTree
 from google.protobuf.json_format import MessageToDict
 from google.type.date_pb2 import Date
 
@@ -53,7 +53,7 @@ def download_currencies(args: Any) -> CurrencyList:  # noqa: ANN401, C901
     resp = http.request("GET", ISO_DOWNLOAD_XML)
 
     currencies = {}
-    root = ET.fromstring(resp.data)
+    root = ElementTree.fromstring(resp.data)
     ccytbl = root.find("CcyTbl")
     for ccyntry in ccytbl.findall("CcyNtry"):
         code = ccyntry.findtext("Ccy")
@@ -97,7 +97,7 @@ def download_currencies(args: Any) -> CurrencyList:  # noqa: ANN401, C901
     args.logger.debug("GET %s", ISO_DOWNLOAD_HISTORIC_XML)
     resp = http.request("GET", ISO_DOWNLOAD_HISTORIC_XML)
 
-    root = ET.fromstring(resp.data)
+    root = ElementTree.fromstring(resp.data)
     ccytbl = root.find("HstrcCcyTbl")
     for ccyntry in ccytbl.findall("HstrcCcyNtry"):
         code = ccyntry.findtext("Ccy")
