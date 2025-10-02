@@ -1,16 +1,6 @@
 {
   "checksums": [
     {
-      "id": "github_release/github.com/checkmake/checkmake/0.2.2/checkmake-0.2.2.darwin.amd64",
-      "checksum": "AFAA325D2348043F9A60D3D7BA7803A0A54B760095EA03837C4DE357C75478EF",
-      "algorithm": "sha256"
-    },
-    {
-      "id": "github_release/github.com/checkmake/checkmake/0.2.2/checkmake-0.2.2.linux.amd64",
-      "checksum": "BEDD033B06F2563809855EC2A9950C7A81ACEA6CD82937FD2F124E2C1C5FC3D5",
-      "algorithm": "sha256"
-    },
-    {
       "id": "github_release/github.com/astral-sh/ruff/0.12.9/ruff-aarch64-apple-darwin.tar.gz",
       "checksum": "68CB47F9A98E17C59E861C3B635B32C5212DEFD21A4EC0B5C1D56950D06076E5",
       "algorithm": "sha256"
@@ -38,6 +28,16 @@
     {
       "id": "github_release/github.com/astral-sh/ruff/0.12.9/ruff-x86_64-unknown-linux-musl.tar.gz",
       "checksum": "C177D59D4C6347ABBF08C8943EFF919432D5C70229A0DD6390E5697D393A9C05",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/checkmake/checkmake/0.2.2/checkmake-0.2.2.darwin.amd64",
+      "checksum": "AFAA325D2348043F9A60D3D7BA7803A0A54B760095EA03837C4DE357C75478EF",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/checkmake/checkmake/0.2.2/checkmake-0.2.2.linux.amd64",
+      "checksum": "BEDD033B06F2563809855EC2A9950C7A81ACEA6CD82937FD2F124E2C1C5FC3D5",
       "algorithm": "sha256"
     },
     {
@@ -223,6 +223,31 @@
     {
       "id": "github_release/github.com/koalaman/shellcheck/v0.11.0/shellcheck-v0.11.0.zip",
       "checksum": "8A4E35AB0B331C85D73567B12F2A444DF187F483E5079CEFFA6BDA1FAA2E740E",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/protocolbuffers/protobuf/v32.1/protoc-32.1-linux-aarch_64.zip",
+      "checksum": "4A802ED23D70F7BAD7EB19E5A3E724B3AA967250D572CADFD537C1BA939AEE6A",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/protocolbuffers/protobuf/v32.1/protoc-32.1-linux-x86_64.zip",
+      "checksum": "E9C129C176BB7DF02546C4CD6185126CA53C89E7D2F09511E209319704B5DD7E",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/protocolbuffers/protobuf/v32.1/protoc-32.1-osx-aarch_64.zip",
+      "checksum": "A7B51B2113862690FA52C62F8891A6037BAFB9DB88D4F9924C486DE9D9BB89D5",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/protocolbuffers/protobuf/v32.1/protoc-32.1-osx-x86_64.zip",
+      "checksum": "F9CAA5B4D0B537ACFFB0FFD7D53225511A5574EF903FCA550EA9E7600987F13B",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/protocolbuffers/protobuf/v32.1/protoc-32.1-win64.zip",
+      "checksum": "69569CBC178CD5785ECB7D93569913110677EAFEB4B8F82970C361FAD4C7CD66",
       "algorithm": "sha256"
     },
     {
