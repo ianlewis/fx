@@ -14,11 +14,13 @@
 
 syntax = "proto3";
 
+package fx.v1;
+
 // Provider represents a currency exchange provider.
 message Provider {
     // Code is a URL-fragment code for the provider.
-    string code = 1; 
-    
+    string code = 1;
+
     // name is the human readable name for the provider.
     string name = 2;
 
@@ -31,5 +33,5 @@ message Provider {
 
 // ProviderList represents a lits of Provider objects.
 message ProviderList {
-    repeated Provider providers = 1;    
+    repeated Provider providers = 1;
 }

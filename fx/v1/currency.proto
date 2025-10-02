@@ -14,6 +14,8 @@
 
 syntax = "proto3";
 
+package fx.v1;
+
 import "google/type/date.proto";
 
 
@@ -37,10 +39,10 @@ message Currency {
 
     // countries are the registered countries where the currency is/was used.
     repeated string countries = 5;
-    
+
     // withdrawal_date is the historical date that the currency was withdrawn.
-    // withdrawal_date.day can be be zero to indicate a month withdrawal date. 
-    google.type.Date withdrawal_date = 6; 
+    // withdrawal_date.day can be be zero to indicate a month withdrawal date.
+    google.type.Date withdrawal_date = 6;
 }
 
 // CurrencyList represents a list of Currency objects.
