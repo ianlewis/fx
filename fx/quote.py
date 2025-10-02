@@ -30,8 +30,8 @@ from typing import Any
 from dateutil.relativedelta import relativedelta
 from google.protobuf.json_format import MessageToDict
 
-from fx.quote_pb2 import Quote, QuoteList  # type: ignore[attr-defined]
 from fx.utils import date_iterator, date_msg_to_str, money_to_str
+from fx.v1.quote_pb2 import Quote, QuoteList  # type: ignore[attr-defined]
 
 
 def quote_in(q: Quote, quotes: list[Quote]) -> bool:

@@ -22,7 +22,7 @@ from typing import Any
 
 from google.protobuf.json_format import MessageToDict
 
-from fx.provider_pb2 import ProviderList  # type: ignore[attr-defined]
+from fx.v1.provider_pb2 import ProviderList  # type: ignore[attr-defined]
 
 
 def write_providers_site(

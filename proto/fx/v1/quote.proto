@@ -14,34 +14,36 @@
 
 syntax = "proto3";
 
-import "google/type/money.proto";
+package fx.v1;
+
 import "google/type/date.proto";
+import "google/type/money.proto";
 
 // Quote is a currency conversion quote.
 message Quote {
-    // provider_code is the provider code of that provides the quote.
-    string provider_code = 1;
+  // provider_code is the provider code of that provides the quote.
+  string provider_code = 1;
 
-    // date is the date on which the quote was given.
-    google.type.Date date = 2; 
+  // date is the date on which the quote was given.
+  google.type.Date date = 2;
 
-    // base_currency_code is the currency pair base currency alphabetic code.
-    string base_currency_code = 3;
-    
-    // quote_currency_code is the currency pair quote currency (target) alphabetic code.
-    string quote_currency_code = 4;
+  // base_currency_code is the currency pair base currency alphabetic code.
+  string base_currency_code = 3;
 
-    // ask is the ask/sell price in the quote currency.
-    google.type.Money ask = 5;
+  // quote_currency_code is the currency pair quote currency (target) alphabetic code.
+  string quote_currency_code = 4;
 
-    // bid is the bid/buy price in the quote currency.
-    google.type.Money bid = 6;
+  // ask is the ask/sell price in the quote currency.
+  google.type.Money ask = 5;
 
-    // mid is the middle rate in the quote currency.
-    google.type.Money mid = 7;
+  // bid is the bid/buy price in the quote currency.
+  google.type.Money bid = 6;
+
+  // mid is the middle rate in the quote currency.
+  google.type.Money mid = 7;
 }
 
 // QuoteList represents a lits of Quote objects.
 message QuoteList {
-    repeated Quote quotes = 1;    
+  repeated Quote quotes = 1;
 }

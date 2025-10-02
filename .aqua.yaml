@@ -32,3 +32,4 @@ packages:
   - name: checkmake/checkmake@0.2.2
   - name: astral-sh/ruff@0.14.6
   - name: protocolbuffers/protobuf/protoc@v32.1
+  - name: bufbuild/buf@v1.61.0

@@ -26,8 +26,8 @@ from defusedxml import ElementTree
 from google.protobuf.json_format import MessageToDict
 from google.type.date_pb2 import Date
 
-from fx.currency_pb2 import Currency, CurrencyList  # type: ignore[attr-defined]
 from fx.utils import date_msg_to_str
+from fx.v1.currency_pb2 import Currency, CurrencyList  # type: ignore[attr-defined]
 
 ISO_DOWNLOAD_XML = "https://www.six-group.com/dam/download/financial-information/data-center/iso-currrency/lists/list-one.xml"
 ISO_DOWNLOAD_HISTORIC_XML = "https://www.six-group.com/dam/download/financial-information/data-center/iso-currrency/lists/list-three.xml"

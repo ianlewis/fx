@@ -21,8 +21,8 @@ import unittest
 from pathlib import Path
 
 from fx.build import build_command
-from fx.currency_pb2 import CurrencyList  # type: ignore[attr-defined]
-from fx.quote_pb2 import QuoteList  # type: ignore[attr-defined]
+from fx.v1.currency_pb2 import CurrencyList  # type: ignore[attr-defined]
+from fx.v1.quote_pb2 import QuoteList  # type: ignore[attr-defined]
 from tests.mock_provider import MockProvider
 
 

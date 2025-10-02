@@ -12,20 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-[mypy]
-strict = True
-
-[mypy-google.type.*]
-ignore_missing_imports = True
-
-[mypy-google.protobuf.*]
-ignore_missing_imports = True
-
-[mypy-fx.v1.provider_pb2]
-ignore_errors = True
-
-[mypy-fx.v1.currency_pb2]
-ignore_errors = True
-
-[mypy-fx.v1.quote_pb2]
-ignore_errors = True
+version: v2
+managed:
+  enabled: true
+plugins:
+  - remote: buf.build/protocolbuffers/python
+    out: .
+inputs:
+  - directory: proto

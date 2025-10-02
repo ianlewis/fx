@@ -25,7 +25,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  protoc:
+  buf-build:
     name: generated code
     runs-on: ubuntu-latest
     steps:
@@ -37,10 +37,10 @@ jobs:
         with:
           python-version-file: ".python-version"
 
-      - name: protoc
+      - name: buf-build
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: make protoc
+        run: make buf-build
 
       - name: check generated code
         run: |
