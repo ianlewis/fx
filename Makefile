@@ -209,9 +209,12 @@ serve: build ## Serve the API locally.
 .PHONY: protoc
 protoc: fx/currency_pb2.py fx/provider_pb2.py fx/quote_pb2.py ## Compile protobuf files.
 
-fx/%_pb2.py: .venv/.installed fx/%.proto
+fx/%_pb2.py:  $(AQUA_ROOT_DIR)/.installed .venv/.installed fx/%.proto
 	@# bash \
-	protoc --proto_path=. --proto_path=.venv/lib/python3.10/site-packages/ --python_out=. $(word 2,$^)
+	protoc \
+		--proto_path=. \
+		--proto_path=".venv/lib/python$$(grep -oE '[0-9]\.[0-9]+' .python-version)/site-packages/" \
+		--python_out=. $(word 3,$^)
 
 ## Testing
 #####################################################################
@@ -269,6 +272,7 @@ license-headers: ## Update license headers.
 			'*.rs' \
 			'*.yaml' \
 			'*.yml' \
+			':!:*_pb2.py' \
 			'Makefile' \
 			| while IFS='' read -r f; do [ -f "$${f}" ] && echo "$${f}" || true; done \
 	); \
@@ -318,6 +322,7 @@ py-format: $(AQUA_ROOT_DIR)/.installed ## Format Python files.
 	files=$$( \
 		git ls-files --deduplicate \
 			'*.py' \
+			':!:*_pb2.py' \
 			| while IFS='' read -r f; do [ -f "$${f}" ] && echo "$${f}" || true; done \
 	); \
 	if [ "$${files}" == "" ]; then \
