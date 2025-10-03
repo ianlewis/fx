@@ -37,7 +37,7 @@ Homepage = "https://fx.ianlewis.org/"
 Issues = "https://github.com/ianlewis/fx/issues"
 
 [build-system]
-# TODO(github.com/ianlewis/repo-template-py/issues/14): Manage the setuptools build version automatically.
+# TODO(github.com/ianlewis/repo-template-py/issues/14): Manage the setuptools version automatically.
 requires = ["setuptools == 80.9.0"]
 build-backend = "setuptools.build_meta"
 

@@ -1,6 +1,7 @@
 # `fx.ianlewis.org`
 
 [![tests](https://github.com/ianlewis/fx/actions/workflows/pull_request.tests.yml/badge.svg)](https://github.com/ianlewis/fx/actions/workflows/pull_request.tests.yml)
+[![Codecov](https://codecov.io/gh/ianlewis/fx/graph/badge.svg?token=H19PETM3S3)](https://codecov.io/gh/ianlewis/fx)
 [![Update Data](https://github.com/ianlewis/fx/actions/workflows/schedule.deploy.yml/badge.svg)](https://github.com/ianlewis/fx/actions/workflows/schedule.deploy.yml)
 [![Netlify Status](https://api.netlify.com/api/v1/badges/657fceaf-8b71-41dc-85ec-3f9d26a573a5/deploy-status)](https://app.netlify.com/sites/fx-ianlewis-org/deploys)
 

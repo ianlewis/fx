@@ -21,6 +21,8 @@ rules:
   spelling:
     language: "en"
     skipPatterns:
+      - "Codecov" # Code coverage service
+
       - "CSV" # Comma-Separated Values file format
       - "JPY" # Japanese Yen currency code
       - "JSON" # JavaScript Object Notation data format

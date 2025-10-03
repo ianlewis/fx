@@ -33,9 +33,10 @@ permissions:
 jobs:
   # tests
   ###############################
-
-  unit-tests:
-    uses: ./.github/workflows/workflow_call.unit-tests.yml
+  unit-test:
+    uses: ./.github/workflows/workflow_call.unit-test.yml
+    secrets:
+      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
   # formatting
   ###############################
@@ -76,6 +77,6 @@ jobs:
 
   zizmor:
     permissions:
-      contents: read
-      security-events: write
+      contents: read # Required for private repositories.
+      security-events: write # Required to upload the SARIF results
     uses: ./.github/workflows/workflow_call.zizmor.yml

@@ -127,14 +127,10 @@ node_modules/.installed: package-lock.json
 	@# bash \
 	python3 -m venv .venv
 
-.venv/.installed: requirements.txt .venv/bin/activate
+.venv/.installed: requirements.txt requirements-dev.txt .venv/bin/activate
 	@# bash \
 	$(REPO_ROOT)/.venv/bin/pip install -r $< --require-hashes; \
-	touch $@
-
-.venv/.installed-dev: requirements-dev.txt .venv/.installed
-	@# bash \
-	$(REPO_ROOT)/.venv/bin/pip install -r $< --require-hashes; \
+	$(REPO_ROOT)/.venv/bin/pip install -r $(word 2,$^) --require-hashes; \
 	touch $@
 
 .bin/aqua-$(AQUA_VERSION)/aqua:
@@ -161,7 +157,7 @@ $(AQUA_ROOT_DIR)/.installed: .aqua.yaml .bin/aqua-$(AQUA_VERSION)/aqua
 #####################################################################
 
 .PHONY: all
-all: test build ## Run all tests and build the site.
+all: format test package build ## Run all tests and build the site.
 
 .PHONY: package
 package: .venv/.installed ## Package the project for distribution.
@@ -220,12 +216,14 @@ fx/%_pb2.py:  $(AQUA_ROOT_DIR)/.installed .venv/.installed fx/%.proto
 #####################################################################
 
 .PHONY: test
-test: lint unit-tests ## Run all linters and tests.
+test: lint unit-test ## Run all linters and tests.
 
-.PHONY: unit-tests
-unit-tests: .venv/.installed ## Run unit tests.
+.PHONY: unit-test
+unit-test: .venv/.installed ## Run unit tests.
 	@# bash \
-	$(REPO_ROOT)/.venv/bin/python3 -m unittest discover .
+	$(REPO_ROOT)/.venv/bin/coverage run -m unittest discover .; \
+	$(REPO_ROOT)/.venv/bin/coverage xml; \
+	$(REPO_ROOT)/.venv/bin/coverage report -m
 
 ## Formatting
 #####################################################################
@@ -328,7 +326,7 @@ py-format: $(AQUA_ROOT_DIR)/.installed ## Format Python files.
 	if [ "$${files}" == "" ]; then \
 		exit 0; \
 	fi; \
-	ruff check --select I --fix; \
+	ruff check --select I --fix $${files}; \
 	ruff format $${files}
 
 .PHONY: yaml-format
@@ -412,7 +410,14 @@ commitlint: node_modules/.installed ## Run commitlint linter.
 	commitlint_from=$(COMMITLINT_FROM_REF); \
 	commitlint_to=$(COMMITLINT_TO_REF); \
 	if [ "$${commitlint_from}" == "" ]; then \
-		commitlint_from=$$(git symbolic-ref refs/remotes/origin/HEAD --short); \
+		# Try to get the default branch without hitting the remote server \
+		if git symbolic-ref --short refs/remotes/origin/HEAD >/dev/null 2>&1; then \
+			commitlint_from=$$(git symbolic-ref --short refs/remotes/origin/HEAD); \
+		elif git show-ref refs/remotes/origin/master >/dev/null 2>&1; then \
+			commitlint_from="origin/master"; \
+		else \
+			commitlint_from="origin/main"; \
+		fi; \
 	fi; \
 	if [ "$${commitlint_to}" == "" ]; then \
 		# if head is on the commitlint_from branch, then we will lint the \
@@ -526,11 +531,11 @@ ruff: $(AQUA_ROOT_DIR)/.installed ## Runs the ruff linter.
 	if [ "$${files}" == "" ]; then \
 		exit 0; \
 	fi; \
-	output_format="full"; \
 	if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
-		output_format="github"; \
-	fi; \
-	ruff check --output-format="$${output_format}" $${files}
+		ruff check --output-format=github $${files}; \
+	else \
+		ruff check $${files}; \
+	fi
 
 .PHONY: textlint
 textlint: node_modules/.installed $(AQUA_ROOT_DIR)/.installed ## Runs the textlint linter.
@@ -568,7 +573,7 @@ textlint: node_modules/.installed $(AQUA_ROOT_DIR)/.installed ## Runs the textli
 	fi
 
 .PHONY: yamllint
-yamllint: .venv/.installed-dev ## Runs the yamllint linter.
+yamllint: .venv/.installed ## Runs the yamllint linter.
 	@# bash \
 	files=$$( \
 		git ls-files --deduplicate \
@@ -590,7 +595,7 @@ yamllint: .venv/.installed-dev ## Runs the yamllint linter.
 		$${files}
 
 .PHONY: zizmor
-zizmor: .venv/.installed-dev ## Runs the zizmor linter.
+zizmor: .venv/.installed ## Runs the zizmor linter.
 	@# bash \
 	# NOTE: On GitHub actions this outputs SARIF format to zizmor.sarif.json \
 	#       in addition to outputting errors to the terminal. \
@@ -645,6 +650,8 @@ clean: ## Delete temporary files.
 	@$(RM) -r build/
 	@$(RM) -r dist/
 	@$(RM) -r *.egg-info/
+	@$(RM) -r .coverage
+	@$(RM) -r coverage.xml
 	@$(RM) -r _site/
 	@python3 -Bc "import pathlib; [p.unlink() for p in pathlib.Path('.').rglob('*.py[cod]')]"
 	@python3 -Bc "import pathlib; [p.rmdir() for p in pathlib.Path('.').rglob('__pycache__')]"
