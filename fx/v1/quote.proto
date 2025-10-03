@@ -14,6 +14,8 @@
 
 syntax = "proto3";
 
+package fx.v1;
+
 import "google/type/money.proto";
 import "google/type/date.proto";
 
@@ -23,11 +25,11 @@ message Quote {
     string provider_code = 1;
 
     // date is the date on which the quote was given.
-    google.type.Date date = 2; 
+    google.type.Date date = 2;
 
     // base_currency_code is the currency pair base currency alphabetic code.
     string base_currency_code = 3;
-    
+
     // quote_currency_code is the currency pair quote currency (target) alphabetic code.
     string quote_currency_code = 4;
 
@@ -43,5 +45,5 @@ message Quote {
 
 // QuoteList represents a lits of Quote objects.
 message QuoteList {
-    repeated Quote quotes = 1;    
+    repeated Quote quotes = 1;
 }
