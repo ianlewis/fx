@@ -104,7 +104,7 @@ def main() -> None:
         "--site-dir",
         help="site directory",
         type=str,
-        default="_site/v1",
+        default="_site",
     )
     build.set_defaults(func=build_command, logger=logger, provider=all_providers)
 
