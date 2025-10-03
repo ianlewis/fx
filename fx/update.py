@@ -38,9 +38,9 @@ def update_command(args: any) -> None:
     """
     args.logger.debug("running update")
 
-    Path.mkdir(args.data_dir, exist_ok=True)
-
     data_path = Path(args.data_dir)
+
+    data_path.mkdir(exist_ok=True)
 
     # Update currencies
     # Data is stored in data/currencies.binpb
