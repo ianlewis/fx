@@ -15,9 +15,9 @@
 """Currency module for downloading and processing ISO 4217 currency data."""
 
 import csv
+import datetime
 import json
 import logging
-from datetime import datetime
 from pathlib import Path
 from typing import Any
 
@@ -106,7 +106,7 @@ def download_currencies(args: Any) -> CurrencyList:  # noqa: ANN401, C901
             args.logger.debug("Registered historical currency: %s", code)
             try:
                 wdate = (
-                    datetime.strptime(ccyntry.findtext("WthdrwlDt"), "%Y-%m")
+                    datetime.datetime.strptime(ccyntry.findtext("WthdrwlDt"), "%Y-%m")
                     .replace(tzinfo=datetime.UTC)
                     .date()
                 )
@@ -190,9 +190,11 @@ def write_currencies_site(
     clist = CurrencyList()
     clist.currencies.extend(currencies_dict.values())
 
-    Path(base_dir).mkdir(parents=True, exist_ok=True)
+    base_path = Path(base_dir)
 
-    json_path = Path(base_dir).joinpath("currency.json")
+    base_path.mkdir(parents=True, exist_ok=True)
+
+    json_path = base_path.joinpath("currency.json")
     logger.debug("writing %d currencies to %s...", len(clist.currencies), json_path)
 
     # write currencies list JSON.
@@ -200,7 +202,7 @@ def write_currencies_site(
         json.dump(MessageToDict(clist), f)
 
     # write currencies list CSV.
-    csv_path = Path(base_dir).joinpath("currency.csv")
+    csv_path = base_path.joinpath("currency.csv")
     logger.debug("writing %d currencies to %s...", len(clist.currencies), csv_path)
     csv_fields = [
         "alphabeticCode",
@@ -228,13 +230,13 @@ def write_currencies_site(
                 )
 
     # Write currencies list proto
-    proto_path = Path(base_dir).joinpath("currency.binpb")
+    proto_path = base_path.joinpath("currency.binpb")
     with proto_path.open("wb") as f:
         logger.debug("writing %s...", f.name)
         f.write(clist.SerializeToString())
 
     # Write individual currencies
-    currency_path = Path(base_dir).joinpath("currency")
+    currency_path = base_path.joinpath("currency")
     currency_path.mkdir(parents=True, exist_ok=True)
 
     for c in clist.currencies:
