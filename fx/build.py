@@ -63,12 +63,14 @@ def build_command(args: Any) -> None:  # noqa: ANN401
     """build_command implements the fx build command."""
     args.logger.debug("running build")
 
-    write_providers_site(args.site_dir, args.provider, args.logger)
+    site_dir_v1 = Path(args.site_dir).joinpath("v1")
+
+    write_providers_site(site_dir_v1, args.provider, args.logger)
 
     currencies_proto_path = Path(args.data_dir).joinpath("currencies.binpb")
     currencies = read_currencies_data(currencies_proto_path, args.logger)
 
-    write_currencies_site(args.site_dir, currencies, args.logger)
+    write_currencies_site(site_dir_v1, currencies, args.logger)
 
     latest_quotes = {}
 
@@ -100,7 +102,7 @@ def build_command(args: Any) -> None:  # noqa: ANN401
 
                     update_latest_quotes(latest_quotes, provider.code, quotelist)
 
-                    base_dir = Path(args.site_dir).joinpath(
+                    base_dir = site_dir_v1.joinpath(
                         "provider",
                         provider.code,
                         "quote",
@@ -116,7 +118,7 @@ def build_command(args: Any) -> None:  # noqa: ANN401
         base_currency_code,
         quote_currency_code,
     ), quote in latest_quotes.items():
-        base_dir = Path(args.site_dir).joinpath(
+        base_dir = site_dir_v1.joinpath(
             "provider",
             provider_code,
             "quote",
