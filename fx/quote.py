@@ -25,6 +25,7 @@ import json
 import logging
 from collections import defaultdict
 from pathlib import Path
+from typing import Any
 
 from dateutil.relativedelta import relativedelta
 from google.protobuf.json_format import MessageToDict
@@ -61,7 +62,7 @@ def quote_equal(q1: Quote, q2: Quote) -> bool:
 
 
 def download_quotes(  # noqa: PLR0913
-    provider: any,
+    provider: Any,
     base_currency_code: str,
     quote_currency_code: str,
     start_date: datetime.date,

@@ -20,8 +20,7 @@ import logging
 import tempfile
 import unittest
 from pathlib import Path
-
-import urllib3
+from unittest import mock
 
 from fx.update import update_command
 from tests.mock_provider import MockProvider
@@ -39,7 +38,7 @@ class TestUpdateCommand(unittest.TestCase):
         self.temp_dir.cleanup()
 
     @unittest.mock.patch("urllib3.PoolManager")
-    def test_update_command(self, mock_pool_manager: urllib3.PoolManager) -> None:
+    def test_update_command(self, mock_pool_manager: mock.MagicMock) -> None:
         """Test the update_command function."""
         mock_currencies_response = unittest.mock.Mock()
         mock_currencies_response.status = 200
