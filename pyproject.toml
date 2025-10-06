@@ -51,7 +51,7 @@ extend-exclude = ["*_pb2.py", "third_party"]
 select = ["ALL"]
 ignore = [
     "PT009", # pytest-unittest-assertion: allow unittest assertions
-    "FIX", # Allow TODO comments. Handled by todos.
+    "FIX", # Allow TODO comments. These are handled by todos/fixme.
 
     "D203", # incorrect-blank-line-before-class. Incompatible with D211
     "D212", # multi-line-summary-first-line. Incompatible with D213

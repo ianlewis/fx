@@ -32,9 +32,9 @@ REPO_ROOT = $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 REPO_NAME = $(shell basename "$(REPO_ROOT)")
 
 # renovate: datasource=github-releases depName=aquaproj/aqua versioning=loose
-AQUA_VERSION ?= v2.53.8
+AQUA_VERSION ?= v2.55.0
 AQUA_REPO ?= github.com/aquaproj/aqua
-AQUA_CHECKSUM.Linux.x86_64 = 0e665447d1ce73cb3baeb50c0c2e8ee61e7086e7d1dc3a049083282421918140
+AQUA_CHECKSUM.Linux.x86_64 = cb7780962ca651c4e025a027b7bfc82c010af25c5c150fe89ad72f4058d46540
 AQUA_CHECKSUM ?= $(AQUA_CHECKSUM.$(uname_s).$(uname_m))
 AQUA_URL = https://$(AQUA_REPO)/releases/download/$(AQUA_VERSION)/aqua_$(kernel)_$(arch).tar.gz
 export AQUA_ROOT_DIR = $(REPO_ROOT)/.aqua
@@ -84,7 +84,7 @@ help: ## Print all Makefile targets (this message).
 
 package-lock.json: package.json $(AQUA_ROOT_DIR)/.installed
 	@# bash \
-	loglevel="silent"; \
+	loglevel="notice"; \
 	if [ -n "$(DEBUG_LOGGING)" ]; then \
 		loglevel="verbose"; \
 	fi; \
@@ -157,10 +157,10 @@ $(AQUA_ROOT_DIR)/.installed: .aqua.yaml .bin/aqua-$(AQUA_VERSION)/aqua
 #####################################################################
 
 .PHONY: all
-all: format test package build ## Run all tests and build the site.
+all: test package build ## Run all tests and build the site.
 
 .PHONY: package
-package: .venv/.installed ## Package the project for distribution.
+package: .venv/.installed ## Create a release package.
 	@# bash \
 	$(REPO_ROOT)/.venv/bin/python3 -m build
 
@@ -354,7 +354,7 @@ yaml-format: node_modules/.installed ## Format YAML files.
 #####################################################################
 
 .PHONY: lint
-lint: actionlint checkmake commitlint fixme markdownlint renovate-config-validator ruff textlint yamllint zizmor ## Run all linters.
+lint: actionlint checkmake commitlint fixme format-check markdownlint mypy renovate-config-validator ruff textlint yamllint zizmor ## Run all linters.
 
 .PHONY: actionlint
 actionlint: $(AQUA_ROOT_DIR)/.installed ## Runs the actionlint linter.
@@ -449,6 +449,23 @@ fixme: $(AQUA_ROOT_DIR)/.installed ## Check for outstanding FIXMEs.
 		--output "$${output}" \
 		--todo-types="FIXME,Fixme,fixme,BUG,Bug,bug,XXX,COMBAK"
 
+.PHONY: format-check
+format-check: ## Check that files are properly formatted.
+	@# bash \
+	if [ -n "$$(git diff)" ]; then \
+		>&2 echo "The working directory is dirty. Please commit, stage, or stash changes and try again."; \
+		exit 1; \
+	fi; \
+	make format; \
+	exit_code=0; \
+	if [ -n "$$(git diff)" ]; then \
+		>&2 echo "Some files need to be formatted. Please run 'make format' and try again."; \
+		git --no-pager diff; \
+		exit_code=1; \
+	fi; \
+	git restore .; \
+	exit "$${exit_code}"
+
 .PHONY: markdownlint
 markdownlint: node_modules/.installed $(AQUA_ROOT_DIR)/.installed ## Runs the markdownlint linter.
 	@# bash \
@@ -512,6 +529,22 @@ markdownlint: node_modules/.installed $(AQUA_ROOT_DIR)/.installed ## Runs the ma
 			--dot \
 			$${files}; \
 	fi
+
+.PHONY: mypy
+mypy: .venv/.installed ## Runs the mypy type checker.
+	@# bash \
+	files=$$( \
+		git ls-files --deduplicate \
+			'*.py' \
+			':!:*_pb2.py' \
+			| while IFS='' read -r f; do [ -f "$${f}" ] && echo "$${f}" || true; done \
+	); \
+	if [ "$${files}" == "" ]; then \
+		exit 0; \
+	fi; \
+	${REPO_ROOT}/.venv/bin/mypy \
+		--config-file mypy.ini \
+		$${files}
 
 .PHONY: renovate-config-validator
 renovate-config-validator: node_modules/.installed ## Validate Renovate configuration.
