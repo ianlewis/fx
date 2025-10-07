@@ -18,15 +18,16 @@ import csv
 import json
 import logging
 from pathlib import Path
+from typing import Any
 
 from google.protobuf.json_format import MessageToDict
 
-from fx.provider_pb2 import ProviderList
+from fx.provider_pb2 import ProviderList  # type: ignore[attr-defined]
 
 
 def write_providers_site(
     base_dir: str | Path,
-    providers: list[any],
+    providers: list[Any],
     logger: logging.Logger,
 ) -> None:
     """
