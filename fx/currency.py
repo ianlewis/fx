@@ -199,7 +199,7 @@ def write_currencies_site(
 
     # write currencies list JSON.
     with json_path.open("w") as f:
-        json.dump(MessageToDict(clist), f)
+        json.dump(MessageToDict(clist), f, separators=(",", ":"))
 
     # write currencies list CSV.
     csv_path = base_path.joinpath("currency.csv")
@@ -244,7 +244,7 @@ def write_currencies_site(
         c_json_path = currency_path.joinpath(f"{c.alphabetic_code}.json")
         with c_json_path.open("w") as f:
             logger.debug("writing %s...", f.name)
-            json.dump(MessageToDict(c), f)
+            json.dump(MessageToDict(c), f, separators=(",", ":"))
 
         # Write currency csv
         c_csv_path = currency_path.joinpath(f"{c.alphabetic_code}.csv")

@@ -55,7 +55,7 @@ def write_providers_site(
 
     # Write providers list JSON.
     with json_path.open("w") as f:
-        json.dump(MessageToDict(plist), f)
+        json.dump(MessageToDict(plist), f, separators=(",", ":"))
 
     # Write providers list CSV.
     csv_path = base_path.joinpath("provider.csv")
@@ -93,7 +93,7 @@ def write_providers_site(
         p_json_path = provider_path.joinpath(f"{p.code}.json")
         with p_json_path.open("w") as f:
             logger.debug("writing %s...", f.name)
-            json.dump(MessageToDict(p), f)
+            json.dump(MessageToDict(p), f, separators=(",", ":"))
 
         # Write provider CSV
         p_csv_path = provider_path.joinpath(f"{p.code}.csv")

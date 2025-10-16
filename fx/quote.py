@@ -204,7 +204,7 @@ def write_year_quotes_site(
 
     # Write currencies list JSON.
     with json_path.open("w") as f:
-        json.dump(MessageToDict(quotelist), f)
+        json.dump(MessageToDict(quotelist), f, separators=(",", ":"))
 
     # Write quote list CSV.
     csv_path = base_path.joinpath(f"{year:04d}.csv")
@@ -253,7 +253,7 @@ def write_month_quotes_site(
 
     # write currencies list JSON.
     with json_path.open("w") as f:
-        json.dump(MessageToDict(quotelist), f)
+        json.dump(MessageToDict(quotelist), f, separators=(",", ":"))
 
     # write quote list CSV.
     csv_path = base_path.joinpath(f"{month:02d}.csv")
@@ -302,7 +302,7 @@ def _write_quote_site(
 
     # write currencies list JSON.
     with json_path.open("w") as f:
-        json.dump(MessageToDict(quote), f)
+        json.dump(MessageToDict(quote), f, separators=(",", ":"))
 
     # write quote list CSV.
     csv_path = base_path.joinpath(f"{file_name}.csv")
