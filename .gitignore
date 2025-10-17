@@ -23,3 +23,6 @@ __pycache__
 # Coverage files
 .coverage
 coverage.xml
+
+# Don't commit .claude local settings.
+.claude/

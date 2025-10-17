@@ -27,7 +27,7 @@ from fx.quote import (
     write_latest_quote_site,
     write_year_quotes_site,
 )
-from fx.quote_pb2 import Quote, QuoteList
+from fx.quote_pb2 import Quote, QuoteList  # type: ignore[attr-defined]
 
 
 def update_latest_quotes(
@@ -72,7 +72,7 @@ def build_command(args: Any) -> None:  # noqa: ANN401
 
     write_currencies_site(site_dir_v1, currencies, args.logger)
 
-    latest_quotes = {}
+    latest_quotes: dict[tuple[str, str, str], Quote] = {}
 
     build_start = time.time()
     for provider in args.provider:

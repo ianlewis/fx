@@ -14,6 +14,7 @@
 
 """Tests for MUFGProvider."""
 
+import argparse
 import datetime
 import logging
 import unittest
@@ -22,58 +23,60 @@ from unittest import mock
 from fx.mufg import MUFGProvider
 
 
+class _MockResponse:
+    def __init__(self, data: bytes) -> None:
+        self.data = data
+
+
 class TestMUFGProvider(unittest.TestCase):
     """Tests for MUFGProvider."""
 
-    def setUp(self) -> None:
-        """Set up the test case."""
-
-        class Args:
-            logger = logging.getLogger("fx")
-            timeout = 10
-            retry = 0
-            backoff = 0
-
-        self.provider = MUFGProvider(Args())
-
-        class MockResponse:
-            def __init__(self, data: bytes) -> None:
-                self.data = data
-
-        self.provider._request = mock.MagicMock(  # noqa: SLF001
-            return_value=MockResponse(
-                """
-            <html>
-                <head><title>Test</title></head>
-                <body>
-                    <table class="data-table5">
-                        <tr>
-
-                            <th>Quote Currency</th>
-                            <th>Base Currency Name</th>
-                            <th>Base Currency</th>
-                            <th>Buying Rate</th>
-                            <th>Selling Rate</th>
-                            <th>Middle Rate</th>
-                        </tr>
-                        <tr>
-                            <td>JPY</td>
-                            <td>米国ドル</td>
-                            <td>USD</td>
-                            <td>109.25</td>
-                            <td>111.25</td>
-                            <td>110.25</td>
-                        </tr>
-                    </table>
-                </body>
-            </html>
-        """.encode("euc-jp"),
-            ),
-        )
-
     def test_get_quote(self) -> None:
         """Test the get_quote provider method."""
-        quote = self.provider.get_quote("USD", "JPY", datetime.date(2024, 6, 20))
+        with mock.patch.object(MUFGProvider, "_request") as mocked_request:
+            mocked_request.return_value = _MockResponse(
+                """
+                <html>
+                    <head><title>Test</title></head>
+                    <body>
+                        <table class="data-table5">
+                            <tr>
+
+                                <th>Quote Currency</th>
+                                <th>Base Currency Name</th>
+                                <th>Base Currency</th>
+                                <th>Buying Rate</th>
+                                <th>Selling Rate</th>
+                                <th>Middle Rate</th>
+                            </tr>
+                            <tr>
+                                <td>JPY</td>
+                                <td>米国ドル</td>
+                                <td>USD</td>
+                                <td>109.25</td>
+                                <td>111.25</td>
+                                <td>110.25</td>
+                            </tr>
+                        </table>
+                    </body>
+                </html>
+                """.encode("euc-jp"),
+            )
+
+            provider = MUFGProvider(
+                argparse.Namespace(
+                    logger=logging.getLogger("fx"),
+                    timeout=10,
+                    retry=0,
+                    backoff=0,
+                ),
+            )
+
+            quote = provider.get_quote("USD", "JPY", datetime.date(2024, 6, 20))
+
+        if quote is None:
+            self.fail("quote is None")
+
         self.assertEqual(quote.date.year, 2024)
         self.assertEqual(quote.date.month, 6)
         self.assertEqual(quote.date.day, 20)
@@ -88,5 +91,45 @@ class TestMUFGProvider(unittest.TestCase):
 
     def test_get_quotes_none(self) -> None:
         """Test the get_quote provider method with no data."""
-        quote = self.provider.get_quote("XYZ", "JPY", datetime.date(2024, 6, 20))
+        with mock.patch.object(MUFGProvider, "_request") as mocked_request:
+            mocked_request.return_value = _MockResponse(
+                """
+                <html>
+                    <head><title>Test</title></head>
+                    <body>
+                        <table class="data-table5">
+                            <tr>
+
+                                <th>Quote Currency</th>
+                                <th>Base Currency Name</th>
+                                <th>Base Currency</th>
+                                <th>Buying Rate</th>
+                                <th>Selling Rate</th>
+                                <th>Middle Rate</th>
+                            </tr>
+                            <tr>
+                                <td>JPY</td>
+                                <td>米国ドル</td>
+                                <td>USD</td>
+                                <td>109.25</td>
+                                <td>111.25</td>
+                                <td>110.25</td>
+                            </tr>
+                        </table>
+                    </body>
+                </html>
+                """.encode("euc-jp"),
+            )
+
+            provider = MUFGProvider(
+                argparse.Namespace(
+                    logger=logging.getLogger("fx"),
+                    timeout=10,
+                    retry=0,
+                    backoff=0,
+                ),
+            )
+
+            quote = provider.get_quote("XYZ", "JPY", datetime.date(2024, 6, 20))
+
         self.assertIsNone(quote)

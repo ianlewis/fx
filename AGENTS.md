@@ -16,7 +16,7 @@ this repository.
 ### Testing
 
 - `make test` - Run all linters and tests
-- `make unit-tests` - Run unit tests only (`python3 -m unittest discover .`)
+- `make unit-test` - Run unit tests only (`python3 -m unittest discover .`)
 
 ### Code Quality
 

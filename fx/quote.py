@@ -25,11 +25,12 @@ import json
 import logging
 from collections import defaultdict
 from pathlib import Path
+from typing import Any
 
 from dateutil.relativedelta import relativedelta
 from google.protobuf.json_format import MessageToDict
 
-from fx.quote_pb2 import Quote, QuoteList
+from fx.quote_pb2 import Quote, QuoteList  # type: ignore[attr-defined]
 from fx.utils import date_iterator, date_msg_to_str, money_to_str
 
 
@@ -50,18 +51,18 @@ def quote_equal(q1: Quote, q2: Quote) -> bool:
     quote_equal returns if two quotes are quotes from the same provider, for
     the same day, for the same currency pair.
     """
-    return (
+    return bool(
         q1.provider_code == q2.provider_code
         and q1.date.year == q2.date.year
         and q1.date.month == q2.date.month
         and q1.date.day == q2.date.day
         and q1.base_currency_code == q2.base_currency_code
-        and q1.quote_currency_code == q2.quote_currency_code
+        and q1.quote_currency_code == q2.quote_currency_code,
     )
 
 
 def download_quotes(  # noqa: PLR0913
-    provider: any,
+    provider: Any,  # noqa: ANN401
     base_currency_code: str,
     quote_currency_code: str,
     start_date: datetime.date,
@@ -85,7 +86,7 @@ def download_quotes(  # noqa: PLR0913
     return quotes
 
 
-def read_quotelist_data(proto_path: str, logger: logging.Logger) -> QuoteList:
+def read_quotelist_data(proto_path: str | Path, logger: logging.Logger) -> QuoteList:
     """Read the serialized QuoteList from the given path."""
     qlist = QuoteList()
     with Path(proto_path).open("rb") as f:
@@ -216,7 +217,7 @@ def write_year_quotes_site(
         logger.debug("writing %s...", f.name)
         f.write(quotelist.SerializeToString())
 
-    month_qlists = defaultdict(QuoteList)
+    month_qlists: dict[int, QuoteList] = defaultdict(QuoteList)
     for q in quotelist.quotes:
         month_qlists[q.date.month].quotes.append(q)
 

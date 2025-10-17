@@ -19,6 +19,7 @@ This module defines the update command which is used to update the local data st
 with currency and quote data from the specified providers.
 """
 
+import argparse
 from datetime import date
 from pathlib import Path
 
@@ -29,7 +30,7 @@ from fx.quote import download_quotes, write_quotes_data
 from fx.utils import date_iterator
 
 
-def update_command(args: any) -> None:
+def update_command(args: argparse.Namespace) -> None:
     """
     Update the local currency and quote data.
 

@@ -14,50 +14,43 @@
 
 """Currency module for downloading and processing ISO 4217 currency data."""
 
+import argparse
 import csv
 import datetime
 import json
 import logging
 from pathlib import Path
-from typing import Any
 
 import urllib3
 from defusedxml import ElementTree
 from google.protobuf.json_format import MessageToDict
 from google.type.date_pb2 import Date
 
-from fx.currency_pb2 import Currency, CurrencyList
+from fx.currency_pb2 import Currency, CurrencyList  # type: ignore[attr-defined]
 from fx.utils import date_msg_to_str
 
 ISO_DOWNLOAD_XML = "https://www.six-group.com/dam/download/financial-information/data-center/iso-currrency/lists/list-one.xml"
 ISO_DOWNLOAD_HISTORIC_XML = "https://www.six-group.com/dam/download/financial-information/data-center/iso-currrency/lists/list-three.xml"
 
 
-# TODO(#100): Refactor to reduce complexity
-def download_currencies(args: Any) -> CurrencyList:  # noqa: ANN401, C901
-    """
-    Download and parse the ISO 4217 currency list.
-
-    Downloads and parses the ISO 4217 currency list and
-    returns a list of unique Currency entries.
-    """
-    args.logger.debug("downloading currencies...")
+def _download_currencies(
+    args: argparse.Namespace,
+    http: urllib3.PoolManager,
+    currencies: dict[str, Currency],
+) -> None:
     args.logger.debug("GET %s", ISO_DOWNLOAD_XML)
-
-    http = urllib3.PoolManager(
-        retries=urllib3.Retry(connect=args.retry, read=args.retry, redirect=2),
-        timeout=urllib3.Timeout(connect=args.timeout, read=args.timeout),
-    )
-
     resp = http.request("GET", ISO_DOWNLOAD_XML)
 
-    currencies = {}
     root = ElementTree.fromstring(resp.data)
     ccytbl = root.find("CcyTbl")
+    if ccytbl is None:
+        msg = "CcyTbl not found in XML"
+        raise ValueError(msg)
     for ccyntry in ccytbl.findall("CcyNtry"):
         code = ccyntry.findtext("Ccy")
 
         if code is None:
+            args.logger.warning("CcyNtry missing Ccy currency code")
             continue
 
         country_name = ccyntry.findtext("CtryNm")
@@ -66,7 +59,8 @@ def download_currencies(args: Any) -> CurrencyList:  # noqa: ANN401, C901
 
         args.logger.debug(currency_name)
         try:
-            minor_units = int(ccyntry.findtext("CcyMnrUnts"))
+            minor_units_text = ccyntry.findtext("CcyMnrUnts")
+            minor_units = int(minor_units_text) if minor_units_text is not None else 0
         except (ValueError, TypeError):
             minor_units = 0
 
@@ -93,20 +87,36 @@ def download_currencies(args: Any) -> CurrencyList:  # noqa: ANN401, C901
                 countries=[ccyntry.findtext("CtryNm")],
             )
 
+
+def _download_currencies_historic(
+    args: argparse.Namespace,
+    http: urllib3.PoolManager,
+    currencies: dict[str, Currency],
+) -> None:
     args.logger.debug("GET %s", ISO_DOWNLOAD_HISTORIC_XML)
     resp = http.request("GET", ISO_DOWNLOAD_HISTORIC_XML)
 
     root = ElementTree.fromstring(resp.data)
     ccytbl = root.find("HstrcCcyTbl")
+    if ccytbl is None:
+        msg = "HstrcCcyTbl not found in XML"
+        raise ValueError(msg)
     for ccyntry in ccytbl.findall("HstrcCcyNtry"):
         code = ccyntry.findtext("Ccy")
+        if code is None:
+            args.logger.warning("HstrcCcyNtry missing Ccy currency code")
+            continue
         if code in currencies:
             currencies[code].countries.append(ccyntry.findtext("CtryNm"))
         else:
             args.logger.debug("Registered historical currency: %s", code)
             try:
+                withdrawal_dt_text = ccyntry.findtext("WthdrwlDt")
+                if withdrawal_dt_text is None:
+                    args.logger.warning("missing WthdrwlDt")
+                    continue
                 wdate = (
-                    datetime.datetime.strptime(ccyntry.findtext("WthdrwlDt"), "%Y-%m")
+                    datetime.datetime.strptime(withdrawal_dt_text, "%Y-%m")
                     .replace(tzinfo=datetime.UTC)
                     .date()
                 )
@@ -125,7 +135,27 @@ def download_currencies(args: Any) -> CurrencyList:  # noqa: ANN401, C901
                 ),
             )
 
-    return currencies.values()
+
+def download_currencies(args: argparse.Namespace) -> CurrencyList:
+    """
+    Download and parse the ISO 4217 currency list.
+
+    Downloads and parses the ISO 4217 currency list and
+    returns a list of unique Currency entries.
+    """
+    args.logger.debug("downloading currencies...")
+
+    http = urllib3.PoolManager(
+        retries=urllib3.Retry(connect=args.retry, read=args.retry, redirect=2),
+        timeout=urllib3.Timeout(connect=args.timeout, read=args.timeout),
+    )
+    currencies: dict[str, Currency] = {}
+
+    _download_currencies(args, http, currencies)
+
+    _download_currencies_historic(args, http, currencies)
+
+    return CurrencyList(currencies=list(currencies.values()))
 
 
 def read_currencies_data(
@@ -145,7 +175,7 @@ def read_currencies_data(
     with Path(proto_path).open("rb") as f:
         clist.ParseFromString(f.read())
 
-    cmap = {}
+    cmap: dict[str, Currency] = {}
     for c in clist.currencies:
         cmap[c.alphabetic_code] = c
     return cmap
@@ -153,7 +183,7 @@ def read_currencies_data(
 
 def write_currencies_data(
     proto_path: str | Path,
-    currencies: list[Currency],
+    clist: CurrencyList,
     logger: logging.Logger,
 ) -> None:
     """
@@ -162,12 +192,10 @@ def write_currencies_data(
     Serializes a list of Currency objects to the given
     path overwriting the existing list of currencies.
     """
-    logger.debug("writing %d currencies to %s...", len(currencies), proto_path)
+    logger.debug("writing %d currencies to %s...", len(clist.currencies), proto_path)
 
     Path(proto_path).parent.mkdir(parents=True, exist_ok=True)
 
-    clist = CurrencyList()
-    clist.currencies.extend(currencies)
     with Path(proto_path).open("wb") as f:
         logger.debug("writing %s...", f.name)
         f.write(clist.SerializeToString())
