@@ -155,7 +155,7 @@ def download_currencies(args: argparse.Namespace) -> CurrencyList:
 
     _download_currencies_historic(args, http, currencies)
 
-    return currencies.values()
+    return CurrencyList(currencies=list(currencies.values()))
 
 
 def read_currencies_data(
@@ -183,7 +183,7 @@ def read_currencies_data(
 
 def write_currencies_data(
     proto_path: str | Path,
-    currencies: list[Currency],
+    clist: CurrencyList,
     logger: logging.Logger,
 ) -> None:
     """
@@ -192,12 +192,10 @@ def write_currencies_data(
     Serializes a list of Currency objects to the given
     path overwriting the existing list of currencies.
     """
-    logger.debug("writing %d currencies to %s...", len(currencies), proto_path)
+    logger.debug("writing %d currencies to %s...", len(clist.currencies), proto_path)
 
     Path(proto_path).parent.mkdir(parents=True, exist_ok=True)
 
-    clist = CurrencyList()
-    clist.currencies.extend(currencies)
     with Path(proto_path).open("wb") as f:
         logger.debug("writing %s...", f.name)
         f.write(clist.SerializeToString())
