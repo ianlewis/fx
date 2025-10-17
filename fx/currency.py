@@ -50,6 +50,7 @@ def _download_currencies(
         code = ccyntry.findtext("Ccy")
 
         if code is None:
+            args.logger.warning("CcyNtry missing Ccy currency code")
             continue
 
         country_name = ccyntry.findtext("CtryNm")
@@ -103,6 +104,7 @@ def _download_currencies_historic(
     for ccyntry in ccytbl.findall("HstrcCcyNtry"):
         code = ccyntry.findtext("Ccy")
         if code is None:
+            args.logger.warning("HstrcCcyNtry missing Ccy currency code")
             continue
         if code in currencies:
             currencies[code].countries.append(ccyntry.findtext("CtryNm"))
