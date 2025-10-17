@@ -14,12 +14,12 @@
 
 """Currency module for downloading and processing ISO 4217 currency data."""
 
+import argparse
 import csv
 import datetime
 import json
 import logging
 from pathlib import Path
-from typing import Any
 
 import urllib3
 from defusedxml import ElementTree
@@ -33,25 +33,14 @@ ISO_DOWNLOAD_XML = "https://www.six-group.com/dam/download/financial-information
 ISO_DOWNLOAD_HISTORIC_XML = "https://www.six-group.com/dam/download/financial-information/data-center/iso-currrency/lists/list-three.xml"
 
 
-# TODO(#100): Refactor to reduce complexity
-def download_currencies(args: Any) -> CurrencyList:  # noqa: ANN401, C901, PLR0912, PLR0915
-    """
-    Download and parse the ISO 4217 currency list.
-
-    Downloads and parses the ISO 4217 currency list and
-    returns a list of unique Currency entries.
-    """
-    args.logger.debug("downloading currencies...")
+def _download_currencies(
+    args: argparse.Namespace,
+    http: urllib3.PoolManager,
+    currencies: dict[str, Currency],
+) -> None:
     args.logger.debug("GET %s", ISO_DOWNLOAD_XML)
-
-    http = urllib3.PoolManager(
-        retries=urllib3.Retry(connect=args.retry, read=args.retry, redirect=2),
-        timeout=urllib3.Timeout(connect=args.timeout, read=args.timeout),
-    )
-
     resp = http.request("GET", ISO_DOWNLOAD_XML)
 
-    currencies: dict[str, Currency] = {}
     root = ElementTree.fromstring(resp.data)
     ccytbl = root.find("CcyTbl")
     if ccytbl is None:
@@ -97,6 +86,12 @@ def download_currencies(args: Any) -> CurrencyList:  # noqa: ANN401, C901, PLR09
                 countries=[ccyntry.findtext("CtryNm")],
             )
 
+
+def _download_currencies_historic(
+    args: argparse.Namespace,
+    http: urllib3.PoolManager,
+    currencies: dict[str, Currency],
+) -> None:
     args.logger.debug("GET %s", ISO_DOWNLOAD_HISTORIC_XML)
     resp = http.request("GET", ISO_DOWNLOAD_HISTORIC_XML)
 
@@ -137,6 +132,26 @@ def download_currencies(args: Any) -> CurrencyList:  # noqa: ANN401, C901, PLR09
                     month=wdate.month,
                 ),
             )
+
+
+def download_currencies(args: argparse.Namespace) -> CurrencyList:
+    """
+    Download and parse the ISO 4217 currency list.
+
+    Downloads and parses the ISO 4217 currency list and
+    returns a list of unique Currency entries.
+    """
+    args.logger.debug("downloading currencies...")
+
+    http = urllib3.PoolManager(
+        retries=urllib3.Retry(connect=args.retry, read=args.retry, redirect=2),
+        timeout=urllib3.Timeout(connect=args.timeout, read=args.timeout),
+    )
+    currencies: dict[str, Currency] = {}
+
+    _download_currencies(args, http, currencies)
+
+    _download_currencies_historic(args, http, currencies)
 
     return currencies.values()
 

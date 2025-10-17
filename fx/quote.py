@@ -86,7 +86,7 @@ def download_quotes(  # noqa: PLR0913
     return quotes
 
 
-def read_quotelist_data(proto_path: str, logger: logging.Logger) -> QuoteList:
+def read_quotelist_data(proto_path: str | Path, logger: logging.Logger) -> QuoteList:
     """Read the serialized QuoteList from the given path."""
     qlist = QuoteList()
     with Path(proto_path).open("rb") as f:
@@ -123,7 +123,7 @@ def write_quotes_data(
     data_path.parent.mkdir(parents=True, exist_ok=True)
 
     try:
-        existing_quotelist = read_quotelist_data(str(proto_path), logger)
+        existing_quotelist = read_quotelist_data(proto_path, logger)
     except FileNotFoundError:
         existing_quotelist = QuoteList()
 
