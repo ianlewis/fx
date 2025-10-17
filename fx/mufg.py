@@ -21,7 +21,7 @@ import urllib3
 from bs4 import BeautifulSoup
 from google.type.date_pb2 import Date
 
-from fx.quote_pb2 import Quote
+from fx.quote_pb2 import Quote  # type: ignore[attr-defined]
 from fx.utils import str_to_money
 
 
@@ -72,7 +72,7 @@ class MUFGProvider:
         self.timeout = args.timeout
         self.retries = args.retry
         self.backoff = args.backoff
-        self._cache = {}
+        self._cache: dict[tuple[str, datetime.date], list[Quote]] = {}
 
     def _request(self, url: str) -> Any:  # noqa: ANN401
         self.logger.debug("GET %s", url)
@@ -121,7 +121,7 @@ class MUFGProvider:
 
         resp = self._request(url)
 
-        quotes = []
+        quotes: list[Quote] = []
         body = resp.data
         try:
             # NOTE: Some pages say they are EUC-JP but they are actually

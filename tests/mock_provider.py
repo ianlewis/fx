@@ -20,7 +20,7 @@ from typing import Any, ClassVar
 from google.type.date_pb2 import Date
 from google.type.money_pb2 import Money
 
-from fx.quote_pb2 import Quote
+from fx.quote_pb2 import Quote  # type: ignore[attr-defined]
 
 
 class MockProvider:

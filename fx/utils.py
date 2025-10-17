@@ -16,9 +16,11 @@
 
 from collections.abc import Iterator
 from datetime import date
+from typing import Any
 
 from dateutil.relativedelta import relativedelta
 from google.protobuf.json_format import MessageToDict
+from google.protobuf.message import Message
 from google.type.money_pb2 import Money
 
 
@@ -44,12 +46,12 @@ def date_iterator(
         from_date = from_date + delta
 
 
-def date_msg_to_str(d: dict) -> str | None:
+def date_msg_to_str(d: Message) -> str | None:
     """Convert a Date protobuf message to a string."""
     return date_dict_to_str(MessageToDict(d))
 
 
-def date_dict_to_str(d: dict) -> str | None:
+def date_dict_to_str(d: dict[str, Any]) -> str | None:
     """Convert a Date protobuf message dict to a string."""
     year = d.get("year")
     month = d.get("month")
@@ -110,7 +112,7 @@ def str_to_money(code: str, s: str) -> Money:
     )
 
 
-def money_dict_to_str(d: dict) -> str | None:
+def money_dict_to_str(d: dict[str, Any]) -> str | None:
     """
     Convert a Money protobuf message dict to a string.
 

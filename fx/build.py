@@ -72,7 +72,7 @@ def build_command(args: Any) -> None:  # noqa: ANN401
 
     write_currencies_site(site_dir_v1, currencies, args.logger)
 
-    latest_quotes = {}
+    latest_quotes: dict[tuple[str, str, str], Quote] = {}
 
     build_start = time.time()
     for provider in args.provider:

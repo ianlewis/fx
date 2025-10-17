@@ -132,7 +132,4 @@ class TestMUFGProvider(unittest.TestCase):
 
             quote = provider.get_quote("XYZ", "JPY", datetime.date(2024, 6, 20))
 
-        if quote is None:
-            self.fail("quote is None")
-
         self.assertIsNone(quote)

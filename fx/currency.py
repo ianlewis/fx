@@ -34,7 +34,7 @@ ISO_DOWNLOAD_HISTORIC_XML = "https://www.six-group.com/dam/download/financial-in
 
 
 # TODO(#100): Refactor to reduce complexity
-def download_currencies(args: Any) -> CurrencyList:  # noqa: ANN401, C901
+def download_currencies(args: Any) -> CurrencyList:  # noqa: ANN401, C901, PLR0912, PLR0915
     """
     Download and parse the ISO 4217 currency list.
 
@@ -51,9 +51,12 @@ def download_currencies(args: Any) -> CurrencyList:  # noqa: ANN401, C901
 
     resp = http.request("GET", ISO_DOWNLOAD_XML)
 
-    currencies = {}
+    currencies: dict[str, Currency] = {}
     root = ElementTree.fromstring(resp.data)
     ccytbl = root.find("CcyTbl")
+    if ccytbl is None:
+        msg = "CcyTbl not found in XML"
+        raise ValueError(msg)
     for ccyntry in ccytbl.findall("CcyNtry"):
         code = ccyntry.findtext("Ccy")
 
@@ -66,7 +69,8 @@ def download_currencies(args: Any) -> CurrencyList:  # noqa: ANN401, C901
 
         args.logger.debug(currency_name)
         try:
-            minor_units = int(ccyntry.findtext("CcyMnrUnts"))
+            minor_units_text = ccyntry.findtext("CcyMnrUnts")
+            minor_units = int(minor_units_text) if minor_units_text is not None else 0
         except (ValueError, TypeError):
             minor_units = 0
 
@@ -98,15 +102,24 @@ def download_currencies(args: Any) -> CurrencyList:  # noqa: ANN401, C901
 
     root = ElementTree.fromstring(resp.data)
     ccytbl = root.find("HstrcCcyTbl")
+    if ccytbl is None:
+        msg = "HstrcCcyTbl not found in XML"
+        raise ValueError(msg)
     for ccyntry in ccytbl.findall("HstrcCcyNtry"):
         code = ccyntry.findtext("Ccy")
+        if code is None:
+            continue
         if code in currencies:
             currencies[code].countries.append(ccyntry.findtext("CtryNm"))
         else:
             args.logger.debug("Registered historical currency: %s", code)
             try:
+                withdrawal_dt_text = ccyntry.findtext("WthdrwlDt")
+                if withdrawal_dt_text is None:
+                    args.logger.warning("missing WthdrwlDt")
+                    continue
                 wdate = (
-                    datetime.datetime.strptime(ccyntry.findtext("WthdrwlDt"), "%Y-%m")
+                    datetime.datetime.strptime(withdrawal_dt_text, "%Y-%m")
                     .replace(tzinfo=datetime.UTC)
                     .date()
                 )
@@ -145,7 +158,7 @@ def read_currencies_data(
     with Path(proto_path).open("rb") as f:
         clist.ParseFromString(f.read())
 
-    cmap = {}
+    cmap: dict[str, Currency] = {}
     for c in clist.currencies:
         cmap[c.alphabetic_code] = c
     return cmap

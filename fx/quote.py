@@ -30,7 +30,7 @@ from typing import Any
 from dateutil.relativedelta import relativedelta
 from google.protobuf.json_format import MessageToDict
 
-from fx.quote_pb2 import Quote, QuoteList
+from fx.quote_pb2 import Quote, QuoteList  # type: ignore[attr-defined]
 from fx.utils import date_iterator, date_msg_to_str, money_to_str
 
 
@@ -51,18 +51,18 @@ def quote_equal(q1: Quote, q2: Quote) -> bool:
     quote_equal returns if two quotes are quotes from the same provider, for
     the same day, for the same currency pair.
     """
-    return (
+    return bool(
         q1.provider_code == q2.provider_code
         and q1.date.year == q2.date.year
         and q1.date.month == q2.date.month
         and q1.date.day == q2.date.day
         and q1.base_currency_code == q2.base_currency_code
-        and q1.quote_currency_code == q2.quote_currency_code
+        and q1.quote_currency_code == q2.quote_currency_code,
     )
 
 
 def download_quotes(  # noqa: PLR0913
-    provider: Any,
+    provider: Any,  # noqa: ANN401
     base_currency_code: str,
     quote_currency_code: str,
     start_date: datetime.date,
@@ -123,7 +123,7 @@ def write_quotes_data(
     data_path.parent.mkdir(parents=True, exist_ok=True)
 
     try:
-        existing_quotelist = read_quotelist_data(proto_path, logger)
+        existing_quotelist = read_quotelist_data(str(proto_path), logger)
     except FileNotFoundError:
         existing_quotelist = QuoteList()
 
@@ -217,7 +217,7 @@ def write_year_quotes_site(
         logger.debug("writing %s...", f.name)
         f.write(quotelist.SerializeToString())
 
-    month_qlists = defaultdict(QuoteList)
+    month_qlists: dict[int, QuoteList] = defaultdict(QuoteList)
     for q in quotelist.quotes:
         month_qlists[q.date.month].quotes.append(q)
 
