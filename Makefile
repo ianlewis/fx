@@ -23,21 +23,26 @@ SHELL := /usr/bin/env bash -ueo pipefail $(BASH_OPTIONS)
 uname_s := $(shell uname -s)
 uname_m := $(shell uname -m)
 arch.x86_64 := amd64
-arch = $(arch.$(uname_m))
+arch.aarch64 := arm64
+arch.arm64 := arm64
+arch := $(arch.$(uname_m))
 kernel.Linux := linux
-kernel = $(kernel.$(uname_s))
+kernel.Darwin := darwin
+kernel := $(kernel.$(uname_s))
 
 OUTPUT_FORMAT ?= $(shell if [ "${GITHUB_ACTIONS}" == "true" ]; then echo "github"; else echo ""; fi)
 REPO_ROOT = $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 REPO_NAME = $(shell basename "$(REPO_ROOT)")
 
 # renovate: datasource=github-releases depName=aquaproj/aqua versioning=loose
-AQUA_VERSION ?= v2.55.0
-AQUA_REPO ?= github.com/aquaproj/aqua
-AQUA_CHECKSUM.Linux.x86_64 = cb7780962ca651c4e025a027b7bfc82c010af25c5c150fe89ad72f4058d46540
-AQUA_CHECKSUM ?= $(AQUA_CHECKSUM.$(uname_s).$(uname_m))
-AQUA_URL = https://$(AQUA_REPO)/releases/download/$(AQUA_VERSION)/aqua_$(kernel)_$(arch).tar.gz
-export AQUA_ROOT_DIR = $(REPO_ROOT)/.aqua
+AQUA_VERSION ?= v2.55.1
+AQUA_REPO := github.com/aquaproj/aqua
+AQUA_CHECKSUM.linux.amd64 := 7371b9785e07c429608a21e4d5b17dafe6780dabe306ec9f4be842ea754de48a
+AQUA_CHECKSUM.linux.arm64 := 283e0e274af47ff1d4d660a19e8084ae4b6aca23d901e95728a68a63dfb98c87
+AQUA_CHECKSUM.darwin.arm64 := cdaa13dd96187622ef5bee52867c46d4cf10765963423dc8e867c7c4decccf4d
+AQUA_CHECKSUM ?= $(AQUA_CHECKSUM.$(kernel).$(arch))
+AQUA_URL := https://$(AQUA_REPO)/releases/download/$(AQUA_VERSION)/aqua_$(kernel)_$(arch).tar.gz
+export AQUA_ROOT_DIR := $(REPO_ROOT)/.aqua
 
 # Ensure that aqua and aqua installed tools are in the PATH.
 export PATH := $(REPO_ROOT)/.bin/aqua-$(AQUA_VERSION):$(AQUA_ROOT_DIR)/bin:$(PATH)
@@ -138,7 +143,7 @@ node_modules/.installed: package-lock.json
 	mkdir -p .bin/aqua-$(AQUA_VERSION); \
 	tempfile=$$(mktemp --suffix=".aqua-$(AQUA_VERSION).tar.gz"); \
 	curl -sSLo "$${tempfile}" "$(AQUA_URL)"; \
-	echo "$(AQUA_CHECKSUM)  $${tempfile}" | sha256sum -c; \
+	echo "$(AQUA_CHECKSUM)  $${tempfile}" | shasum -a 256 -c; \
 	tar -x -C .bin/aqua-$(AQUA_VERSION) -f "$${tempfile}"
 
 $(AQUA_ROOT_DIR)/.installed: .aqua.yaml .bin/aqua-$(AQUA_VERSION)/aqua
