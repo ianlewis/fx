@@ -52,22 +52,33 @@
       matchUpdateTypes: ["minor", "patch"],
       groupName: "aqua",
       matchFileNames: [".aqua.yaml", ".aqua-checksums.yaml"],
+      commitBody: "[skip netlify]",
     },
     {
       matchUpdateTypes: ["minor", "patch"],
       groupName: "makefile",
       matchFileNames: ["Makefile"],
+      commitBody: "[skip netlify]",
     },
     {
       matchManagers: ["github-actions"],
       matchUpdateTypes: ["minor", "patch"],
       groupName: "github-actions",
       pinDigests: true,
+      commitBody: "[skip netlify]",
     },
     {
       matchManagers: ["pip_requirements"],
       matchUpdateTypes: ["minor", "patch"],
+      matchFileNames: ["requirements.txt"],
       groupName: "python",
+    },
+    {
+      matchManagers: ["pip_requirements"],
+      matchUpdateTypes: ["minor", "patch"],
+      matchFileNames: ["requirements-dev.txt"],
+      groupName: "python-dev",
+      commitBody: "[skip netlify]",
     },
     {
       matchManagers: ["npm"],
@@ -79,6 +90,7 @@
       matchManagers: ["npm"],
       matchDepTypes: ["devDependencies"],
       groupName: "npm dev",
+      commitBody: "[skip netlify]",
     },
   ],
 }
