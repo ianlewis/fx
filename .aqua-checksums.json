@@ -71,6 +71,36 @@
       "algorithm": "sha256"
     },
     {
+      "id": "github_release/github.com/astral-sh/ruff/0.14.6/ruff-aarch64-apple-darwin.tar.gz",
+      "checksum": "B2ACE677F51D0F2B91CA27D312AC8B069658502049015F4891C16F8864136282",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/astral-sh/ruff/0.14.6/ruff-aarch64-pc-windows-msvc.zip",
+      "checksum": "90518B6D16FE8B705C891DCDD77B20AB41DA5E042B085ACED7BBC647F6F2FDCD",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/astral-sh/ruff/0.14.6/ruff-aarch64-unknown-linux-musl.tar.gz",
+      "checksum": "4D3C113E59C5FBC31F1DEF566CEBF28732BB45FF6B83DF8E142BC1C055B3AFA3",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/astral-sh/ruff/0.14.6/ruff-x86_64-apple-darwin.tar.gz",
+      "checksum": "EFE45A6DEFCF4F1B6DE87D56CE94635F53B00F88DDC2FCB8E25E2C4E3A61261C",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/astral-sh/ruff/0.14.6/ruff-x86_64-pc-windows-msvc.zip",
+      "checksum": "3A8BB3499484C7F9E86060C89D0E61C47DAC7F9FB4D7FE46BC59DCA400B322C9",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/astral-sh/ruff/0.14.6/ruff-x86_64-unknown-linux-musl.tar.gz",
+      "checksum": "7EF1743875C7C469CC1C4BB6DA6A9BBFF3F3A7B89A75632D6CD2944EDE470A5E",
+      "algorithm": "sha256"
+    },
+    {
       "id": "github_release/github.com/checkmake/checkmake/0.2.2/checkmake-0.2.2.darwin.amd64",
       "checksum": "AFAA325D2348043F9A60D3D7BA7803A0A54B760095EA03837C4DE357C75478EF",
       "algorithm": "sha256"
@@ -321,6 +351,36 @@
       "algorithm": "sha256"
     },
     {
+      "id": "github_release/github.com/rhysd/actionlint/v1.7.9/actionlint_1.7.9_darwin_amd64.tar.gz",
+      "checksum": "F89A910E90E536F60DF7C504160247DB01DD67CAB6F08C064C1C397B76C91A79",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/rhysd/actionlint/v1.7.9/actionlint_1.7.9_darwin_arm64.tar.gz",
+      "checksum": "855E49E823FC68C6371FD6967E359CDE11912D8D44FED343283C8E6E943BD789",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/rhysd/actionlint/v1.7.9/actionlint_1.7.9_linux_amd64.tar.gz",
+      "checksum": "233B280D05E100837F4AF1433C7B40A5DCB306E3AA68FB4F17F8A7F45A7DF7B4",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/rhysd/actionlint/v1.7.9/actionlint_1.7.9_linux_arm64.tar.gz",
+      "checksum": "6B82A3B8C808BF1BCD39A95ACED22FC1A026EEF08EDE410F81E274AF8DEADBBC",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/rhysd/actionlint/v1.7.9/actionlint_1.7.9_windows_amd64.zip",
+      "checksum": "7C8B10A93723838BC3533F6E1886D868FDBB109B81606EBE6D1A533D11D8E978",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/rhysd/actionlint/v1.7.9/actionlint_1.7.9_windows_arm64.zip",
+      "checksum": "7ACA9BF09EEDF0A743E08C7CB9F1712467A7324A9342A029AE4536FB4BE95C25",
+      "algorithm": "sha256"
+    },
+    {
       "id": "registries/github_content/github.com/aquaproj/aqua-registry/v4.333.1/registry.yaml",
       "checksum": "9DBB73AF6D587E7696230A00BF9AD1A4D1B62512D5C179D55A5B471F332FF52E",
       "algorithm": "sha256"
@@ -369,6 +429,11 @@
       "id": "registries/github_content/github.com/aquaproj/aqua-registry/v4.421.0/registry.yaml",
       "checksum": "28F12785429274ADCFA97906A10D80FFC44D0FAEF7CF1560119A31EA218C118E0C173C7FAEDDE31449665D25741B12F40EF3FFFCA4540947BE96D5CD370A92DE",
       "algorithm": "sha512"
+    },
+    {
+      "id": "registries/github_content/github.com/aquaproj/aqua-registry/v4.439.0/registry.yaml",
+      "checksum": "9237F032690C0457E435CDED5AB67B75B867F7738855CEAE93C938C3F1DD4773",
+      "algorithm": "sha256"
     }
   ]
 }
