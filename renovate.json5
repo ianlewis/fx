@@ -22,7 +22,9 @@
   // NOTE: Set the prHourlyLimit to 0 to disable the hourly limit. This is done
   // because we are using a monthly schedule and the default hourly limit of 2
   // would cause Renovate to only create 2 PRs every month.
+  // Similarly set prConcurrentLimit to 0 to disable the concurrent PR limit.
   prHourlyLimit: 0,
+  prConcurrentLimit: 0,
 
   // Security alerts/updates.
   vulnerabilityAlerts: {
@@ -47,25 +49,31 @@
   configWarningReuseIssue: false,
 
   // Group various ecosystem updates. Security updates are always separate.
+  // NOTE: Added "[skip netlify]" to commit messages to prevent Netlify from
+  //       triggering a new build for Renovate's own dependency updates. This
+  //       needs to be in the commit message and not the body so that it is
+  //       included in the PR title. The PR title then gets added to the default
+  //       merge commit message.
+  //       See: https://docs.netlify.com/deploy/manage-deploys/manage-deploys-overview/#skip-a-deploy
   packageRules: [
     {
       matchUpdateTypes: ["minor", "patch"],
       groupName: "aqua",
       matchFileNames: [".aqua.yaml", ".aqua-checksums.yaml"],
-      commitBody: "[skip netlify]",
+      commitMessageExtra: "to {{#if isPinDigest}}{{{newDigestShort}}}{{else}}{{#if isMajor}}{{prettyNewMajor}}{{else}}{{#if isSingleVersion}}{{prettyNewVersion}}{{else}}{{#if newValue}}{{{newValue}}}{{else}}{{{newDigestShort}}}{{/if}}{{/if}}{{/if}}{{/if}} [skip netlify]",
     },
     {
       matchUpdateTypes: ["minor", "patch"],
       groupName: "makefile",
       matchFileNames: ["Makefile"],
-      commitBody: "[skip netlify]",
+      commitMessageExtra: "to {{#if isPinDigest}}{{{newDigestShort}}}{{else}}{{#if isMajor}}{{prettyNewMajor}}{{else}}{{#if isSingleVersion}}{{prettyNewVersion}}{{else}}{{#if newValue}}{{{newValue}}}{{else}}{{{newDigestShort}}}{{/if}}{{/if}}{{/if}}{{/if}} [skip netlify]",
     },
     {
       matchManagers: ["github-actions"],
       matchUpdateTypes: ["minor", "patch"],
       groupName: "github-actions",
       pinDigests: true,
-      commitBody: "[skip netlify]",
+      commitMessageExtra: "to {{#if isPinDigest}}{{{newDigestShort}}}{{else}}{{#if isMajor}}{{prettyNewMajor}}{{else}}{{#if isSingleVersion}}{{prettyNewVersion}}{{else}}{{#if newValue}}{{{newValue}}}{{else}}{{{newDigestShort}}}{{/if}}{{/if}}{{/if}}{{/if}} [skip netlify]",
     },
     {
       matchManagers: ["pip_requirements"],
@@ -78,7 +86,7 @@
       matchUpdateTypes: ["minor", "patch"],
       matchFileNames: ["requirements-dev.txt"],
       groupName: "python-dev",
-      commitBody: "[skip netlify]",
+      commitMessageExtra: "to {{#if isPinDigest}}{{{newDigestShort}}}{{else}}{{#if isMajor}}{{prettyNewMajor}}{{else}}{{#if isSingleVersion}}{{prettyNewVersion}}{{else}}{{#if newValue}}{{{newValue}}}{{else}}{{{newDigestShort}}}{{/if}}{{/if}}{{/if}}{{/if}} [skip netlify]",
     },
     {
       matchManagers: ["npm"],
@@ -90,7 +98,7 @@
       matchManagers: ["npm"],
       matchDepTypes: ["devDependencies"],
       groupName: "npm dev",
-      commitBody: "[skip netlify]",
+      commitMessageExtra: "to {{#if isPinDigest}}{{{newDigestShort}}}{{else}}{{#if isMajor}}{{prettyNewMajor}}{{else}}{{#if isSingleVersion}}{{prettyNewVersion}}{{else}}{{#if newValue}}{{{newValue}}}{{else}}{{{newDigestShort}}}{{/if}}{{/if}}{{/if}}{{/if}} [skip netlify]",
     },
   ],
 }
