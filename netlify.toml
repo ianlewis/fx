@@ -5,6 +5,10 @@ command = "make build"
 # NOTE: This should match the Python version in `.python-version`.
 environment = { PYTHON_VERSION = "3.13.5" }
 
+[context.deploy-preview]
+  # Skip deploy previews for Renovate PRs (branches starting with "renovate/")
+  ignore = "sh -c '[ \"${HEAD#renovate/}\" != \"$HEAD\" ]'"
+
 [[headers]]
   for = "/v1/*"
   [headers.values]
