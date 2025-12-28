@@ -12,20 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-[mypy]
-strict = True
-
-[mypy-google.type.*]
-ignore_missing_imports = True
-
-[mypy-google.protobuf.*]
-ignore_missing_imports = True
-
-[mypy-fx.v1.provider_pb2]
-ignore_errors = True
-
-[mypy-fx.v1.currency_pb2]
-ignore_errors = True
-
-[mypy-fx.v1.quote_pb2]
-ignore_errors = True
+# For details on buf.yaml configuration, visit https://buf.build/docs/configuration/v2/buf-yaml
+version: v2
+modules:
+  - path: proto
+  - path: .venv/lib/python3.13/site-packages
+lint:
+  use:
+    - STANDARD
+  ignore:
+    - .venv/lib/python3.13/site-packages
+breaking:
+  use:
+    - FILE

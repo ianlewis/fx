@@ -165,12 +165,12 @@ $(AQUA_ROOT_DIR)/.installed: .aqua.yaml .bin/aqua-$(AQUA_VERSION)/aqua
 all: test package build ## Run all tests and build the site.
 
 .PHONY: package
-package: .venv/.installed ## Create a release package.
+package: buf-build .venv/.installed ## Create a release package.
 	@# bash \
 	$(REPO_ROOT)/.venv/bin/python3 -m build
 
 .PHONY: install
-install: .venv/.installed ## Install the package in the local venv.
+install: buf-build .venv/.installed ## Install the package in the local venv.
 	@# bash \
 	$(REPO_ROOT)/.venv/bin/pip install .
 
@@ -207,15 +207,11 @@ serve: build ## Serve the API locally.
 	@# bash \
 	$(REPO_ROOT)/.venv/bin/python3 -m http.server --directory _site/
 
-.PHONY: protoc
-protoc: fx/currency_pb2.py fx/provider_pb2.py fx/quote_pb2.py ## Compile protobuf files.
-
-fx/%_pb2.py:  $(AQUA_ROOT_DIR)/.installed .venv/.installed fx/%.proto
+.PHONY: buf-build
+buf-build: $(AQUA_ROOT_DIR)/.installed .venv/.installed proto/fx/v1/currency.proto proto/fx/v1/provider.proto proto/fx/v1/quote.proto ## Compile protobuf files.
 	@# bash \
-	protoc \
-		--proto_path=. \
-		--proto_path=".venv/lib/python$$(grep -oE '[0-9]\.[0-9]+' .python-version)/site-packages/" \
-		--python_out=. $(word 3,$^)
+	buf generate; \
+	buf build
 
 ## Testing
 #####################################################################
@@ -234,7 +230,7 @@ unit-test: .venv/.installed ## Run unit tests.
 #####################################################################
 
 .PHONY: format
-format: json-format license-headers md-format py-format yaml-format ## Format all files
+format: json-format license-headers md-format proto-format py-format yaml-format ## Format all files
 
 .PHONY: json-format
 json-format: node_modules/.installed ## Format JSON files.
@@ -319,6 +315,23 @@ md-format: node_modules/.installed ## Format Markdown files.
 		--write \
 		$${files}
 
+
+.PHONY: proto-format
+proto-format: $(AQUA_ROOT_DIR)/.installed ## Format Protocol Buffers files.
+	@# bash \
+	files=$$( \
+		git ls-files --deduplicate \
+			'*.proto' \
+			| while IFS='' read -r f; do [ -f "$${f}" ] && echo "$${f}" || true; done \
+	); \
+	if [ "$${files}" == "" ]; then \
+		exit 0; \
+	fi; \
+	for filename in $${files}; do \
+		buf format --write $${filename}; \
+	done
+
+
 .PHONY: py-format
 py-format: $(AQUA_ROOT_DIR)/.installed ## Format Python files.
 	@# bash \
@@ -359,7 +372,7 @@ yaml-format: node_modules/.installed ## Format YAML files.
 #####################################################################
 
 .PHONY: lint
-lint: actionlint checkmake commitlint fixme format-check markdownlint mypy renovate-config-validator ruff textlint yamllint zizmor ## Run all linters.
+lint: actionlint buf checkmake commitlint fixme format-check markdownlint mypy renovate-config-validator ruff textlint yamllint zizmor ## Run all linters.
 
 .PHONY: actionlint
 actionlint: $(AQUA_ROOT_DIR)/.installed ## Runs the actionlint linter.
@@ -385,6 +398,21 @@ actionlint: $(AQUA_ROOT_DIR)/.installed ## Runs the actionlint linter.
 			$${files}; \
 	fi
 
+.PHONY: buf
+buf: $(AQUA_ROOT_DIR)/.installed .venv/.installed node_modules/.installed ## Runs the buf linter.
+	@# bash \
+	files=$$( \
+		git ls-files --deduplicate \
+			'*.proto' \
+			| while IFS='' read -r f; do [ -f "$${f}" ] && echo "$${f}" || true; done \
+	); \
+	if [ "$${files}" == "" ]; then \
+		exit 0; \
+	fi; \
+	for filename in $${files}; do \
+		buf lint --path $${filename}; \
+	done
+
 .PHONY: checkmake
 checkmake: $(AQUA_ROOT_DIR)/.installed ## Runs the checkmake linter.
 	@# bash \
@@ -400,13 +428,10 @@ checkmake: $(AQUA_ROOT_DIR)/.installed ## Runs the checkmake linter.
 	if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
 		# TODO: Remove newline from the format string after updating checkmake. \
 		checkmake \
-			--config .checkmake.ini \
 			--format '::error file={{.FileName}},line={{.LineNumber}}::{{.Rule}}: {{.Violation}}'$$'\n' \
 			$${files}; \
 	else \
-		checkmake \
-			--config .checkmake.ini \
-			$${files}; \
+		checkmake $${files}; \
 	fi
 
 .PHONY: commitlint
