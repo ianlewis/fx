@@ -15,7 +15,7 @@
 # Set the initial shell so we can determine extra options.
 SHELL := /usr/bin/env bash -ueo pipefail
 DEBUG_LOGGING ?= $(shell if [[ "${GITHUB_ACTIONS}" == "true" ]] && [[ -n "${RUNNER_DEBUG}" || "${ACTIONS_RUNNER_DEBUG}" == "true" || "${ACTIONS_STEP_DEBUG}" == "true" ]]; then echo "true"; else echo ""; fi)
-BASH_OPTIONS ?= $(shell if [ "$(DEBUG_LOGGING)" == "true" ]; then echo "-x"; else echo ""; fi)
+BASH_OPTIONS := $(shell if [ "$(DEBUG_LOGGING)" == "true" ]; then echo "-x"; else echo ""; fi)
 
 # Add extra options for debugging.
 SHELL := /usr/bin/env bash -ueo pipefail $(BASH_OPTIONS)
@@ -31,8 +31,8 @@ kernel.Darwin := darwin
 kernel := $(kernel.$(uname_s))
 
 OUTPUT_FORMAT ?= $(shell if [ "${GITHUB_ACTIONS}" == "true" ]; then echo "github"; else echo ""; fi)
-REPO_ROOT = $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
-REPO_NAME = $(shell basename "$(REPO_ROOT)")
+REPO_ROOT := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
+REPO_NAME := $(shell basename "$(REPO_ROOT)")
 
 # renovate: datasource=github-releases depName=aquaproj/aqua versioning=loose
 AQUA_VERSION ?= v2.55.2
@@ -42,10 +42,15 @@ AQUA_CHECKSUM.linux.arm64 := 75bef0c9e82480adb4c203b71b9af530945fda60b91f6f860b1
 AQUA_CHECKSUM.darwin.arm64 := 040857e7f4eec6d468dedbad9a05a2409c2dfe13fc2e69c197f25bddec361793
 AQUA_CHECKSUM ?= $(AQUA_CHECKSUM.$(kernel).$(arch))
 AQUA_URL := https://$(AQUA_REPO)/releases/download/$(AQUA_VERSION)/aqua_$(kernel)_$(arch).tar.gz
-export AQUA_ROOT_DIR := $(REPO_ROOT)/.aqua
+export AQUA_ROOT_DIR = $(REPO_ROOT)/.aqua
 
 # Ensure that aqua and aqua installed tools are in the PATH.
 export PATH := $(REPO_ROOT)/.bin/aqua-$(AQUA_VERSION):$(AQUA_ROOT_DIR)/bin:$(PATH)
+
+# We want GNU versions of tools so prefer them if present.
+GREP := $(shell command -v ggrep 2>/dev/null || command -v grep 2>/dev/null)
+AWK := $(shell command -v gawk 2>/dev/null || command -v awk 2>/dev/null)
+MKTEMP := $(shell command -v gmktemp 2>/dev/null || command -v mktemp 2>/dev/null)
 
 # The help command prints targets in groups. Help documentation in the Makefile
 # uses comments with double hash marks (##). Documentation is printed by the
@@ -63,18 +68,18 @@ export PATH := $(REPO_ROOT)/.bin/aqua-$(AQUA_VERSION):$(AQUA_ROOT_DIR)/bin:$(PAT
 help: ## Print all Makefile targets (this message).
 	@# bash \
 	echo "$(REPO_NAME) Makefile"; \
-	echo "Usage: make [COMMAND]"; \
+	echo "Usage: $(MAKE) [COMMAND]"; \
 	echo ""; \
 	normal=""; \
 	cyan=""; \
-	if command -v tput >/dev/null 3>&1; then \
+	if command -v tput >/dev/null 2>&1; then \
 		if [ -t 1 ]; then \
 			normal=$$(tput sgr0); \
 			cyan=$$(tput setaf 6); \
 		fi; \
 	fi; \
-	grep --no-filename -E '^([/a-z.A-Z0-9_%-]+:.*?|)##' $(MAKEFILE_LIST) | \
-		awk \
+	$(GREP) --no-filename -E '^([/a-z.A-Z0-9_%-]+:.*?|)##' $(MAKEFILE_LIST) | \
+		$(AWK) \
 			--assign=normal="$${normal}" \
 			--assign=cyan="$${cyan}" \
 			'BEGIN {FS = "(:.*?|)## ?"}; { \
@@ -141,7 +146,7 @@ node_modules/.installed: package-lock.json
 .bin/aqua-$(AQUA_VERSION)/aqua:
 	@# bash \
 	mkdir -p .bin/aqua-$(AQUA_VERSION); \
-	tempfile=$$(mktemp --suffix=".aqua-$(AQUA_VERSION).tar.gz"); \
+	tempfile=$$($(MKTEMP) --suffix=".aqua-$(AQUA_VERSION).tar.gz"); \
 	curl -sSLo "$${tempfile}" "$(AQUA_URL)"; \
 	echo "$(AQUA_CHECKSUM)  $${tempfile}" | shasum -a 256 -c; \
 	tar -x -C .bin/aqua-$(AQUA_VERSION) -f "$${tempfile}"
@@ -153,8 +158,8 @@ $(AQUA_ROOT_DIR)/.installed: .aqua.yaml .bin/aqua-$(AQUA_VERSION)/aqua
 		loglevel="debug"; \
 	fi; \
 	$(REPO_ROOT)/.bin/aqua-$(AQUA_VERSION)/aqua \
+		--config "$(REPO_ROOT)/.aqua.yaml" \
 		--log-level "$${loglevel}" \
-		--config .aqua.yaml \
 		install; \
 	touch $@
 
@@ -280,9 +285,10 @@ license-headers: ## Update license headers.
 		>&2 echo "git user.name is required."; \
 		>&2 echo "Set it up using:"; \
 		>&2 echo "git config user.name \"John Doe\""; \
+		exit 1; \
 	fi; \
 	for filename in $${files}; do \
-		if ! ( head "$${filename}" | grep -iL "Copyright" > /dev/null ); then \
+		if ! ( head "$${filename}" | $(GREP) -iL "Copyright" > /dev/null ); then \
 			$(REPO_ROOT)/third_party/mbrukman/autogen/autogen.sh \
 				--in-place \
 				--no-code \
@@ -315,7 +321,6 @@ md-format: node_modules/.installed ## Format Markdown files.
 		--write \
 		$${files}
 
-
 .PHONY: proto-format
 proto-format: $(AQUA_ROOT_DIR)/.installed ## Format Protocol Buffers files.
 	@# bash \
@@ -330,7 +335,6 @@ proto-format: $(AQUA_ROOT_DIR)/.installed ## Format Protocol Buffers files.
 	for filename in $${files}; do \
 		buf format --write $${filename}; \
 	done
-
 
 .PHONY: py-format
 py-format: $(AQUA_ROOT_DIR)/.installed ## Format Python files.
@@ -459,7 +463,6 @@ commitlint: node_modules/.installed ## Run commitlint linter.
 		commitlint_to="HEAD"; \
 	fi; \
 	$(REPO_ROOT)/node_modules/.bin/commitlint \
-		--config commitlint.config.mjs \
 		--from "$${commitlint_from}" \
 		--to "$${commitlint_to}" \
 		--verbose \
@@ -486,11 +489,17 @@ format-check: ## Check that files are properly formatted.
 		>&2 echo "The working directory is dirty. Please commit, stage, or stash changes and try again."; \
 		exit 1; \
 	fi; \
-	make format; \
+	$(MAKE) format; \
 	exit_code=0; \
 	if [ -n "$$(git diff)" ]; then \
 		>&2 echo "Some files need to be formatted. Please run 'make format' and try again."; \
+		if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
+			echo "::group::git diff"; \
+		fi; \
 		git --no-pager diff; \
+		if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
+			echo "::endgroup::"; \
+		fi; \
 		exit_code=1; \
 	fi; \
 	git restore .; \
@@ -512,53 +521,7 @@ markdownlint: node_modules/.installed $(AQUA_ROOT_DIR)/.installed ## Runs the ma
 	if [ "$${files}" == "" ]; then \
 		exit 0; \
 	fi; \
-	if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
-		exit_code=0; \
-		while IFS="" read -r p && [ -n "$$p" ]; do \
-			file=$$(echo "$$p" | jq -cr '.fileName // empty'); \
-			line=$$(echo "$$p" | jq -cr '.lineNumber // empty'); \
-			endline=$${line}; \
-			message=$$(echo "$$p" | jq -cr '.ruleNames[0] + "/" + .ruleNames[1] + " " + .ruleDescription + " [Detail: \"" + .errorDetail + "\", Context: \"" + .errorContext + "\"]"'); \
-			exit_code=1; \
-			echo "::error file=$${file},line=$${line},endLine=$${endline}::$${message}"; \
-		done <<< "$$($(REPO_ROOT)/node_modules/.bin/markdownlint --config .markdownlint.yaml --dot --json $${files} 2>&1 | jq -c '.[]')"; \
-		if [ "$${exit_code}" != "0" ]; then \
-			exit "$${exit_code}"; \
-		fi; \
-	else \
-		$(REPO_ROOT)/node_modules/.bin/markdownlint \
-			--config .markdownlint.yaml \
-			--dot \
-			$${files}; \
-	fi; \
-	files=$$( \
-		git ls-files --deduplicate \
-			'.github/pull_request_template.md' \
-			'.github/ISSUE_TEMPLATE/*.md' \
-			| while IFS='' read -r f; do [ -f "$${f}" ] && echo "$${f}" || true; done \
-	); \
-	if [ "$${files}" == "" ]; then \
-		exit 0; \
-	fi; \
-	if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
-		exit_code=0; \
-		while IFS="" read -r p && [ -n "$$p" ]; do \
-			file=$$(echo "$$p" | jq -cr '.fileName // empty'); \
-			line=$$(echo "$$p" | jq -cr '.lineNumber // empty'); \
-			endline=$${line}; \
-			message=$$(echo "$$p" | jq -cr '.ruleNames[0] + "/" + .ruleNames[1] + " " + .ruleDescription + " [Detail: \"" + .errorDetail + "\", Context: \"" + .errorContext + "\"]"'); \
-			exit_code=1; \
-			echo "::error file=$${file},line=$${line},endLine=$${endline}::$${message}"; \
-		done <<< "$$($(REPO_ROOT)/node_modules/.bin/markdownlint --config .github/template.markdownlint.yaml --dot --json $${files} 2>&1 | jq -c '.[]')"; \
-		if [ "$${exit_code}" != "0" ]; then \
-			exit "$${exit_code}"; \
-		fi; \
-	else \
-		$(REPO_ROOT)/node_modules/.bin/markdownlint \
-			--config .github/template.markdownlint.yaml \
-			--dot \
-			$${files}; \
-	fi
+	$(REPO_ROOT)/node_modules/.bin/markdownlint-cli2 $${files}
 
 .PHONY: mypy
 mypy: .venv/.installed ## Runs the mypy type checker.
@@ -615,23 +578,23 @@ textlint: node_modules/.installed $(AQUA_ROOT_DIR)/.installed ## Runs the textli
 	fi; \
 	if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
 		exit_code=0; \
+		textlint_out="$$($(REPO_ROOT)/node_modules/.bin/textlint --format json $${files} | jq -cr '.[]' || exit_code=\"$$?\")"; \
 		while IFS="" read -r p && [ -n "$$p" ]; do \
 			filePath=$$(echo "$$p" | jq -cr '.filePath // empty'); \
 			file=$$(realpath --relative-to="." "$${filePath}"); \
+			messages=$$(echo "$$p" | jq -cr '.messages[] // empty'); \
 			while IFS="" read -r m && [ -n "$$m" ]; do \
 				line=$$(echo "$$m" | jq -cr '.loc.start.line // empty'); \
 				endline=$$(echo "$$m" | jq -cr '.loc.end.line // empty'); \
 				col=$$(echo "$${m}" | jq -cr '.loc.start.column // empty'); \
 				endcol=$$(echo "$${m}" | jq -cr '.loc.end.column // empty'); \
 				message=$$(echo "$$m" | jq -cr '.message // empty'); \
-				exit_code=1; \
 				echo "::error file=$${file},line=$${line},endLine=$${endline},col=$${col},endColumn=$${endcol}::$${message}"; \
-			done <<<"$$(echo "$$p" | jq -cr '.messages[] // empty')"; \
-		done <<< "$$($(REPO_ROOT)/node_modules/.bin/textlint -c .textlintrc.yaml --format json $${files} 2>&1 | jq -c '.[]')"; \
+			done <<<"$${messages}"; \
+		done <<<"$${textlint_out}"; \
 		exit "$${exit_code}"; \
 	else \
 		$(REPO_ROOT)/node_modules/.bin/textlint \
-			--config .textlintrc.yaml \
 			$${files}; \
 	fi
 
@@ -653,7 +616,6 @@ yamllint: .venv/.installed ## Runs the yamllint linter.
 	fi; \
 	$(REPO_ROOT)/.venv/bin/yamllint \
 		--strict \
-		--config-file .yamllint.yaml \
 		--format "$${format}" \
 		$${files}
 
@@ -672,15 +634,13 @@ zizmor: .venv/.installed ## Runs the zizmor linter.
 		exit 0; \
 	fi; \
 	if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
-		.venv/bin/zizmor \
-			--config .zizmor.yml \
+		$(REPO_ROOT)/.venv/bin/zizmor \
 			--quiet \
 			--pedantic \
 			--format sarif \
 			$${files} > zizmor.sarif.json; \
 	fi; \
 	$(REPO_ROOT)/.venv/bin/zizmor \
-		--config .zizmor.yml \
 		--quiet \
 		--pedantic \
 		--format plain \
