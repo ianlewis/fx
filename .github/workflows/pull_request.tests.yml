@@ -73,6 +73,9 @@ jobs:
   mypy:
     uses: ./.github/workflows/workflow_call.mypy.yml
 
+  openapi-spec-validator:
+    uses: ./.github/workflows/workflow_call.openapi-spec-validator.yml
+
   renovate-config-validator:
     uses: ./.github/workflows/workflow_call.renovate-config-validator.yml
 

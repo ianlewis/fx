@@ -376,7 +376,7 @@ yaml-format: node_modules/.installed ## Format YAML files.
 #####################################################################
 
 .PHONY: lint
-lint: actionlint buf checkmake commitlint fixme format-check markdownlint mypy renovate-config-validator ruff textlint yamllint zizmor ## Run all linters.
+lint: actionlint buf checkmake commitlint fixme format-check markdownlint mypy openapi-spec-validator renovate-config-validator ruff textlint yamllint zizmor ## Run all linters.
 
 .PHONY: actionlint
 actionlint: $(AQUA_ROOT_DIR)/.installed ## Runs the actionlint linter.
@@ -538,6 +538,13 @@ mypy: .venv/.installed ## Runs the mypy type checker.
 	${REPO_ROOT}/.venv/bin/mypy \
 		--config-file mypy.ini \
 		$${files}
+
+
+.PHONY: openapi-spec-validator
+openapi-spec-validator: .venv/.installed ## Runs the openapi-spec-validator.
+	@# bash \
+	$(REPO_ROOT)/.venv/bin/openapi-spec-validator \
+		docs/v1/openapi.yaml
 
 .PHONY: renovate-config-validator
 renovate-config-validator: node_modules/.installed ## Validate Renovate configuration.
