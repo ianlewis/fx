@@ -5,6 +5,11 @@ All notable changes will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## `2025-12-30`
+
+- Added a JSON formatted error for 404 responses
+  ([#151](https://github.com/ianlewis/fx/issues/151)).
+
 ## `2025-09-25`
 
 - Added the `latest` endpoint that returns the most recent quote for a currency

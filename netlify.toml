@@ -14,3 +14,8 @@ environment = { PYTHON_VERSION = "3.13.5" }
   [headers.values]
     # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin
     access-control-allow-origin = "*"
+
+[[redirects]]
+  from = "/v1/*"
+  to = "/v1/404.json"
+  status = 404
