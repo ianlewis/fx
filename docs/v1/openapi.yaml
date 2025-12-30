@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-openapi: 3.0.4
+openapi: 3.1.0
 info:
   title: fx.ianlewis.org
   description: A simple currency exchange rate API.
@@ -121,13 +121,13 @@ components:
         message:
           type: string
 
-responses:
-  NotFound:
-    description: The specified resource was not found.
-    content:
-      application/json:
-        schema:
-          $ref: "#/components/schemas/Error"
+  responses:
+    NotFound:
+      description: The specified resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
 
 paths:
   /currency.json:
@@ -136,11 +136,11 @@ paths:
       description: Returns a full list of currencies. Not all providers support all currencies.
       responses:
         "200": # status code
-          description: A Currency object.
+          description: A list of Currency objects.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Currency"
+                $ref: "#/components/schemas/CurrencyList"
         "404":
           $ref: "#/components/responses/NotFound"
 
@@ -157,11 +157,11 @@ paths:
           description: The ISO 4217 currency code.
       responses:
         "200": # status code
-          description: A list of Currency objects.
+          description: A Currency object.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/CurrencyList"
+                $ref: "#/components/schemas/Currency"
         "404":
           $ref: "#/components/responses/NotFound"
 
