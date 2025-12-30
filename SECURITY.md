@@ -34,25 +34,25 @@ It is reasonable to delay disclosure when the bug or the fix is not yet fully
 understood, the solution is not well-tested, or for vendor coordination. The
 time frame for disclosure is from immediate (especially if it's already publicly
 known) to several weeks. For a vulnerability with a straightforward mitigation,
-we expect report date to disclosure date to be on the order of 14 days.
+we expect the report date to disclosure date to be on the order of 14 days.
 
 If you know of a publicly disclosed security vulnerability please IMMEDIATELY
 [report the vulnerability](#reporting-a-vulnerability) so that the patch,
 release, and communication process can be started as early as possible.
 
-If the reporter does not go through the private disclosure process, the fix and
+If the reporter does not go through the private disclosure process, the fix, and
 release process will proceed as swiftly as possible. In extreme cases you can
 ask GitHub to delete the issue but this generally isn't necessary and is
 unlikely to make a public disclosure less damaging.
 
 ### Security Releases
 
-Once a fix is available it will be released, the GitHub Security Advisory made
-public and announced via project communication channels. Security releases
-will clearly marked as a security release and include information on which
-vulnerabilities were fixed. As much as possible this announcement should be
-actionable, and include any mitigating steps users can take prior to upgrading
-to a fixed version.
+Once a fix is available, it will be released, the GitHub Security Advisory made
+public, and the fix release announced via project communication channels.
+Security releases will be clearly marked as a security release and include
+information on which vulnerabilities were fixed. As much as possible this
+announcement should be actionable, and include any mitigating steps users can
+take prior to upgrading to a fixed version.
 
 Fixes will be applied in patch releases to all [supported
 versions](#supported-versions) and all fixed vulnerabilities will be noted in
@@ -67,7 +67,7 @@ Vulnerability severity is evaluated on a case-by-case basis, guided by [CVSS
 
 We aim to reduce the number of security issues through several general
 security-conscious development practices including the use of unit-tests,
-end-to-end (e2e) tests, static and dynamic analysis tools, and use of
+end-to-end (e2e) tests, static, and dynamic analysis tools, and use of
 memory-safe languages.
 
 We aim to fix issues discovered by analysis tools as quickly as possible. We
