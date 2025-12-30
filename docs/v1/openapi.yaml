@@ -113,6 +113,22 @@ components:
           items:
             $ref: "#/components/schemas/Quote"
 
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+
+responses:
+  NotFound:
+    description: The specified resource was not found.
+    content:
+      application/json:
+        schema:
+          $ref: "#/components/schemas/Error"
+
 paths:
   /currency.json:
     get:
@@ -125,6 +141,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Currency"
+        "404":
+          $ref: "#/components/responses/NotFound"
 
   /currency/{currency_code}.json:
     get:
@@ -144,6 +162,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/CurrencyList"
+        "404":
+          $ref: "#/components/responses/NotFound"
 
   /provider.json:
     get:
@@ -156,6 +176,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ProviderList"
+        "404":
+          $ref: "#/components/responses/NotFound"
 
   /provider/{provider_code}.json:
     get:
@@ -175,6 +197,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Provider"
+        "404":
+          $ref: "#/components/responses/NotFound"
 
   /provider/{provider_code}/quote/{base_currency_code}/{quote_currency_code}/latest.json:
     get:
@@ -206,6 +230,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Quote"
+        "404":
+          $ref: "#/components/responses/NotFound"
 
   /provider/{provider_code}/quote/{base_currency_code}/{quote_currency_code}/{year}/{month}/{day}.json:
     get:
@@ -258,6 +284,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Quote"
+        "404":
+          $ref: "#/components/responses/NotFound"
 
   /provider/{provider_code}/quote/{base_currency_code}/{quote_currency_code}/{year}/{month}.json:
     get:
@@ -303,6 +331,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/QuoteList"
+        "404":
+          $ref: "#/components/responses/NotFound"
 
   /provider/{provider_code}/quote/{base_currency_code}/{quote_currency_code}/{year}.json:
     get:
@@ -341,3 +371,5 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/QuoteList"
+        "404":
+          $ref: "#/components/responses/NotFound"
