@@ -52,6 +52,12 @@ GREP := $(shell command -v ggrep 2>/dev/null || command -v grep 2>/dev/null)
 AWK := $(shell command -v gawk 2>/dev/null || command -v awk 2>/dev/null)
 MKTEMP := $(shell command -v gmktemp 2>/dev/null || command -v mktemp 2>/dev/null)
 
+# Default port for `make serve`.
+SERVE_PORT ?= 8888
+
+# Default build context for `make build` and `make serve`.
+NETLIFY_BUILD_CONTEXT ?= dev
+
 # The help command prints targets in groups. Help documentation in the Makefile
 # uses comments with double hash marks (##). Documentation is printed by the
 # help target in the order in appears in the Makefile.
@@ -179,8 +185,8 @@ install: buf-build .venv/.installed ## Install the package in the local venv.
 	@# bash \
 	$(REPO_ROOT)/.venv/bin/pip install .
 
-.PHONY: build
-build: install mkdocs ## Build the site files.
+.PHONY: fx-build
+fx-build: install mkdocs
 	@# bash \
 	debugarg=""; \
 	if [ -n "$(DEBUG_LOGGING)" ]; then \
@@ -189,6 +195,18 @@ build: install mkdocs ## Build the site files.
 	$(REPO_ROOT)/.venv/bin/fx \
 		$${debugarg} \
 		build
+
+.PHONY: build
+build: node_modules/.installed ## Build the site.
+	@# bash \
+	debug_options=""; \
+	if [ -n "$(DEBUG_LOGGING)" ]; then \
+		debug_options="--debug"; \
+	fi; \
+	$(REPO_ROOT)/node_modules/.bin/netlify build \
+		--context "$(NETLIFY_BUILD_CONTEXT)" \
+		--offline \
+		$${debug_options}
 
 .PHONY: update
 update: install ## Update API data.
@@ -210,7 +228,25 @@ mkdocs: .venv/.installed ## Generate API documentation.
 .PHONY: serve
 serve: build ## Serve the API locally.
 	@# bash \
-	$(REPO_ROOT)/.venv/bin/python3 -m http.server --directory _site/
+	$(REPO_ROOT)/.venv/bin/python3 -m http.server \
+		--directory _site/ \
+		-- $(SERVE_PORT)
+
+# TODO(#135): Use netlify-cli when the bug is fixed.
+# .PHONY: serve
+# serve: node_modules/.installed build ## Run local development server.
+# 	@# bash \
+# 	debug_options=""; \
+# 	if [ -n "$(DEBUG_LOGGING)" ]; then \
+# 		debug_options="--debug"; \
+# 	fi; \
+# 	$(REPO_ROOT)/node_modules/.bin/netlify dev \
+# 		--skip-gitignore \
+# 		--no-open \
+# 		--context "$(NETLIFY_BUILD_CONTEXT)" \
+# 		--offline \
+# 		--port "$(SERVE_PORT)" \
+# 		$${debug_options}
 
 .PHONY: buf-build
 buf-build: $(AQUA_ROOT_DIR)/.installed .venv/.installed proto/fx/v1/currency.proto proto/fx/v1/provider.proto proto/fx/v1/quote.proto ## Compile protobuf files.

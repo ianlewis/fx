@@ -26,3 +26,9 @@ coverage.xml
 
 # Don't commit .claude local settings.
 .claude/
+
+# Local development settings for Netlify
+.netlify/
+
+# Deno lock file created by the netlify CLI
+deno.lock
