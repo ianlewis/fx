@@ -1,7 +1,7 @@
 [build]
 base = "."
 publish = "_site/"  # relative to `base` directory
-command = "make build"
+command = "make fx-build"
 # NOTE: This should match the Python version in `.python-version`.
 environment = { PYTHON_VERSION = "3.13.5" }
 
