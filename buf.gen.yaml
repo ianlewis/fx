@@ -16,7 +16,10 @@ version: v2
 managed:
   enabled: true
 plugins:
-  - remote: buf.build/protocolbuffers/python
+  # NOTE: Updating the version here seems to update the runtime version in the
+  #       generated code even though the installed version in the virtual
+  #       environment is different. Ensure these versions match when updating.
+  - remote: buf.build/protocolbuffers/python:v33.2
     out: .
 inputs:
   - directory: proto
