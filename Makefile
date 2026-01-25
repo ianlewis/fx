@@ -403,7 +403,7 @@ actionlint: $(AQUA_ROOT_DIR)/.installed ## Runs the actionlint linter.
 	fi
 
 .PHONY: buf
-buf: $(AQUA_ROOT_DIR)/.installed .venv/.installed node_modules/.installed ## Runs the buf linter.
+buf: $(AQUA_ROOT_DIR)/.installed .venv/.installed ## Runs the buf linter.
 	@# bash \
 	files=$$( \
 		git ls-files --deduplicate \
