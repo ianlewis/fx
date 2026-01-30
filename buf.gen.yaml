@@ -19,7 +19,7 @@ plugins:
   # NOTE: Updating the version here seems to update the runtime version in the
   #       generated code even though the installed version in the virtual
   #       environment is different. Ensure these versions match when updating.
-  - remote: buf.build/protocolbuffers/python:v33.2
+  - remote: buf.build/protocolbuffers/python:v33.4
     out: .
 inputs:
   - directory: proto
