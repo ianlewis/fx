@@ -58,6 +58,9 @@ jobs:
   buf:
     uses: ./.github/workflows/workflow_call.buf.yml
 
+  buf-breaking:
+    uses: ./.github/workflows/workflow_call.buf-breaking.yml
+
   checkmake:
     uses: ./.github/workflows/workflow_call.checkmake.yml
 
