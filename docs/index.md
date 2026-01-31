@@ -1,6 +1,7 @@
 # `fx.ianlewis.org`
 
-`fx.ianlewis.org` is a currency conversion API. It currently supports MUFG
+`fx.ianlewis.org` is a currency conversion API. It currently supports
+[MUFG](https://www.bk.mufg.jp/ippan/gaitame/index.html)
 published rates between 31 currencies and JPY.
 
 ## Data Types & Endpoints
@@ -10,8 +11,7 @@ The following sections outline the various data types available in the API.
 - [Swagger UI](https://petstore.swagger.io/?url=https://fx.ianlewis.org/v1/openapi.yaml)
 - [Redoc](https://redocly.github.io/redoc/?url=https://fx.ianlewis.org/v1/openapi.yaml)
 
-The full OpenAPI definition can be viewed at
-[`/v1/openapi.yaml`](/v1/openapi.yaml).
+The full OpenAPI definition can be viewed at [`/v1/openapi.yaml`](/v1/openapi.yaml).
 
 ### Provider
 
@@ -34,7 +34,8 @@ endpoint. The `Provider` object's format is defined in
 }
 ```
 
-Individual providers can be accessed via their code.
+Individual providers can be accessed via their [ISO
+4217](https://en.wikipedia.org/wiki/ISO_4217) currency code.
 
 #### [`/v1/provider/MUFG.json`](/v1/provider/MUFG.json)
 
@@ -79,61 +80,11 @@ Individual providers can be accessed via their code.
 }
 ```
 
-### Currencies
-
-Currency information can be retrieved via the currency endpoint using the currency's ISO 4217 alphabetic code. The `Currency` object's format is defined in [`currency.proto`](https://github.com/ianlewis/fx/blob/main/fx/currency.proto).
-
-#### [`/v1/currency.json`](/v1/currency.json)
-
-```json
-{
-    "currencies": [
-        {
-            "alphabeticCode": "AFN",
-            "numericCode": "971",
-            "name": "Afghani",
-            "minorUnits": 2,
-            "countries": ["AFGHANISTAN"]
-        }
-        // ...
-    ]
-}
-```
-
-#### [`/v1/currency/USD.json`](/v1/currency/USD.json)
-
-```json
-{
-    "alphabeticCode": "USD",
-    "numericCode": "840",
-    "name": "US Dollar",
-    "countries": [
-        "AMERICAN SAMOA",
-        "BONAIRE, SINT EUSTATIUS AND SABA",
-        "BRITISH INDIAN OCEAN TERRITORY (THE)",
-        "ECUADOR",
-        "EL SALVADOR",
-        "GUAM",
-        "HAITI",
-        "MARSHALL ISLANDS (THE)",
-        "MICRONESIA (FEDERATED STATES OF)",
-        "NORTHERN MARIANA ISLANDS (THE)",
-        "PALAU",
-        "PANAMA",
-        "PUERTO RICO",
-        "TIMOR-LESTE",
-        "TURKS AND CAICOS ISLANDS (THE)",
-        "UNITED STATES MINOR OUTLYING ISLANDS (THE)",
-        "UNITED STATES OF AMERICA (THE)",
-        "VIRGIN ISLANDS (BRITISH)",
-        "VIRGIN ISLANDS (U.S.)"
-    ]
-}
-```
-
 ### Quotes
 
-Currency exchange rate quotes can be retrieved via a provider's quote endpoint. The `Quote` object's format is defined in [`quote.proto`](https://github.com/ianlewis/fx/blob/main/fx/quote.proto).
+Currency exchange rate quotes can be retrieved via a provider's quote endpoint. The
+`Quote` object's format is defined in
+[`quote.proto`](https://github.com/ianlewis/fx/blob/main/fx/quote.proto).
 
 Quotes for a single day can be accessed by date.
 
