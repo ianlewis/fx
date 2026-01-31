@@ -21,26 +21,12 @@ import unittest
 from pathlib import Path
 
 from fx.build import build_command
-from fx.v1.currency_pb2 import CurrencyList  # type: ignore[attr-defined]
 from fx.v1.quote_pb2 import QuoteList  # type: ignore[attr-defined]
 from tests.mock_provider import MockProvider
 
 
 def _write_test_data(data_dir_path: Path) -> None:
     """Write test data."""
-    clist = CurrencyList()
-    currency = clist.currencies.add()
-    currency.alphabetic_code = "USD"
-    currency.numeric_code = "840"
-    currency.name = "US Dollar"
-    currency.minor_units = 2
-    currency.countries.extend(["UNITED STATES OF AMERICA (THE)"])
-
-    currency_file_path = data_dir_path.joinpath("currencies.binpb")
-    currency_file_path.parent.mkdir(parents=True, exist_ok=True)
-    with currency_file_path.open("wb") as f:
-        f.write(clist.SerializeToString())
-
     quotes = QuoteList()
     quote = quotes.quotes.add()
     quote.provider_code = "MOCK"

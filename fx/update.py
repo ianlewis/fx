@@ -16,7 +16,7 @@
 The Update Command.
 
 This module defines the update command which is used to update the local data store
-with currency and quote data from the specified providers.
+with quote data from the specified providers.
 """
 
 import argparse
@@ -25,16 +25,15 @@ from pathlib import Path
 
 from dateutil.relativedelta import relativedelta
 
-from fx.currency import download_currencies, write_currencies_data
 from fx.quote import download_quotes, write_quotes_data
 from fx.utils import date_iterator
 
 
 def update_command(args: argparse.Namespace) -> None:
     """
-    Update the local currency and quote data.
+    Update the local quote data.
 
-    This comand downloads currency and quote data given the command line arguments
+    This command downloads quote data given the command line arguments
     and stores them in the specified data directory.
     """
     args.logger.debug("running update")
@@ -42,11 +41,6 @@ def update_command(args: argparse.Namespace) -> None:
     data_path = Path(args.data_dir)
 
     data_path.mkdir(exist_ok=True)
-
-    # Update currencies
-    # Data is stored in data/currencies.binpb
-    currencies_proto_path = data_path.joinpath("currencies.binpb")
-    write_currencies_data(currencies_proto_path, download_currencies(args), args.logger)
 
     # Update quotes
 

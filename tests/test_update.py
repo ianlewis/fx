@@ -94,8 +94,6 @@ class TestUpdateCommand(unittest.TestCase):
             ),
         )
 
-        self.assertTrue(Path(self.temp_dir.name).joinpath("currencies.binpb").is_file())
-
         self.assertTrue(
             Path(self.temp_dir.name)
             .joinpath("MOCK", "USD", "JPY", "2024.binpb")
