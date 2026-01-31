@@ -417,7 +417,7 @@ buf: $(AQUA_ROOT_DIR)/.installed .venv/.installed ## Runs the buf linter.
 	done
 
 .PHONY: buf-breaking
-buf-breaking: $(AQUA_ROOT_DIR)/.installed .venv/.installed ## Runs the buf linter.
+buf-breaking: $(AQUA_ROOT_DIR)/.installed .venv/.installed ## Check for breaking changes in protobuf definitions.
 	@# bash \
 	commit_from=$(BUF_FROM_REF); \
 	commit_to=$(BUF_TO_REF); \
