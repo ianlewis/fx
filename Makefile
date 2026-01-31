@@ -434,7 +434,7 @@ buf-breaking: $(AQUA_ROOT_DIR)/.installed .venv/.installed ## Runs the buf linte
 	if [ "$${commit_to}" == "" ]; then \
 		# if head is on the commit_from branch, then we will lint the \
 		# last commit by default. \
-		current_branch=$$(git rev-parse --abbrev-ref HEAD); \
+		current_branch=$$(git rev-parse --abbrev-ref @{u}); \
 		if [ "$${commit_from}" == "$${current_branch}" ]; then \
 			commit_from="HEAD~1"; \
 		fi; \
@@ -508,7 +508,7 @@ commitlint: node_modules/.installed ## Run commitlint linter.
 	if [ "$${commitlint_to}" == "" ]; then \
 		# if head is on the commitlint_from branch, then we will lint the \
 		# last commit by default. \
-		current_branch=$$(git rev-parse --abbrev-ref HEAD); \
+		current_branch=$$(git rev-parse --abbrev-ref @{u}); \
 		if [ "$${commitlint_from}" == "$${current_branch}" ]; then \
 			commitlint_from="HEAD~1"; \
 		fi; \
