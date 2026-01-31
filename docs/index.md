@@ -34,8 +34,8 @@ endpoint. The `Provider` object's format is defined in
 }
 ```
 
-Individual providers can be accessed via their [ISO
-4217](https://en.wikipedia.org/wiki/ISO_4217) currency code.
+Individual providers can be accessed via their provider code. A list of supported [ISO
+4217](https://en.wikipedia.org/wiki/ISO_4217) currencies is included for each provider.
 
 #### [`/v1/provider/MUFG.json`](/v1/provider/MUFG.json)
 
