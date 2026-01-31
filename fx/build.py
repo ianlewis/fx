@@ -20,7 +20,6 @@ import time
 from pathlib import Path
 from typing import Any
 
-from fx.currency import read_currencies_data, write_currencies_site
 from fx.provider import write_providers_site
 from fx.quote import (
     read_quotelist_data,
@@ -66,11 +65,6 @@ def build_command(args: Any) -> None:  # noqa: ANN401
     site_dir_v1 = Path(args.site_dir).joinpath("v1")
 
     write_providers_site(site_dir_v1, args.provider, args.logger)
-
-    currencies_proto_path = Path(args.data_dir).joinpath("currencies.binpb")
-    currencies = read_currencies_data(currencies_proto_path, args.logger)
-
-    write_currencies_site(site_dir_v1, currencies, args.logger)
 
     latest_quotes: dict[tuple[str, str, str], Quote] = {}
 

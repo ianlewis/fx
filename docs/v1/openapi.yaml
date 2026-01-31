@@ -46,31 +46,6 @@ components:
         nanos:
           type: integer
 
-    Currency:
-      type: object
-      properties:
-        alphabeticCode:
-          type: string
-        numericCode:
-          type: string
-          format: integer
-        name:
-          type: string
-        minorUnits:
-          type: integer
-        countries:
-          type: array
-          items:
-            type: string
-
-    CurrencyList:
-      type: object
-      properties:
-        currencies:
-          type: array
-          items:
-            $ref: "#/components/schemas/Currency"
-
     Provider:
       type: object
       properties:
@@ -130,41 +105,6 @@ components:
             $ref: "#/components/schemas/Error"
 
 paths:
-  /currency.json:
-    get:
-      summary: Get supported currencies.
-      description: Returns a full list of currencies. Not all providers support all currencies.
-      responses:
-        "200": # status code
-          description: A list of Currency objects.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/CurrencyList"
-        "404":
-          $ref: "#/components/responses/NotFound"
-
-  /currency/{currency_code}.json:
-    get:
-      summary: Get a currency by code.
-      description: Returns a currency corresponding to the currency code.
-      parameters:
-        - name: currency_code
-          in: path
-          required: true
-          schema:
-            type: string
-          description: The ISO 4217 currency code.
-      responses:
-        "200": # status code
-          description: A Currency object.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Currency"
-        "404":
-          $ref: "#/components/responses/NotFound"
-
   /provider.json:
     get:
       summary: Get supported providers.

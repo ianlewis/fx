@@ -213,7 +213,7 @@ serve: build ## Serve the API locally.
 	$(REPO_ROOT)/.venv/bin/python3 -m http.server --directory _site/
 
 .PHONY: buf-build
-buf-build: $(AQUA_ROOT_DIR)/.installed .venv/.installed proto/fx/v1/currency.proto proto/fx/v1/provider.proto proto/fx/v1/quote.proto ## Compile protobuf files.
+buf-build: $(AQUA_ROOT_DIR)/.installed .venv/.installed proto/fx/v1/provider.proto proto/fx/v1/quote.proto ## Compile protobuf files.
 	@# bash \
 	buf generate; \
 	buf build
