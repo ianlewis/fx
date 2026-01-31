@@ -215,8 +215,7 @@ serve: build ## Serve the API locally.
 .PHONY: buf-build
 buf-build: $(AQUA_ROOT_DIR)/.installed .venv/.installed proto/fx/v1/provider.proto proto/fx/v1/quote.proto ## Compile protobuf files.
 	@# bash \
-	buf generate; \
-	buf build
+	buf generate
 
 ## Testing
 #####################################################################
@@ -376,7 +375,7 @@ yaml-format: node_modules/.installed ## Format YAML files.
 #####################################################################
 
 .PHONY: lint
-lint: actionlint buf checkmake commitlint fixme format-check markdownlint mypy openapi-spec-validator renovate-config-validator ruff textlint yamllint zizmor ## Run all linters.
+lint: actionlint buf buf-breaking checkmake commitlint fixme format-check markdownlint mypy openapi-spec-validator renovate-config-validator ruff textlint yamllint zizmor ## Run all linters.
 
 .PHONY: actionlint
 actionlint: $(AQUA_ROOT_DIR)/.installed ## Runs the actionlint linter.
@@ -417,6 +416,59 @@ buf: $(AQUA_ROOT_DIR)/.installed .venv/.installed ## Runs the buf linter.
 		buf lint --path $${filename}; \
 	done
 
+.PHONY: buf-breaking
+buf-breaking: $(AQUA_ROOT_DIR)/.installed .venv/.installed ## Check for breaking changes in protobuf definitions.
+	@# bash \
+	commit_from=$(BUF_FROM_REF); \
+	commit_to=$(BUF_TO_REF); \
+	if [ "$${commit_from}" == "" ]; then \
+		# Try to get the default branch without hitting the remote server \
+		if git symbolic-ref --short refs/remotes/origin/HEAD >/dev/null 2>&1; then \
+			commit_from=$$(git symbolic-ref --short refs/remotes/origin/HEAD); \
+		elif git show-ref refs/remotes/origin/master >/dev/null 2>&1; then \
+			commit_from="origin/master"; \
+		else \
+			commit_from="origin/main"; \
+		fi; \
+	fi; \
+	if [ "$${commit_to}" == "" ]; then \
+		# if head is on the commit_from branch, then we will lint the \
+		# last commit by default. \
+		current_branch=$$(git rev-parse --abbrev-ref @{u}); \
+		if [ "$${commit_from}" == "$${current_branch}" ]; then \
+			commit_from="HEAD~1"; \
+		fi; \
+		commit_to="HEAD"; \
+	fi; \
+	format="text"; \
+	if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
+		format="github-actions"; \
+	fi; \
+	if [ "$${commit_to}" == "HEAD" ]; then \
+		tmp_to_dir="."; \
+	else \
+		tmp_to_dir=$$($(MKTEMP) -p "" -d buf-breaking-XXXXXX); \
+		git worktree add -q "$${tmp_to_dir}" "$${commit_to}"; \
+	fi; \
+	tmp_from_dir=$$($(MKTEMP) -p "" -d buf-breaking-XXXXXX); \
+	git worktree add -q "$${tmp_from_dir}" "$${commit_from}"; \
+	# NOTE: .venv is needed for protobuf dependencies. \
+	$(MAKE) -C "$${tmp_to_dir}" .venv/.installed; \
+	$(MAKE) -C "$${tmp_from_dir}" .venv/.installed; \
+	exit_code=0; \
+	set +e; \
+	buf breaking \
+		"$${tmp_to_dir}" \
+		--against "$${tmp_from_dir}" \
+		--error-format "$${format}"; \
+	exit_code="$$?"; \
+	set -e; \
+	if [ "$${commit_to}" != "HEAD" ]; then \
+		git worktree remove -f "$${tmp_to_dir}"; \
+	fi; \
+	git worktree remove -f "$${tmp_from_dir}"; \
+	exit "$${exit_code}"
+
 .PHONY: checkmake
 checkmake: $(AQUA_ROOT_DIR)/.installed ## Runs the checkmake linter.
 	@# bash \
@@ -456,7 +508,7 @@ commitlint: node_modules/.installed ## Run commitlint linter.
 	if [ "$${commitlint_to}" == "" ]; then \
 		# if head is on the commitlint_from branch, then we will lint the \
 		# last commit by default. \
-		current_branch=$$(git rev-parse --abbrev-ref HEAD); \
+		current_branch=$$(git rev-parse --abbrev-ref @{u}); \
 		if [ "$${commitlint_from}" == "$${current_branch}" ]; then \
 			commitlint_from="HEAD~1"; \
 		fi; \
@@ -585,7 +637,6 @@ textlint: node_modules/.installed $(AQUA_ROOT_DIR)/.installed ## Runs the textli
 	fi; \
 	if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
 		exit_code=0; \
-		textlint_out="$$($(REPO_ROOT)/node_modules/.bin/textlint --format json $${files} | jq -cr '.[]' || exit_code=\"$$?\")"; \
 		while IFS="" read -r p && [ -n "$$p" ]; do \
 			filePath=$$(echo "$$p" | jq -cr '.filePath // empty'); \
 			file=$$(realpath --relative-to="." "$${filePath}"); \
@@ -596,9 +647,10 @@ textlint: node_modules/.installed $(AQUA_ROOT_DIR)/.installed ## Runs the textli
 				col=$$(echo "$${m}" | jq -cr '.loc.start.column // empty'); \
 				endcol=$$(echo "$${m}" | jq -cr '.loc.end.column // empty'); \
 				message=$$(echo "$$m" | jq -cr '.message // empty'); \
+				exit_code=1; \
 				echo "::error file=$${file},line=$${line},endLine=$${endline},col=$${col},endColumn=$${endcol}::$${message}"; \
-			done <<<"$${messages}"; \
-		done <<<"$${textlint_out}"; \
+			done <<<"$$(echo "$${p}" | jq -cr '.messages[] // empty')"; \
+		done <<< "$$($(REPO_ROOT)/node_modules/.bin/textlint --format json $${files} 2>&1 | jq -c '.[]')"; \
 		exit "$${exit_code}"; \
 	else \
 		$(REPO_ROOT)/node_modules/.bin/textlint \
