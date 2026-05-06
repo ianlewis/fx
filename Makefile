@@ -198,10 +198,19 @@ update: install ## Update API data.
 	if [ -n "$(DEBUG_LOGGING)" ]; then \
 		debugarg="--debug"; \
 	fi; \
+	start_date="$$(date -d "-14 days" +"%Y-%m-%d")"; \
+	if [ -n "$(UPDATE_START_DATE)" ]; then \
+		start_date="$(UPDATE_START_DATE)"; \
+	fi; \
+	end_date="$$(date +"%Y-%m-%d")"; \
+	if [ -n "$(UPDATE_END_DATE)" ]; then \
+		end_date="$(UPDATE_END_DATE)"; \
+	fi; \
 	$(REPO_ROOT)/.venv/bin/fx \
 		$${debugarg} \
 		update \
-		--start "$$(date -d "-14 days" +"%Y-%m-%d")"
+		--start "$${start_date}" \
+		--end "$${end_date}"
 
 .PHONY: mkdocs
 mkdocs: .venv/.installed ## Generate API documentation.

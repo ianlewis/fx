@@ -16,6 +16,15 @@ name: Update Data
 
 on:
   workflow_dispatch:
+    inputs:
+      start_date:
+        description: "Start date for data update (YYYY-MM-DD)"
+        required: false
+        default: ""
+      end_date:
+        description: "End date for data update (YYYY-MM-DD)"
+        required: false
+        default: ""
   schedule:
     - cron: "0 0 * * *"
 
@@ -47,7 +56,10 @@ jobs:
         with:
           python-version-file: ".python-version"
 
-      - run: make update
+      - env:
+          UPDATE_START_DATE: ${{ github.event.inputs.start_date }}
+          UPDATE_END_DATE: ${{ github.event.inputs.end_date }}
+        run: make update
       - run: |
           git config --global user.name github-actions
           git config --global user.email github-actions@github.com
