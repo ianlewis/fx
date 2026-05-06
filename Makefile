@@ -135,7 +135,8 @@ node_modules/.installed: package-lock.json
 
 .venv/bin/activate:
 	@# bash \
-	python3 -m venv .venv
+	python3 -m venv .venv; \
+	touch $@
 
 .venv/.installed: requirements.txt requirements-dev.txt .venv/bin/activate
 	@# bash \
