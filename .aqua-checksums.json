@@ -341,6 +341,31 @@
       "algorithm": "sha256"
     },
     {
+      "id": "github_release/github.com/protocolbuffers/protobuf/v34.1/protoc-34.1-linux-aarch_64.zip",
+      "checksum": "31C5E9E3C7BF013CF41FB97765EE255C140024A6B175B6CC9B64BEDDD7C23BA7",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/protocolbuffers/protobuf/v34.1/protoc-34.1-linux-x86_64.zip",
+      "checksum": "AF27EA66CD26938FE48587804CA7D4817457A08350021A1C6E23A27CCC8C6904",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/protocolbuffers/protobuf/v34.1/protoc-34.1-osx-aarch_64.zip",
+      "checksum": "2C7E92B8B578916937DF132B3032E2E8E6C170862ECF7A8333094A6F3D03650C",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/protocolbuffers/protobuf/v34.1/protoc-34.1-osx-x86_64.zip",
+      "checksum": "AB124429C1F49951F03B6C0C0E911FEC04E2C7C20DE5C935E0CDE7353BBD016C",
+      "algorithm": "sha256"
+    },
+    {
+      "id": "github_release/github.com/protocolbuffers/protobuf/v34.1/protoc-34.1-win64.zip",
+      "checksum": "6D7EBDC75E9C1F0026D4FB28F17EF1D0AAE77D36744D83A9E052D79BA493724F",
+      "algorithm": "sha256"
+    },
+    {
       "id": "github_release/github.com/rhysd/actionlint/v1.7.7/actionlint_1.7.7_darwin_amd64.tar.gz",
       "checksum": "28E5DE5A05FC558474F638323D736D822FFF183D2D492F0AECB2B73CC44584F5",
       "algorithm": "sha256"
@@ -489,11 +514,6 @@
       "id": "registries/github_content/github.com/aquaproj/aqua-registry/v4.439.0/registry.yaml",
       "checksum": "9237F032690C0457E435CDED5AB67B75B867F7738855CEAE93C938C3F1DD4773",
       "algorithm": "sha256"
-    },
-    {
-      "id": "registries/github_content/github.com/aquaproj/aqua-registry/v4.421.0/registry.yaml",
-      "checksum": "28F12785429274ADCFA97906A10D80FFC44D0FAEF7CF1560119A31EA218C118E0C173C7FAEDDE31449665D25741B12F40EF3FFFCA4540947BE96D5CD370A92DE",
-      "algorithm": "sha512"
     }
   ]
 }
