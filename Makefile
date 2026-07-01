@@ -206,7 +206,7 @@ package: buf-build .venv/.installed ## Create a release package.
 .PHONY: install
 install: buf-build .venv/.installed ## Install the package in the local venv.
 	@# bash \
-	./.venv/bin/pip install .
+	./.uv/venv/bin/uv pip install .
 
 .PHONY: build
 build: install mkdocs ## Build the site files.
