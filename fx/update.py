@@ -19,14 +19,17 @@ This module defines the update command which is used to update the local data st
 with quote data from the specified providers.
 """
 
-import argparse
 from datetime import date
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 from dateutil.relativedelta import relativedelta
 
 from fx.quote import download_quotes, write_quotes_data
 from fx.utils import date_iterator
+
+if TYPE_CHECKING:
+    import argparse
 
 
 def update_command(args: argparse.Namespace) -> None:

@@ -13,7 +13,7 @@
 
     // Add Aqua present to allow updating CLI tools.
     // https://aquaproj.github.io/docs/guides/renovate/
-    "github>aquaproj/aqua-renovate-config#2.9.0",
+    "github>aquaproj/aqua-renovate-config#2.12.0",
 
     // Update version numbers in Makefile.
     // https://docs.renovatebot.com/presets-customManagers/#custommanagersmakefileversions
@@ -53,6 +53,13 @@
     schedule: ["* 0-3 1 * *"],
   },
 
+  // Enable git submodule updates.
+  "git-submodules": {
+    enabled: true,
+    // NOTE: Same as schedule:monthly preset.
+    schedule: ["* 0-3 1 * *"],
+  },
+
   // Create a new issue for each config warning. By default, Renovate re-opens
   // an existing issue which can be very old and is easily missed. Opening new
   // issues is more intuitive.
@@ -84,12 +91,6 @@
       groupName: "github-actions",
       pinDigests: true,
       commitMessageExtra: "to {{#if isPinDigest}}{{{newDigestShort}}}{{else}}{{#if isMajor}}{{prettyNewMajor}}{{else}}{{#if isSingleVersion}}{{prettyNewVersion}}{{else}}{{#if newValue}}{{{newValue}}}{{else}}{{{newDigestShort}}}{{/if}}{{/if}}{{/if}}{{/if}} [skip netlify]",
-    },
-    {
-      matchManagers: ["pip_requirements"],
-      matchUpdateTypes: ["minor", "patch"],
-      matchFileNames: ["requirements.txt"],
-      groupName: "python",
     },
     {
       matchManagers: ["pip_requirements"],

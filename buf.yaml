@@ -16,12 +16,12 @@
 version: v2
 modules:
   - path: proto
-  - path: .venv/lib/python3.13/site-packages
+  - path: .venv/lib/python3.14/site-packages
 lint:
   use:
     - STANDARD
   ignore:
-    - .venv/lib/python3.13/site-packages
+    - .venv/lib/python3.14/site-packages
 breaking:
   use:
     - FILE

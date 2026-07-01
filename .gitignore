@@ -6,12 +6,15 @@ node_modules/
 .bin/
 .venv/
 .aqua/
+.uv/
 
 # SARIF files
 *.sarif.json
 
-# the built site directory.
-_site/
+# Python cache files
+__pycache__/
+*.egg-info/
+*.pyc
 
 # Python caches and build directories.
 *.py[cod]
@@ -23,6 +26,9 @@ __pycache__
 # Coverage files
 .coverage
 coverage.xml
+
+# the built site directory.
+_site/
 
 # Don't commit .claude local settings.
 .claude/

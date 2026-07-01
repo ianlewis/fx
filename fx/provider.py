@@ -16,13 +16,15 @@
 
 import csv
 import json
-import logging
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from google.protobuf.json_format import MessageToDict
 
 from fx.v1.provider_pb2 import ProviderList  # type: ignore[attr-defined]
+
+if TYPE_CHECKING:
+    import logging
 
 
 def write_providers_site(

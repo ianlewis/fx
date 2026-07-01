@@ -20,18 +20,20 @@ currency exchange quotes.
 """
 
 import csv
-import datetime
 import json
-import logging
 from collections import defaultdict
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from dateutil.relativedelta import relativedelta
 from google.protobuf.json_format import MessageToDict
 
 from fx.utils import date_iterator, date_msg_to_str, money_to_str
 from fx.v1.quote_pb2 import Quote, QuoteList  # type: ignore[attr-defined]
+
+if TYPE_CHECKING:
+    import datetime
+    import logging
 
 
 def quote_in(q: Quote, quotes: list[Quote]) -> bool:

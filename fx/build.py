@@ -18,7 +18,7 @@ import datetime
 import re
 import time
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from fx.provider import write_providers_site
 from fx.quote import (
@@ -26,7 +26,9 @@ from fx.quote import (
     write_latest_quote_site,
     write_year_quotes_site,
 )
-from fx.v1.quote_pb2 import Quote, QuoteList  # type: ignore[attr-defined]
+
+if TYPE_CHECKING:
+    from fx.v1.quote_pb2 import Quote, QuoteList  # type: ignore[attr-defined]
 
 
 def update_latest_quotes(
