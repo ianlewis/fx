@@ -14,8 +14,10 @@
 
 """A mock currency quote provider for tests."""
 
-import datetime
-from typing import Any, ClassVar
+from typing import TYPE_CHECKING, Any, ClassVar
+
+if TYPE_CHECKING:
+    import datetime
 
 from google.type.date_pb2 import Date
 from google.type.money_pb2 import Money

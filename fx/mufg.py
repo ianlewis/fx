@@ -14,8 +14,7 @@
 
 """MUFG Bank exchange rate provider implementation."""
 
-import datetime
-from typing import Any, ClassVar
+from typing import TYPE_CHECKING, Any, ClassVar
 
 import urllib3
 from bs4 import BeautifulSoup
@@ -23,6 +22,9 @@ from google.type.date_pb2 import Date
 
 from fx.utils import str_to_money
 from fx.v1.quote_pb2 import Quote  # type: ignore[attr-defined]
+
+if TYPE_CHECKING:
+    import datetime
 
 
 class MUFGProvider:

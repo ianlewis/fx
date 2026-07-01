@@ -14,14 +14,17 @@
 
 """Utilities used throughout fx."""
 
-from collections.abc import Iterator
 from datetime import date
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from dateutil.relativedelta import relativedelta
 from google.protobuf.json_format import MessageToDict
-from google.protobuf.message import Message
 from google.type.money_pb2 import Money
+
+if TYPE_CHECKING:
+    from collections.abc import Iterator
+
+    from google.protobuf.message import Message
 
 
 def date_iterator(

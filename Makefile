@@ -14,7 +14,7 @@
 
 # Set the initial shell so we can determine extra options.
 SHELL := /usr/bin/env bash -ueo pipefail
-DEBUG_LOGGING ?= $(shell if [[ "${GITHUB_ACTIONS}" == "true" ]] && [[ -n "${RUNNER_DEBUG}" || "${ACTIONS_RUNNER_DEBUG}" == "true" || "${ACTIONS_STEP_DEBUG}" == "true" ]]; then echo "true"; else echo ""; fi)
+DEBUG_LOGGING ?= $(shell if [[ "$(GITHUB_ACTIONS)" == "true" ]] && [[ -n "$(RUNNER_DEBUG)" || "$(ACTIONS_RUNNER_DEBUG)" == "true" || "$(ACTIONS_STEP_DEBUG)" == "true" ]]; then echo "true"; else echo ""; fi)
 BASH_OPTIONS := $(shell if [ "$(DEBUG_LOGGING)" == "true" ]; then echo "-x"; else echo ""; fi)
 
 # Add extra options for debugging.
@@ -30,22 +30,18 @@ kernel.Linux := linux
 kernel.Darwin := darwin
 kernel := $(kernel.$(uname_s))
 
-OUTPUT_FORMAT ?= $(shell if [ "${GITHUB_ACTIONS}" == "true" ]; then echo "github"; else echo ""; fi)
+OUTPUT_FORMAT ?= $(shell if [ "$(GITHUB_ACTIONS)" == "true" ]; then echo "github"; else echo ""; fi)
 REPO_ROOT := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 REPO_NAME := $(shell basename "$(REPO_ROOT)")
 
 # renovate: datasource=github-releases depName=aquaproj/aqua versioning=loose
-AQUA_VERSION ?= v2.55.2
+AQUA_VERSION ?= v2.59.1
 AQUA_REPO := github.com/aquaproj/aqua
-AQUA_CHECKSUM.linux.amd64 := 4b47965f71afee9bef6ac9ca4515dc2adc4bc1dfe279dceab8126e69ca3a6bc3
-AQUA_CHECKSUM.linux.arm64 := 75bef0c9e82480adb4c203b71b9af530945fda60b91f6f860b17791adf068158
-AQUA_CHECKSUM.darwin.arm64 := 040857e7f4eec6d468dedbad9a05a2409c2dfe13fc2e69c197f25bddec361793
 AQUA_CHECKSUM ?= $(AQUA_CHECKSUM.$(kernel).$(arch))
-AQUA_URL := https://$(AQUA_REPO)/releases/download/$(AQUA_VERSION)/aqua_$(kernel)_$(arch).tar.gz
 export AQUA_ROOT_DIR = $(REPO_ROOT)/.aqua
 
 # Ensure that aqua and aqua installed tools are in the PATH.
-export PATH := $(REPO_ROOT)/.bin/aqua-$(AQUA_VERSION):$(AQUA_ROOT_DIR)/bin:$(PATH)
+export PATH := $(AQUA_ROOT_DIR)/bin:$(PATH)
 
 # We want GNU versions of tools so prefer them if present.
 GREP := $(shell command -v ggrep 2>/dev/null || command -v grep 2>/dev/null)
@@ -92,6 +88,9 @@ help: ## Print all Makefile targets (this message).
 				} \
 			}'
 
+# Node.js setup
+#####################################################################
+
 package-lock.json: package.json $(AQUA_ROOT_DIR)/.installed
 	@# bash \
 	loglevel="notice"; \
@@ -113,6 +112,10 @@ package-lock.json: package.json $(AQUA_ROOT_DIR)/.installed
 		# integrity field. npm install will not restore this field if \
 		# missing in an existing package-lock.json file. \
 		rm -f $@; \
+		# NOTE: We clean the node_modules directory to ensure that npm install \
+		#       will not desync between the package.json, package-lock.json \
+		#       and the node_modules directory. \
+		$(MAKE) clean-node-modules; \
 		npm --loglevel="$${loglevel}" install \
 			--no-audit \
 			--no-fund; \
@@ -121,9 +124,9 @@ package-lock.json: package.json $(AQUA_ROOT_DIR)/.installed
 			--package-lock-only \
 			--no-audit \
 			--no-fund; \
-	fi; \
+	fi
 
-node_modules/.installed: package-lock.json
+node_modules/.installed: package.json
 	@# bash \
 	loglevel="silent"; \
 	if [ -n "$(DEBUG_LOGGING)" ]; then \
@@ -133,33 +136,58 @@ node_modules/.installed: package-lock.json
 	npm --loglevel="$${loglevel}" audit signatures; \
 	touch $@
 
-.venv/bin/activate:
+# Python setup
+#####################################################################
+
+.uv/venv/bin/activate:
 	@# bash \
-	python3 -m venv .venv; \
+	mkdir -p .uv; \
+	python -m venv .uv/venv; \
 	touch $@
 
-.venv/.installed: requirements.txt requirements-dev.txt .venv/bin/activate
+.uv/.installed: requirements-dev.txt .uv/venv/bin/activate
 	@# bash \
-	$(REPO_ROOT)/.venv/bin/pip install -r $< --require-hashes; \
-	$(REPO_ROOT)/.venv/bin/pip install -r $(word 2,$^) --require-hashes; \
+	./.uv/venv/bin/pip install -r $< --require-hashes; \
 	touch $@
 
-.bin/aqua-$(AQUA_VERSION)/aqua:
+uv.lock: pyproject.toml .uv/.installed
 	@# bash \
-	mkdir -p .bin/aqua-$(AQUA_VERSION); \
-	tempfile=$$($(MKTEMP) --suffix=".aqua-$(AQUA_VERSION).tar.gz"); \
-	curl -sSLo "$${tempfile}" "$(AQUA_URL)"; \
-	echo "$(AQUA_CHECKSUM)  $${tempfile}" | shasum -a 256 -c; \
-	tar -x -C .bin/aqua-$(AQUA_VERSION) -f "$${tempfile}"
+	./.uv/venv/bin/uv lock; \
+	touch $@
 
-$(AQUA_ROOT_DIR)/.installed: .aqua.yaml .bin/aqua-$(AQUA_VERSION)/aqua
+.venv/.installed: pyproject.toml .uv/.installed
+	@# bash \
+	./.uv/venv/bin/uv sync --locked; \
+	touch $@
+
+# Aqua setup
+#####################################################################
+
+$(AQUA_ROOT_DIR)/.$(AQUA_VERSION).installed:
+	@# bash \
+	./third_party/aquaproj/aqua-installer/aqua-installer -v "$(AQUA_VERSION)"; \
+	touch $@
+
+.aqua-checksums.json: .aqua.yaml $(AQUA_ROOT_DIR)/.$(AQUA_VERSION).installed
 	@# bash \
 	loglevel="info"; \
 	if [ -n "$(DEBUG_LOGGING)" ]; then \
 		loglevel="debug"; \
 	fi; \
-	$(REPO_ROOT)/.bin/aqua-$(AQUA_VERSION)/aqua \
-		--config "$(REPO_ROOT)/.aqua.yaml" \
+	$(AQUA_ROOT_DIR)/bin/aqua \
+		--config ".aqua.yaml" \
+		--log-level "$${loglevel}" \
+		update-checksum \
+		--prune
+
+$(AQUA_ROOT_DIR)/.installed: .aqua.yaml $(AQUA_ROOT_DIR)/.$(AQUA_VERSION).installed
+	@# bash \
+	loglevel="info"; \
+	if [ -n "$(DEBUG_LOGGING)" ]; then \
+		loglevel="debug"; \
+	fi; \
+	$(AQUA_ROOT_DIR)/bin/aqua \
+		--config ".aqua.yaml" \
 		--log-level "$${loglevel}" \
 		install; \
 	touch $@
@@ -173,12 +201,12 @@ all: test package build ## Run all tests and build the site.
 .PHONY: package
 package: buf-build .venv/.installed ## Create a release package.
 	@# bash \
-	$(REPO_ROOT)/.venv/bin/python3 -m build
+	./.venv/bin/python -m build
 
 .PHONY: install
 install: buf-build .venv/.installed ## Install the package in the local venv.
 	@# bash \
-	$(REPO_ROOT)/.venv/bin/pip install .
+	./.uv/venv/bin/uv pip install .
 
 .PHONY: build
 build: install mkdocs ## Build the site files.
@@ -187,7 +215,7 @@ build: install mkdocs ## Build the site files.
 	if [ -n "$(DEBUG_LOGGING)" ]; then \
 		debugarg="--debug"; \
 	fi; \
-	$(REPO_ROOT)/.venv/bin/fx \
+	./.venv/bin/fx \
 		$${debugarg} \
 		build
 
@@ -206,7 +234,7 @@ update: install ## Update API data.
 	if [ -n "$(UPDATE_END_DATE)" ]; then \
 		end_date="$(UPDATE_END_DATE)"; \
 	fi; \
-	$(REPO_ROOT)/.venv/bin/fx \
+	./.venv/bin/fx \
 		$${debugarg} \
 		update \
 		--start "$${start_date}" \
@@ -215,12 +243,12 @@ update: install ## Update API data.
 .PHONY: mkdocs
 mkdocs: .venv/.installed ## Generate API documentation.
 	@# bash \
-	$(REPO_ROOT)/.venv/bin/mkdocs build
+	./.venv/bin/mkdocs build
 
 .PHONY: serve
 serve: build ## Serve the API locally.
 	@# bash \
-	$(REPO_ROOT)/.venv/bin/python3 -m http.server --directory _site/
+	./.venv/bin/python -m http.server --directory _site/
 
 .PHONY: buf-build
 buf-build: $(AQUA_ROOT_DIR)/.installed .venv/.installed proto/fx/v1/provider.proto proto/fx/v1/quote.proto ## Compile protobuf files.
@@ -236,9 +264,9 @@ test: lint unit-test ## Run all linters and tests.
 .PHONY: unit-test
 unit-test: .venv/.installed ## Run unit tests.
 	@# bash \
-	$(REPO_ROOT)/.venv/bin/coverage run -m unittest discover .; \
-	$(REPO_ROOT)/.venv/bin/coverage xml; \
-	$(REPO_ROOT)/.venv/bin/coverage report -m
+	./.venv/bin/coverage run -m unittest discover .; \
+	./.venv/bin/coverage xml; \
+	./.venv/bin/coverage report -m
 
 ## Formatting
 #####################################################################
@@ -262,7 +290,7 @@ json-format: node_modules/.installed ## Format JSON files.
 	if [ "$${files}" == "" ]; then \
 		exit 0; \
 	fi; \
-	$(REPO_ROOT)/node_modules/.bin/prettier \
+	./node_modules/.bin/prettier \
 		--log-level "$${loglevel}" \
 		--no-error-on-unmatched-pattern \
 		--write \
@@ -285,8 +313,8 @@ license-headers: ## Update license headers.
 			'*.rs' \
 			'*.yaml' \
 			'*.yml' \
-			':!:*_pb2.py' \
 			'Makefile' \
+			':!:*_pb2.py' \
 			| while IFS='' read -r f; do [ -f "$${f}" ] && echo "$${f}" || true; done \
 	); \
 	name=$$(git config user.name); \
@@ -298,7 +326,7 @@ license-headers: ## Update license headers.
 	fi; \
 	for filename in $${files}; do \
 		if ! ( head "$${filename}" | $(GREP) -iL "Copyright" > /dev/null ); then \
-			$(REPO_ROOT)/third_party/mbrukman/autogen/autogen.sh \
+			./third_party/mbrukman/autogen/autogen.sh \
 				--in-place \
 				--no-code \
 				--no-tlc \
@@ -324,7 +352,7 @@ md-format: node_modules/.installed ## Format Markdown files.
 		exit 0; \
 	fi; \
 	# NOTE: prettier uses .editorconfig for tab-width. \
-	$(REPO_ROOT)/node_modules/.bin/prettier \
+	./node_modules/.bin/prettier \
 		--log-level "$${loglevel}" \
 		--no-error-on-unmatched-pattern \
 		--write \
@@ -375,7 +403,7 @@ yaml-format: node_modules/.installed ## Format YAML files.
 	if [ "$${files}" == "" ]; then \
 		exit 0; \
 	fi; \
-	$(REPO_ROOT)/node_modules/.bin/prettier \
+	./node_modules/.bin/prettier \
 		--log-level "$${loglevel}" \
 		--no-error-on-unmatched-pattern \
 		--write \
@@ -492,9 +520,8 @@ checkmake: $(AQUA_ROOT_DIR)/.installed ## Runs the checkmake linter.
 		exit 0; \
 	fi; \
 	if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
-		# TODO: Remove newline from the format string after updating checkmake. \
 		checkmake \
-			--format '::error file={{.FileName}},line={{.LineNumber}}::{{.Rule}}: {{.Violation}}'$$'\n' \
+			--format '::error file={{.FileName}},line={{.LineNumber}}::{{.Rule}}: {{.Violation}}' \
 			$${files}; \
 	else \
 		checkmake $${files}; \
@@ -516,15 +543,15 @@ commitlint: node_modules/.installed ## Run commitlint linter.
 		fi; \
 	fi; \
 	if [ "$${commitlint_to}" == "" ]; then \
-		# if head is on the commitlint_from branch, then we will lint the \
-		# last commit by default. \
+		# If upstream of HEAD is on the commitlint_from branch, then we will \
+		# lint the last commit by default. \
 		current_branch=$$(git rev-parse --abbrev-ref @{u}); \
 		if [ "$${commitlint_from}" == "$${current_branch}" ]; then \
 			commitlint_from="HEAD~1"; \
 		fi; \
 		commitlint_to="HEAD"; \
 	fi; \
-	$(REPO_ROOT)/node_modules/.bin/commitlint \
+	./node_modules/.bin/commitlint \
 		--from "$${commitlint_from}" \
 		--to "$${commitlint_to}" \
 		--verbose \
@@ -554,7 +581,7 @@ format-check: ## Check that files are properly formatted.
 	$(MAKE) format; \
 	exit_code=0; \
 	if [ -n "$$(git diff)" ]; then \
-		>&2 echo "Some files need to be formatted. Please run 'make format' and try again."; \
+		>&2 echo "Some files need to be formatted. Please run '$(MAKE) format' and try again."; \
 		if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
 			echo "::group::git diff"; \
 		fi; \
@@ -576,14 +603,12 @@ markdownlint: node_modules/.installed $(AQUA_ROOT_DIR)/.installed ## Runs the ma
 	files=$$( \
 		git ls-files --deduplicate \
 			'*.md' \
-			':!:.github/pull_request_template.md' \
-			':!:.github/ISSUE_TEMPLATE/*.md' \
 			| while IFS='' read -r f; do [ -f "$${f}" ] && echo "$${f}" || true; done \
 	); \
 	if [ "$${files}" == "" ]; then \
 		exit 0; \
 	fi; \
-	$(REPO_ROOT)/node_modules/.bin/markdownlint-cli2 $${files}
+	./node_modules/.bin/markdownlint-cli2 $${files}
 
 .PHONY: mypy
 mypy: .venv/.installed ## Runs the mypy type checker.
@@ -591,27 +616,25 @@ mypy: .venv/.installed ## Runs the mypy type checker.
 	files=$$( \
 		git ls-files --deduplicate \
 			'*.py' \
-			':!:*_pb2.py' \
 			| while IFS='' read -r f; do [ -f "$${f}" ] && echo "$${f}" || true; done \
 	); \
 	if [ "$${files}" == "" ]; then \
 		exit 0; \
 	fi; \
-	${REPO_ROOT}/.venv/bin/mypy \
+	./.venv/bin/mypy \
 		--config-file mypy.ini \
 		$${files}
-
 
 .PHONY: openapi-spec-validator
 openapi-spec-validator: .venv/.installed ## Runs the openapi-spec-validator.
 	@# bash \
-	$(REPO_ROOT)/.venv/bin/openapi-spec-validator \
+	./.venv/bin/openapi-spec-validator \
 		docs/v1/openapi.yaml
 
 .PHONY: renovate-config-validator
 renovate-config-validator: node_modules/.installed ## Validate Renovate configuration.
 	@# bash \
-	$(REPO_ROOT)/node_modules/.bin/renovate-config-validator \
+	./node_modules/.bin/renovate-config-validator \
 		--strict
 
 .PHONY: ruff
@@ -645,27 +668,7 @@ textlint: node_modules/.installed $(AQUA_ROOT_DIR)/.installed ## Runs the textli
 	if [ "$${files}" == "" ]; then \
 		exit 0; \
 	fi; \
-	if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
-		exit_code=0; \
-		while IFS="" read -r p && [ -n "$$p" ]; do \
-			filePath=$$(echo "$$p" | jq -cr '.filePath // empty'); \
-			file=$$(realpath --relative-to="." "$${filePath}"); \
-			messages=$$(echo "$$p" | jq -cr '.messages[] // empty'); \
-			while IFS="" read -r m && [ -n "$$m" ]; do \
-				line=$$(echo "$$m" | jq -cr '.loc.start.line // empty'); \
-				endline=$$(echo "$$m" | jq -cr '.loc.end.line // empty'); \
-				col=$$(echo "$${m}" | jq -cr '.loc.start.column // empty'); \
-				endcol=$$(echo "$${m}" | jq -cr '.loc.end.column // empty'); \
-				message=$$(echo "$$m" | jq -cr '.message // empty'); \
-				exit_code=1; \
-				echo "::error file=$${file},line=$${line},endLine=$${endline},col=$${col},endColumn=$${endcol}::$${message}"; \
-			done <<<"$$(echo "$${p}" | jq -cr '.messages[] // empty')"; \
-		done <<< "$$($(REPO_ROOT)/node_modules/.bin/textlint --format json $${files} 2>&1 | jq -c '.[]')"; \
-		exit "$${exit_code}"; \
-	else \
-		$(REPO_ROOT)/node_modules/.bin/textlint \
-			$${files}; \
-	fi
+	./node_modules/.bin/textlint $${files}
 
 .PHONY: yamllint
 yamllint: .venv/.installed ## Runs the yamllint linter.
@@ -683,7 +686,7 @@ yamllint: .venv/.installed ## Runs the yamllint linter.
 	if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
 		format="github"; \
 	fi; \
-	$(REPO_ROOT)/.venv/bin/yamllint \
+	./.venv/bin/yamllint \
 		--strict \
 		--format "$${format}" \
 		$${files}
@@ -703,20 +706,24 @@ zizmor: .venv/.installed ## Runs the zizmor linter.
 		exit 0; \
 	fi; \
 	if [ "$(OUTPUT_FORMAT)" == "github" ]; then \
-		$(REPO_ROOT)/.venv/bin/zizmor \
+		./.venv/bin/zizmor \
 			--quiet \
 			--pedantic \
 			--format sarif \
 			$${files} > zizmor.sarif.json; \
 	fi; \
-	$(REPO_ROOT)/.venv/bin/zizmor \
+	./.venv/bin/zizmor \
 		--quiet \
 		--pedantic \
 		--format plain \
 		$${files}
 
+
 ## Maintenance
 #####################################################################
+
+.PHONY: update-lockfiles
+update-lockfiles: .aqua-checksums.json package-lock.json uv.lock ## Update lockfiles.
 
 .PHONY: todos
 todos: $(AQUA_ROOT_DIR)/.installed ## Print outstanding TODOs.
@@ -732,12 +739,16 @@ todos: $(AQUA_ROOT_DIR)/.installed ## Print outstanding TODOs.
 		--output "$${output}" \
 		--todo-types="TODO,Todo,todo,FIXME,Fixme,fixme,BUG,Bug,bug,XXX,COMBAK"
 
+.PHONY: clean-node-modules
+clean-node-modules:
+	@$(RM) -r node_modules
+
 .PHONY: clean
-clean: ## Delete temporary files.
-	@$(RM) -r .bin/
+clean: clean-node-modules ## Delete temporary files.
+	@$(RM) -r .bin
 	@$(RM) -r $(AQUA_ROOT_DIR)
-	@$(RM) -r .venv/
-	@$(RM) -r node_modules/
+	@$(RM) -r .venv
+	@$(RM) -r .uv
 	@$(RM) *.sarif.json
 	@$(RM) -r build/
 	@$(RM) -r dist/
@@ -745,5 +756,5 @@ clean: ## Delete temporary files.
 	@$(RM) -r .coverage
 	@$(RM) -r coverage.xml
 	@$(RM) -r _site/
-	@python3 -Bc "import pathlib; [p.unlink() for p in pathlib.Path('.').rglob('*.py[cod]')]"
-	@python3 -Bc "import pathlib; [p.rmdir() for p in pathlib.Path('.').rglob('__pycache__')]"
+	@python -Bc "import pathlib; [p.unlink() for p in pathlib.Path('.').rglob('*.py[cod]')]"
+	@python -Bc "import pathlib; [p.rmdir() for p in pathlib.Path('.').rglob('__pycache__')]"
