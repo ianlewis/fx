@@ -54,7 +54,7 @@ dev = [
     "coverage==7.10.7",
     "mypy==1.18.2",
     "openapi-spec-validator==0.8.5",
-    "types-python-dateutil==2.9.0.20260408",
+    "types-python-dateutil==2.9.0.20260716",
     "yamllint==1.38.0",
     "zizmor==1.25.2",
 ]
