@@ -30,7 +30,7 @@ license = "Apache-2.0"
 license-files = ["LICENSE"]
 
 dependencies = [
-    "beautifulsoup4==4.14.3",
+    "beautifulsoup4==4.15.0",
     "googleapis-common-protos==1.72.0",
     "mkdocs==1.6.1",
     "python-dateutil==2.9.0.post0",
