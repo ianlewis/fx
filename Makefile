@@ -49,7 +49,7 @@ AWK := $(shell command -v gawk 2>/dev/null || command -v awk 2>/dev/null)
 MKTEMP := $(shell command -v gmktemp 2>/dev/null || command -v mktemp 2>/dev/null)
 
 # Set the rust toolcahin that is used for builds.
-export RUSTUP_TOOLCHAIN = "stable"
+export RUSTUP_TOOLCHAIN = stable
 
 # The help command prints targets in groups. Help documentation in the Makefile
 # uses comments with double hash marks (##). Documentation is printed by the
