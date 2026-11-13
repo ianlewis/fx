@@ -3,7 +3,7 @@ base = "."
 publish = "_site/"  # relative to `base` directory
 command = "make build"
 # NOTE: This should match the Python version in `.python-version`.
-environment = { PYTHON_VERSION = "3.13.5" }
+environment = { PYTHON_VERSION = "3.15.1" }
 
 [context.deploy-preview]
   # Skip deploy previews for Renovate PRs (branches starting with "renovate/")
