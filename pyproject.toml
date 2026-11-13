@@ -35,7 +35,7 @@ dependencies = [
     "mkdocs==1.6.1",
     # NOTE: This needs to match the version of the `protoc` binary used to
     #       generate protobuf files (see .aqua.yaml).
-    #       It also needs to match the version of the buf protcolbuffers
+    #       It also needs to match the version of the buf protocolbuffers
     #       package (see buf.gen.yaml).
     "protobuf==7.36.2",
     "python-dateutil==2.9.0.post0",
