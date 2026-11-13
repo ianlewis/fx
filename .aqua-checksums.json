@@ -171,28 +171,28 @@
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/protocolbuffers/protobuf/v34.1/protoc-34.1-linux-aarch_64.zip",
-      "checksum": "31C5E9E3C7BF013CF41FB97765EE255C140024A6B175B6CC9B64BEDDD7C23BA7",
+      "id": "github_release/github.com/protocolbuffers/protobuf/v36.2/protoc-36.2-linux-aarch_64.zip",
+      "checksum": "8B8F18BD2B30346EFBC698DD5A73DD7C805F3EF8380F6DFC95C768F3F1852F6A",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/protocolbuffers/protobuf/v34.1/protoc-34.1-linux-x86_64.zip",
-      "checksum": "AF27EA66CD26938FE48587804CA7D4817457A08350021A1C6E23A27CCC8C6904",
+      "id": "github_release/github.com/protocolbuffers/protobuf/v36.2/protoc-36.2-linux-x86_64.zip",
+      "checksum": "121F6C7AFE1D4D0E3EA6AAB9432038599250134CBF4474CB1167D2C7DECD4278",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/protocolbuffers/protobuf/v34.1/protoc-34.1-osx-aarch_64.zip",
-      "checksum": "2C7E92B8B578916937DF132B3032E2E8E6C170862ECF7A8333094A6F3D03650C",
+      "id": "github_release/github.com/protocolbuffers/protobuf/v36.2/protoc-36.2-osx-aarch_64.zip",
+      "checksum": "9CD98A532C5C5E0C4161314DE0225DE27E4C8A323917B6EA7B1B714D3AE23466",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/protocolbuffers/protobuf/v34.1/protoc-34.1-osx-x86_64.zip",
-      "checksum": "AB124429C1F49951F03B6C0C0E911FEC04E2C7C20DE5C935E0CDE7353BBD016C",
+      "id": "github_release/github.com/protocolbuffers/protobuf/v36.2/protoc-36.2-osx-x86_64.zip",
+      "checksum": "228CC7ADD4616CC14CA5E80DEE83209D44449A7AEE95A914AE748FA374EFB078",
       "algorithm": "sha256"
     },
     {
-      "id": "github_release/github.com/protocolbuffers/protobuf/v34.1/protoc-34.1-win64.zip",
-      "checksum": "6D7EBDC75E9C1F0026D4FB28F17EF1D0AAE77D36744D83A9E052D79BA493724F",
+      "id": "github_release/github.com/protocolbuffers/protobuf/v36.2/protoc-36.2-win64.zip",
+      "checksum": "F0C128DC0D8492ECEECE83BB459A4C0E316764B929FFBF1AA416357FD644EDD3",
       "algorithm": "sha256"
     },
     {
